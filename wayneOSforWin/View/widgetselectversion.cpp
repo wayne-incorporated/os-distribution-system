@@ -17,7 +17,7 @@ WidgetSelectVersion::WidgetSelectVersion(QWidget *parent) :QWidget(parent), ui(n
 	ui->btnPrev->move(QPoint(ui->btnPrev->x()*1.5*windowsDpiScale(), ui->btnPrev->y()*1.5*windowsDpiScale()));
 	ui->btnNext->setFixedSize((int)(windowsDpiScale()*1.5*ui->btnNext->width()), (int)(windowsDpiScale()*1.5*ui->btnNext->height()));
 	ui->btnNext->move(QPoint(ui->btnNext->x()*1.5*windowsDpiScale(), ui->btnNext->y()*1.5*windowsDpiScale()));*/
-    ui->radioPaid->click();
+    ui->radioFree->click(); // modified by LEE jeun jeun@wayne-inc.com
 }
 
 

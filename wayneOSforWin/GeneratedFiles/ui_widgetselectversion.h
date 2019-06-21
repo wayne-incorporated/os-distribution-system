@@ -26,8 +26,8 @@ public:
     QWidget *verticalLayoutWidget_2;
     QVBoxLayout *verticalLayout_2;
     QTextEdit *textEdit;
-    QRadioButton *radioPaid;
     QRadioButton *radioFree;
+    QRadioButton *radioPaid;
     QHBoxLayout *horizontalLayout;
     QPushButton *btnPrev;
     QPushButton *btnNext;
@@ -67,26 +67,26 @@ public:
 
         verticalLayout_2->addWidget(textEdit);
 
-        radioPaid = new QRadioButton(verticalLayoutWidget_2);
-        radioPaid->setObjectName(QStringLiteral("radioPaid"));
-        sizePolicy1.setHeightForWidth(radioPaid->sizePolicy().hasHeightForWidth());
-        radioPaid->setSizePolicy(sizePolicy1);
-        QFont font;
-        font.setPointSize(11);
-        font.setBold(true);
-        font.setWeight(75);
-        radioPaid->setFont(font);
-
-        verticalLayout_2->addWidget(radioPaid, 0, Qt::AlignHCenter|Qt::AlignVCenter);
-
         radioFree = new QRadioButton(verticalLayoutWidget_2);
         radioFree->setObjectName(QStringLiteral("radioFree"));
         sizePolicy1.setHeightForWidth(radioFree->sizePolicy().hasHeightForWidth());
         radioFree->setSizePolicy(sizePolicy1);
         radioFree->setMinimumSize(QSize(242, 22));
+        QFont font;
+        font.setPointSize(11);
+        font.setBold(true);
+        font.setWeight(75);
         radioFree->setFont(font);
 
         verticalLayout_2->addWidget(radioFree, 0, Qt::AlignHCenter|Qt::AlignVCenter);
+
+        radioPaid = new QRadioButton(verticalLayoutWidget_2);
+        radioPaid->setObjectName(QStringLiteral("radioPaid"));
+        sizePolicy1.setHeightForWidth(radioPaid->sizePolicy().hasHeightForWidth());
+        radioPaid->setSizePolicy(sizePolicy1);
+        radioPaid->setFont(font);
+
+        verticalLayout_2->addWidget(radioPaid, 0, Qt::AlignHCenter|Qt::AlignVCenter);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(100);
@@ -131,8 +131,8 @@ public:
                         "ion, you can select paid option.</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Gulim'; font-size:9pt;\">If not, you can only choose the free version.</span></p>\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Gulim'; font-size:9pt;\"><br /></p></body></html>", nullptr));
-        radioPaid->setText(QApplication::translate("WidgetSelectVersion", "OS Registered version (Paid)", nullptr));
         radioFree->setText(QApplication::translate("WidgetSelectVersion", "OS free version", nullptr));
+        radioPaid->setText(QApplication::translate("WidgetSelectVersion", "OS Registered version (Paid)", nullptr));
         btnPrev->setText(QApplication::translate("WidgetSelectVersion", "Back", nullptr));
         btnNext->setText(QApplication::translate("WidgetSelectVersion", "Next", nullptr));
     } // retranslateUi
