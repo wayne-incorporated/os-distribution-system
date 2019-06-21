@@ -1,0 +1,15 @@
+﻿  moc_widgetinstall.cpp
+  moc_widgetlicenseinfo.cpp
+  moc_widgetselectdisk.cpp
+  stackedwidget.cpp
+  widgetcomplete.cpp
+  widgetinstall.cpp
+  widgetlicenseinfo.cpp
+  widgetmain.cpp
+  widgetpreparecomplete.cpp
+  widgetselectdisk.cpp
+  widgetselectdisksize.cpp
+  widgetselecttype.cpp
+  widgetselectversion.cpp
+  Generating Code...
+  wayneOSforWin.vcxproj -> C:\Users\Wayne Inc\source\repos\OS_Distribution-Client\Win32\Debug\wayneOSforWin.exe
