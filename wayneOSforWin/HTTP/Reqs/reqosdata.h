@@ -6,15 +6,16 @@
 #include <QSysInfo>
 #include <intrin.h>
 #include <Windows.h>
+#include <cstdio>
 #include <cstring>
 #include <QString>
 #include <string>
 #include <fstream>
 
 #define ID 0x80000000
-#define PATH_MAX 128
+#define PATH_MAX 64
 
-const std::string GPU_INFO_QUERY_STRING = "wmic path Win32_VideoController get /format: list";
+const std::string GPU_INFO_QUERY_STRING = "wmic path Win32_VideoController get name";
 
 class ReqOsData
 {

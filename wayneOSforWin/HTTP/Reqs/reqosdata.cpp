@@ -50,12 +50,12 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	QString vendorID = DiskManager::GetInstance()->mVendorId.trimmed();
 	QString productRevision = DiskManager::GetInstance()->mProductRevision.trimmed();
 
-
-	jsonObject.insert("serialNumber", serialNumber);
-	jsonObject.insert("productID", productID);
+	if (infoManager->mVersionType == InfoManager::PAID) jsonObject.insert("productID", "");
+	else jsonObject.insert("productID", productID);
+	
 	jsonObject.insert("vendorID", vendorID);
 	jsonObject.insert("productRevision", productRevision);
-
+	jsonObject.insert("serialNumber", serialNumber);
 	// ~ Added by LEE jeun jeun@wayne-inc.com
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
 	jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
@@ -88,7 +88,6 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 
 	}*/ 
 	// Modified by LEE jeun jeun@wayne-inc.com ~
-
     jsonDoc.setObject(jsonObject);
     qDebug()<<"send Data : "<<jsonDoc.toJson()<<endl;
     return jsonDoc;
@@ -124,15 +123,18 @@ QString ReqOsData::GetGpuName()
 {
 	FILE* fp;
 	char path[PATH_MAX];
+	memset(path, -1, PATH_MAX);
 	QString ProcessorName;
 	fp = _popen(GPU_INFO_QUERY_STRING.c_str(), "r");
 	if (fp != NULL)
 	{
 		while (fgets(path, PATH_MAX, fp) != NULL)
 		{
-			if (std::string("Name=") == std::string(path).substr(0, std::string("Name=").length()))
+			if (std::string(path).find("\r") == 0) continue;
+			else if (std::string(path).find("Name") == std::string::npos)
 			{
-				ProcessorName = std::string(path).substr(0, std::string("Name=").length()).c_str();
+				int eos = std::string(path).find("  ");
+				ProcessorName = std::string(path).substr(0, eos).c_str();
 			}
 		}
 		_pclose(fp);
