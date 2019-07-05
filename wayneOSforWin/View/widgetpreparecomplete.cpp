@@ -44,6 +44,6 @@ void WidgetPrepareComplete::on_btnSetup_clicked()
 	//QDir dir;
 	//QString path = dir.absoluteFilePath("wayneUpdateFile");
 	//QMessageBox::critical(NULL, "Write Error", path);
-	ViewManager::GetInstance()->timer->start(500); // Added by LEE Jeun
+	//ViewManager::GetInstance()->timer->start(500); // Added by LEE Jeun
 }
 

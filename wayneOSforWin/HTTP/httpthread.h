@@ -26,7 +26,7 @@ public:
 
      QFile* updateFile;
 	 QString IPAddr; //Added by LEE jeun jeun@wayne-inc.com
-
+	 QString getFileName();
 
 
 private:

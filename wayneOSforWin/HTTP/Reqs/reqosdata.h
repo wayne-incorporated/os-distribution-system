@@ -11,11 +11,13 @@
 #include <QString>
 #include <string>
 #include <fstream>
+#include <atlstr.h>
 
 #define ID 0x80000000
-#define PATH_MAX 64
-
-const std::string GPU_INFO_QUERY_STRING = "wmic path Win32_VideoController get name";
+// ~ Modified and Added by LEE Jeun jeun@wayne-inc.com
+#define BUFSIZE 1024
+#define GPU_INFO_QUERY_STRING "wmic path Win32_VideoController get name";
+// Modified and Added by LEE Jeun jeun@wayne-inc.com ~
 
 class ReqOsData
 {
