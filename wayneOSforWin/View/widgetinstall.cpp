@@ -17,11 +17,10 @@ WidgetInstall::WidgetInstall(QWidget *parent) : QWidget(parent),ui(new Ui::Widge
 {
     ui->setupUi(this);
 	// ~ Added by LEE Jeun@wayne-inc.com
-	p = 0;
+	idx = 0, cnt = 0, p = 0;
 	display = "Downloading Files";
-	timer2 = new QTimer(this);
 	connect(ViewManager::GetInstance()->timer, SIGNAL(timeout()), this, SLOT(setDynamic()));
-	connect(timer2, SIGNAL(timeout()), this, SLOT(setDynamic()));
+	ViewManager::GetInstance()->timer->start(500);
 	// Added by LEE Jeun@wayne-inc.com
 	status = STATUS_IDLE;
 	ui->progressBar->reset();
@@ -35,7 +34,6 @@ WidgetInstall::WidgetInstall(QWidget *parent) : QWidget(parent),ui(new Ui::Widge
 WidgetInstall::~WidgetInstall()
 {
     delete ui;
-	if (timer2 != NULL) delete timer2; // Added by LEE Jeun@wayne-inc.com
 }
 Ui::WidgetInstall* WidgetInstall::getUI()
 {
@@ -103,117 +101,120 @@ void WidgetInstall::startInstall()
 	QString path = dir.absoluteFilePath("updStatus/wayneUpdateFile");
 	
 	QByteArray charPath = path.toLocal8Bit();
-	hFile = getHandleOnFile(charPath.data() , GENERIC_READ);
-	//hFile = getHandleOnFile("wayneUpdateFile", GENERIC_READ);
-	if (hFile == INVALID_HANDLE_VALUE)
+	if (HttpManager::GetInstance()->httpThread.getFileName() != "dummy.img") // Modified by LEE Jeun jeun@wayne-inc.com
 	{
-		removeLockOnVolume(hVolume);
-		CloseHandle(hVolume);
-		status = STATUS_IDLE;
-		hVolume = INVALID_HANDLE_VALUE;
-		//btnCancel->setEnabled(false);
-		//setReadWriteButtonState();
-		return;
-	}
-	hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE);
-	if (hRawDisk == INVALID_HANDLE_VALUE)
-	{
-		removeLockOnVolume(hVolume);
-		CloseHandle(hFile);
-		CloseHandle(hVolume);
-		status = STATUS_IDLE;
-		hVolume = INVALID_HANDLE_VALUE;
-		hFile = INVALID_HANDLE_VALUE;
-		//btnCancel->setEnabled(false);
-		//setReadWriteButtonState();
-		return;
-	}
-	availablesectors = getNumberOfSectors(hRawDisk, &sectorsize);
-	numsectors = getFileSizeInSectors(hFile, sectorsize);
-	if (numsectors > availablesectors)
-	{
-		QMessageBox::critical(NULL, "Write Error", QString::fromLocal8Bit("Not enough space on disk: Size: %1 sectors  Available: %2 sectors  Sector size: %3").arg(numsectors).arg(availablesectors).arg(sectorsize));
+		hFile = getHandleOnFile(charPath.data(), GENERIC_READ);
+		//hFile = getHandleOnFile("wayneUpdateFile", GENERIC_READ);
+		if (hFile == INVALID_HANDLE_VALUE)
+		{
+			removeLockOnVolume(hVolume);
+			CloseHandle(hVolume);
+			status = STATUS_IDLE;
+			hVolume = INVALID_HANDLE_VALUE;
+			//btnCancel->setEnabled(false);
+			//setReadWriteButtonState();
+			return;
+		}
+		hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE);
+		if (hRawDisk == INVALID_HANDLE_VALUE)
+		{
+			removeLockOnVolume(hVolume);
+			CloseHandle(hFile);
+			CloseHandle(hVolume);
+			status = STATUS_IDLE;
+			hVolume = INVALID_HANDLE_VALUE;
+			hFile = INVALID_HANDLE_VALUE;
+			//btnCancel->setEnabled(false);
+			//setReadWriteButtonState();
+			return;
+		}
+		availablesectors = getNumberOfSectors(hRawDisk, &sectorsize);
+		numsectors = getFileSizeInSectors(hFile, sectorsize);
+		if (numsectors > availablesectors)
+		{
+			QMessageBox::critical(NULL, "Write Error", QString::fromLocal8Bit("Not enough space on disk: Size: %1 sectors  Available: %2 sectors  Sector size: %3").arg(numsectors).arg(availablesectors).arg(sectorsize));
+			removeLockOnVolume(hVolume);
+			CloseHandle(hRawDisk);
+			CloseHandle(hFile);
+			CloseHandle(hVolume);
+			status = STATUS_IDLE;
+			hVolume = INVALID_HANDLE_VALUE;
+			hFile = INVALID_HANDLE_VALUE;
+			hRawDisk = INVALID_HANDLE_VALUE;
+			//btnCancel->setEnabled(false);
+			//setReadWriteButtonState();
+			return;
+		}
+
+		ui->progressBar->setRange(0, (numsectors == 0ul) ? 100 : (int)numsectors);
+		lasti = 0ul;
+		timer.start();
+		// ~ Added by LEE Jeun@wayne-inc.com
+		ViewManager::GetInstance()->timer->start(500);
+		display = "Installing";
+		ui->labelStatus->setText(display);
+		// Added by LEE Jeun@wayne-inc.com ~
+		for (i = 0ul; i < numsectors && status == STATUS_WRITING; i += 1024ul)
+		{
+			sectorData = readSectorDataFromHandle(hFile, i, (numsectors - i >= 1024ul) ? 1024ul : (numsectors - i), sectorsize);
+			if (sectorData == NULL)
+			{
+				delete sectorData;
+				removeLockOnVolume(hVolume);
+				CloseHandle(hRawDisk);
+				CloseHandle(hFile);
+				CloseHandle(hVolume);
+				status = STATUS_IDLE;
+				sectorData = NULL;
+				hRawDisk = INVALID_HANDLE_VALUE;
+				hFile = INVALID_HANDLE_VALUE;
+				hVolume = INVALID_HANDLE_VALUE;
+				//btnCancel->setEnabled(false);
+				//setReadWriteButtonState();
+				return;
+			}
+			if (!writeSectorDataToHandle(hRawDisk, sectorData, i, (numsectors - i >= 1024ul) ? 1024ul : (numsectors - i), sectorsize))
+			{
+				delete sectorData;
+				removeLockOnVolume(hVolume);
+				CloseHandle(hRawDisk);
+				CloseHandle(hFile);
+				CloseHandle(hVolume);
+				status = STATUS_IDLE;
+				sectorData = NULL;
+				hRawDisk = INVALID_HANDLE_VALUE;
+				hFile = INVALID_HANDLE_VALUE;
+				hVolume = INVALID_HANDLE_VALUE;
+				//btnCancel->setEnabled(false);
+				//setReadWriteButtonState();
+				return;
+			}
+			delete sectorData;
+			sectorData = NULL;
+			QCoreApplication::processEvents();
+			if (timer.elapsed() >= 1000)
+			{
+				mbpersec = (((double)sectorsize * (i - lasti)) * (1000.0 / timer.elapsed())) / 1024.0 / 1024.0;
+				//after make
+		  //statusbar->showMessage(QString("%1MB/s").arg(mbpersec));
+				timer.start();
+				lasti = i;
+			}
+			ui->progressBar->setValue(i);
+			QCoreApplication::processEvents();
+		}
 		removeLockOnVolume(hVolume);
 		CloseHandle(hRawDisk);
 		CloseHandle(hFile);
 		CloseHandle(hVolume);
-		status = STATUS_IDLE;
-		hVolume = INVALID_HANDLE_VALUE;
-		hFile = INVALID_HANDLE_VALUE;
-		hRawDisk = INVALID_HANDLE_VALUE;
-		//btnCancel->setEnabled(false);
-		//setReadWriteButtonState();
-		return;
-	}
-
-	ui->progressBar->setRange(0, (numsectors == 0ul) ? 100 : (int)numsectors);
-	lasti = 0ul;
-	timer.start();
-	// ~ Added by LEE Jeun@wayne-inc.com
-	timer2->start(500);
-	display = "Installing";
-	ui->labelStatus->setText(display);
-	// Added by LEE Jeun@wayne-inc.com ~
-	for (i = 0ul; i < numsectors && status == STATUS_WRITING; i += 1024ul)
-	{
-		sectorData = readSectorDataFromHandle(hFile, i, (numsectors - i >= 1024ul) ? 1024ul:(numsectors - i), sectorsize);
-		if (sectorData == NULL)
-		{
-			delete sectorData;
-			removeLockOnVolume(hVolume);
-			CloseHandle(hRawDisk);
-			CloseHandle(hFile);
-			CloseHandle(hVolume);
-			status = STATUS_IDLE;
-			sectorData = NULL;
-			hRawDisk = INVALID_HANDLE_VALUE;
-			hFile = INVALID_HANDLE_VALUE;
-			hVolume = INVALID_HANDLE_VALUE;
-			//btnCancel->setEnabled(false);
-			//setReadWriteButtonState();
-			return;
-		}
-		if (!writeSectorDataToHandle(hRawDisk, sectorData, i, (numsectors - i >= 1024ul) ? 1024ul:(numsectors - i), sectorsize))
-		{
-			delete sectorData;
-			removeLockOnVolume(hVolume);
-			CloseHandle(hRawDisk);
-			CloseHandle(hFile);
-			CloseHandle(hVolume);
-			status = STATUS_IDLE;
-			sectorData = NULL;
-			hRawDisk = INVALID_HANDLE_VALUE;
-			hFile = INVALID_HANDLE_VALUE;
-			hVolume = INVALID_HANDLE_VALUE;
-			//btnCancel->setEnabled(false);
-			//setReadWriteButtonState();
-			return;
-		}
-		delete sectorData;
 		sectorData = NULL;
-		QCoreApplication::processEvents();
-		if (timer.elapsed() >= 1000)
-		{
-			mbpersec = (((double)sectorsize * (i - lasti)) * (1000.0 / timer.elapsed())) / 1024.0 / 1024.0;
-                  //after make
-			//statusbar->showMessage(QString("%1MB/s").arg(mbpersec));
-			timer.start();
-			lasti = i;
-		}
-		ui->progressBar->setValue(i);
-		QCoreApplication::processEvents();
+		hRawDisk = INVALID_HANDLE_VALUE;
+		hFile = INVALID_HANDLE_VALUE;
+		hVolume = INVALID_HANDLE_VALUE;
+		ViewManager::GetInstance()->timer->stop(); // Added by LEE Jeun jeun@wayne-inc.com
+		ui->progressBar->reset();
 	}
-	removeLockOnVolume(hVolume);
-	CloseHandle(hRawDisk);
-	CloseHandle(hFile);
-	CloseHandle(hVolume);
-	sectorData = NULL;
-	hRawDisk = INVALID_HANDLE_VALUE;
-	hFile = INVALID_HANDLE_VALUE;
-	hVolume = INVALID_HANDLE_VALUE;
 	///////////////////
-	ui->progressBar->reset();
-	timer2->stop(); // Added by LEE Jeun jeun@wayne-inc.com
     #endif
 	
 	// ~ Modified and Added by LEE jeun jeun@wayne-inc.com
@@ -242,7 +243,6 @@ void WidgetInstall::RequestServerData()
 	ui->btnNext->setEnabled(false);
 	QObject::connect(&(HttpManager::GetInstance()->httpThread), SIGNAL(DonwloadStatus(int, int)), this, SLOT(DonwloadStatus(int, int)));
 	HttpManager::GetInstance()->RequestOSData();
-
 }
 
 // ~ Modified by LEE Jeun@wayne-inc.com

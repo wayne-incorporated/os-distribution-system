@@ -50,7 +50,6 @@ private:
 	char *sectorData;
 	QTime timer;
 	// ~ Added by LEE Jeun@wayne-inc.com
-	QTimer* timer2;
 	QString display;
 	int p;
 	int idx;

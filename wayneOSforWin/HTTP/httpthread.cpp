@@ -144,11 +144,11 @@ void HttpThread::ReplyFinished(QNetworkReply *reply)
 			   {
 
 				   this->slideCount = jsonObj.find("slideCount").value().toInt();
-				   if (slideCount == 0)
+				   /*if (slideCount == 0)
 				   {
 					   QMessageBox::critical(NULL, QString::fromLocal8Bit("Error"), QString::fromLocal8Bit("An error is occured during downloading."));
 					   QApplication::exit();
-				   }
+				   }*/ // Modified by LEE Jeun jeun@wayne-inc.com
 				   RequestOSFile();
 			   }
 			   else
@@ -266,13 +266,15 @@ void HttpThread::ReplyFinished(QNetworkReply *reply)
 
    else
    {
-       qDebug()<<"error :"<<reply->errorString()<<endl;
-       int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-       qDebug()<<"statusCode"<<statusCode<<endl;
-       qDebug()<<"FileDown Error";
-       QMessageBox::critical(NULL, "Connect Error", QString("can not connect to Server.."));
-       QApplication::exit();
-
+		if (updateFileName != "dummy.img") // Modified by LEE Jeun jeun@wayne-inc.com
+		{
+			qDebug() << "error :" << reply->errorString() << endl;
+			int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+			qDebug() << "statusCode" << statusCode << endl;
+			qDebug() << "FileDown Error";
+			QMessageBox::critical(NULL, "Connect Error", QString("can not connect to Server.."));
+			QApplication::exit();
+		}
    }
 }
 
@@ -282,5 +284,10 @@ void HttpThread::gotReply(QNetworkReply* networkReply)
 	networkReply->deleteLater();
 	QJsonObject Jobj = QJsonDocument::fromJson(networkReply->readAll()).object();
 	IPAddr = Jobj.find("ip").value().toString();
+}
+
+QString HttpThread::getFileName()
+{
+	return updateFileName;
 }
 // Added by LEE jeun jeun@wayne-inc.com ~

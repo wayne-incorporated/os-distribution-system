@@ -51,8 +51,9 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	QString productRevision = DiskManager::GetInstance()->mProductRevision.trimmed();
 
 	// ~ Modified by LEE Jeun jeun@wayne-inc.com
-	if (infoManager->mVersionType == InfoManager::PAID) jsonObject.insert("productID", "");
-	else jsonObject.insert("productID", productID);
+	//if (infoManager->mVersionType == InfoManager::PAID) jsonObject.insert("productID", "");
+	//else jsonObject.insert("productID", productID);
+	jsonObject.insert("productID", productID);
 	// Modified by LEE Jeun jeun@wayne-inc.com
 
 	jsonObject.insert("vendorID", vendorID);
@@ -63,12 +64,16 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
 
 	QString CPU = GetCpuName();
-	qDebug() << CPU;
+	//qDebug() << CPU;
 	jsonObject.insert("customerInfo0", "CPU: " + CPU);
+	qDebug() << CPU;
+	jsonObject.insert("CPU", CPU);
 
 	QString GPU = GetGpuName();
-	qDebug() << GPU;
+	//qDebug() << GPU;
 	jsonObject.insert("customerInfo1", "GPU: " + GPU);
+	qDebug() << GPU;
+	jsonObject.insert("GPU", GPU);
 	// Added by LEE jeun jeun@wayne-inc.com ~
 	
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
