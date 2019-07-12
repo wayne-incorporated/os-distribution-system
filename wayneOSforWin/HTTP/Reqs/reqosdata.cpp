@@ -64,14 +64,12 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
 
 	QString CPU = GetCpuName();
-	//qDebug() << CPU;
-	jsonObject.insert("customerInfo0", "CPU: " + CPU);
+	//jsonObject.insert("customerInfo0", "CPU: " + CPU);
 	qDebug() << CPU;
 	jsonObject.insert("CPU", CPU);
 
 	QString GPU = GetGpuName();
-	//qDebug() << GPU;
-	jsonObject.insert("customerInfo1", "GPU: " + GPU);
+	//jsonObject.insert("customerInfo1", "GPU: " + GPU);
 	qDebug() << GPU;
 	jsonObject.insert("GPU", GPU);
 	// Added by LEE jeun jeun@wayne-inc.com ~
