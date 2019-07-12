@@ -1,2 +1,17 @@
-﻿  urlstrings.cpp
-  wayneOSforWin.vcxproj -> C:\Users\Wayne Inc\source\repos\OS_Distribution-Client\Win32\Debug\wayneOSforWin.exe
+﻿  moc_widgetinstall.cpp
+  moc_widgetlicenseinfo.cpp
+  moc_widgetselectdisk.cpp
+  reqosdata.cpp
+  urlstrings.cpp
+  stackedwidget.cpp
+  widgetcomplete.cpp
+  widgetinstall.cpp
+  widgetlicenseinfo.cpp
+  widgetmain.cpp
+  widgetpreparecomplete.cpp
+  widgetselectdisk.cpp
+  widgetselectdisksize.cpp
+  widgetselecttype.cpp
+  widgetselectversion.cpp
+  코드를 생성하고 있습니다...
+  wayneOSforWin.vcxproj -> C:\Users\EliteDesk\source\repos\os-distribution-system\Win32\Debug\wayneOSforWin.exe
