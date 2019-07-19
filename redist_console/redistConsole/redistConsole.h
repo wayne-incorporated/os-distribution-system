@@ -10,7 +10,9 @@
 
 #define DIR_LEN MAX_PATH+1
 
-const CString KEY = "SOFTWARE\\WOW6432Node\\Microsoft\\VisualStudio";
+const CString JUDGE3264 = "SOFTWARE\\WOW6432Node";
+const CString KEY32 = "SOFTWARE\\Microsoft\\VisualStudio";
+const CString KEY64 = "SOFTWARE\\WOW6432Node\\Microsoft\\VisualStudio";
 const CString MSVCR13 = "\\vcredist\\vcredist_x86_2013.exe";
 const CString MSVCR15 = "\\vcredist\\vcredist_x86_2015.exe";
 const CString MAIN_INSTALLER = "\\main\\wayneOSforWin.exe";
