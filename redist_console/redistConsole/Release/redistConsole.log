@@ -1,1 +1,7 @@
-﻿  redistConsole.vcxproj -> C:\Users\Wayne Inc\source\repos\redist_console\Release\redistConsole.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Windows XP를 대상으로 하는 지원은 사용되지 않으며 Visual Studio의 향후 릴리스에서 제공되지 않습니다. 자세한 내용은 https://go.microsoft.com/fwlink/?linkid=2023588을 참조하세요.
+  코드를 생성하고 있습니다.
+  0 of 450 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  redistConsole.vcxproj -> C:\Users\EliteDesk\source\repos\redist_console\Release\redistConsole.exe

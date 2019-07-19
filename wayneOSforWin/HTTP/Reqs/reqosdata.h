@@ -12,22 +12,49 @@
 #include <string>
 #include <fstream>
 #include <atlstr.h>
+#include <vector>
 
 #define ID 0x80000000
 // ~ Modified and Added by LEE Jeun jeun@wayne-inc.com
-#define BUFSIZE 1024
-#define GPU_INFO_QUERY_STRING "wmic path Win32_VideoController get name";
+#define BUFSIZE 128
+#define DIV 1024
+#define GPU_INFO_QUERY_STRING "wmic path Win32_VideoController get name"
+#define RAM_INFO_QUERY_STRING "wmic memorychip get capacity, speed"
+#define LOCAL_OS_INFO_QUERY_STRING "wmic os get caption, osarchitecture"
+//#define RAM_CAPACITY_QUERY_STRING "wmic memorychip get capacity"
+//#define RAM_CLOCK_SPEED_QUERY_STRING "wmic memorychip get speed"
 // Modified and Added by LEE Jeun jeun@wayne-inc.com ~
+
+typedef struct _RAMINFO
+{
+	long long capacity;
+	int ClockSpeed;
+	int byteToGB() { return capacity / (DIV*DIV*DIV); }
+}RamInfo;
+
+typedef struct _OSINFO
+{
+	std::string OSver;
+	TCHAR bit[8];
+}OSInfo;
 
 class ReqOsData
 {
 public:
     ReqOsData(QNetworkAccessManager* manager);
     ~ReqOsData();
-    
 	QJsonDocument GetInstallInfoData();
-	QString GetCpuName(); // Added by LEE jeun jeun@wayne-inc.com
-	QString GetGpuName(); // Added by LEE Jeun jeun@wayne-inc.com
+	// ~ Added by LEE jeun jeun@wayne-inc.com
+	QString GetCpuName(); 
+	QString GetGpuName(); 
+	RamInfo RAM;
+	OSInfo OS;
+	std::string getHwInfo(const TCHAR command[]);
+	RamInfo getRamInfo();
+	OSInfo getOSInfo();
+	//int getRamCapacity();
+	//int getRamClockSpeed();
+	// Added by LEE Jeun jeun@wayne-inc.com ~
 };
 
 

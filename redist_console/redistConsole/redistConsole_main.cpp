@@ -14,12 +14,17 @@
 
 int main()
 {
-	SetConsoleTitle(_T("Wayne Inc. OS Installer 1.2.1"));
-	CString ver = KEY + MSVCRKEY13;
-	// CString csProduct = "{8122DAB1-ED4D-3676-BB0A-CA368196543E}"; // vcredist 2013 x86 minimum 12.0.40664
+	SetConsoleTitle(_T("Wayne Inc. OS Installer 1.2.0"));
+	LONG result;
 	BOOL STATE;
 	HKEY hKey;
-	LONG result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ver, 0, KEY_READ, &hKey);
+	CString path;
+	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, JUDGE3264, 0, KEY_READ, &hKey);
+	if (result != ERROR_SUCCESS) path = KEY32;
+	else path = KEY64;
+	CString ver = path + MSVCRKEY13;
+	// CString csProduct = "{8122DAB1-ED4D-3676-BB0A-CA368196543E}"; // vcredist 2013 x86 minimum 12.0.40664
+	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ver, 0, KEY_READ, &hKey);
 	if (result != ERROR_SUCCESS)
 	{
 		showStatus(ver, result);
@@ -28,7 +33,7 @@ int main()
 		isInstalled(hKey, ver);
 	}
 	else showStatus(ver, result);
-	ver = KEY + MSVCRKEY15;
+	ver = path + MSVCRKEY15;
 	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ver, 0, KEY_READ, &hKey);
 	if (result != ERROR_SUCCESS)
 	{

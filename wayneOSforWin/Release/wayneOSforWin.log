@@ -1,4 +1,44 @@
-﻿  reqosdata.cpp
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Windows XP를 대상으로 하는 지원은 사용되지 않으며 Visual Studio의 향후 릴리스에서 제공되지 않습니다. 자세한 내용은 https://go.microsoft.com/fwlink/?linkid=2023588을 참조하세요.
+  disk.cpp
+  diskmanager.cpp
+  moc_httpmanager.cpp
+  moc_httprequest.cpp
+  moc_httpthread.cpp
+  moc_stackedwidget.cpp
+  moc_titlebar.cpp
+  moc_widgetcomplete.cpp
+  moc_widgetinstall.cpp
+  moc_widgetlicenseinfo.cpp
+  moc_widgetmain.cpp
+  moc_widgetpreparecomplete.cpp
+  moc_widgetselectdisk.cpp
+  moc_widgetselectdisksize.cpp
+  moc_widgetselecttype.cpp
+  moc_widgetselectversion.cpp
+  httpmanager.cpp
+  httprequest.cpp
+  httpthread.cpp
+  reqdevicevolume.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  reqosdata.cpp
+  reqosfile.cpp
   urlstrings.cpp
+  infomanager.cpp
+  main.cpp
+  frametitlebar.cpp
+  titlebar.cpp
+  stackedwidget.cpp
+  viewmanager.cpp
+  widgetcomplete.cpp
+  widgetinstall.cpp
+  widgetlicenseinfo.cpp
+  widgetmain.cpp
+  widgetpreparecomplete.cpp
+  widgetselectdisk.cpp
+  widgetselectdisksize.cpp
+  widgetselecttype.cpp
+  widgetselectversion.cpp
+  WinDpiScale.cpp
   코드를 생성하고 있습니다...
   wayneOSforWin.vcxproj -> C:\Users\EliteDesk\source\repos\os-distribution-system\Win32\Release\wayneOSforWin.exe
