@@ -26,14 +26,6 @@ WidgetSelectDisk::WidgetSelectDisk(QWidget *parent) :
     ui(new Ui::WidgetSelectDisk)
 {
     ui->setupUi(this);
-	/*ui->textEdit->setFixedSize((int)(windowsDpiScale() * 2 * ui->textEdit->width()), (int)(windowsDpiScale() * 2 * ui->textEdit->height()));
-	ui->textEdit->move(QPoint(ui->textEdit->x() * 2 * windowsDpiScale(), ui->textEdit->y() * 2 * windowsDpiScale()));
-	ui->gridLayoutWidget->setFixedSize((int)(windowsDpiScale() * 2 * ui->gridLayoutWidget->width()), (int)(windowsDpiScale() * 2 * ui->gridLayoutWidget->height()));
-	ui->gridLayoutWidget->move(QPoint(ui->gridLayoutWidget->x() * 2 * windowsDpiScale(), ui->gridLayoutWidget->y() * 2 * windowsDpiScale()));
-	ui->btnPrev->setFixedSize((int)(windowsDpiScale() * 2 * ui->btnPrev->width()), (int)(windowsDpiScale() * 2 * ui->btnPrev->height()));
-	ui->btnPrev->move(QPoint(ui->btnPrev->x() * 2 * windowsDpiScale(), ui->btnPrev->y() * 2 * windowsDpiScale()));
-	ui->btnNext->setFixedSize((int)(windowsDpiScale() * 2 * ui->btnNext->width()), (int)(windowsDpiScale() * 2 * ui->btnNext->height()));
-	ui->btnNext->move(QPoint(ui->btnNext->x() * 2 * windowsDpiScale(), ui->btnNext->y() * 2 * windowsDpiScale()));*/
 #if WAYNE_WINAPI
 	getLogicalDrives();
 	if(ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt() == 0)
@@ -105,8 +97,11 @@ void WidgetSelectDisk::on_btnNext_clicked()
 	else
 	{
 		InfoManager::GetInstance()->mDriveInstallPath = ui->comboBox->currentText();
+		//QString tmpStr = ui->comboBox->currentText(); // for debugging
 		InfoManager::GetInstance()->mVolumeId = ui->comboBox->currentText().at(1).toLatin1() - 'A';
+		//int tmpVolumeID = ui->comboBox->currentText().at(1).toLatin1() - 'A'; // for debugging
 		InfoManager::GetInstance()->mDeviceId =ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
+		//int tmpDeviceID = ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt(); // for debugging
 		
 		//Get SerialNumber, ProductId, VendorId
 		getProductInfo(InfoManager::GetInstance()->mDeviceId);

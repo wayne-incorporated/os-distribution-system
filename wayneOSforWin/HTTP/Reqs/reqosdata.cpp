@@ -60,6 +60,10 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("productRevision", productRevision);
 	jsonObject.insert("serialNumber", serialNumber);
 	// ~ Added by LEE jeun jeun@wayne-inc.com
+	DOUBLE realCapacity = GetSelectedDiskCapacity();
+	qDebug() << "real capacity: " << realCapacity << "GB";
+	jsonObject.insert("realCapacity", realCapacity);
+
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
 	jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
 	
@@ -313,6 +317,19 @@ QString ReqOsData::GetGpuName()
 	return ProcessorName;
 }
 
+DOUBLE ReqOsData::GetSelectedDiskCapacity()
+{
+	QString path = InfoManager::GetInstance()->mDriveInstallPath.section("", 2, 3);
+	TCHAR DrivePath[8];
+	memset(DrivePath, 0, sizeof(DrivePath));
+	path.toWCharArray(DrivePath);
+	ULARGE_INTEGER lpFreeByteAvailableToCaller, lpTotalNumberOfBytes, lpTotalNumberOfFreeBytes;
+	//UINT DiskType = GetDriveType(DrivePath);
+	BOOL bResult = GetDiskFreeSpaceEx(DrivePath, &lpFreeByteAvailableToCaller, &lpTotalNumberOfBytes, &lpTotalNumberOfFreeBytes);
+	if (!bResult) return 0;
+	DOUBLE selectedDiskCapacity = (lpTotalNumberOfBytes.QuadPart) / (1024.0*1024.0*1024.0);
+	return selectedDiskCapacity;
+}
 /*QString ReqOsData::GetGpuName()
 {
 	HANDLE hChildStdOut_Rd = NULL, hChildStdOut_Wr = NULL;
