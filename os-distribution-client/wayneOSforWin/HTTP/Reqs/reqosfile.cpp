@@ -14,6 +14,8 @@ ReqOsFile::ReqOsFile(QNetworkAccessManager* manager, QString updateFileName, int
     QNetworkRequest request(url);
 
     request.setRawHeader("Content-Type", "application/json;charset=UTF-8");
+	//request.setRawHeader("Content-Type", "application/x-iso-9660-image");
+	//request.setRawHeader("Content-Transfer-Encoding", "binary");
     //request.setRawHeader("Connection","keep-alive");
     manager->post(request,CreateData().toJson());
 }

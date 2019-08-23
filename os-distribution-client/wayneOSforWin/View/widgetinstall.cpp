@@ -277,6 +277,7 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 		//QString status = "Installing...";
 		//ui->labelStatus->setText(display);
 		//Write logic call...
+		HttpManager::GetInstance()->httpThread.updateFile->close();
 		try
 		{
 			this->startInstall();
