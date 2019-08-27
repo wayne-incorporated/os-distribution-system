@@ -1,0 +1,18 @@
+SYNOPSIS:
+ A server-client system that distribute OS image file to user.
+ 1) Server admin upload OS image files to server
+ 2) User connect Removable Device (ex: USB flash drive) to own PC
+ 3) User execute client program
+ 2) Client program send user side information to server
+ 3) Server recognize user side information (ex: Device ID, IP, etc) and record it to DB
+ 4) Server send OS image file to client program
+ 5) Clent program install the OS image to the Removable Device
+
+FOR WHOM:
+ Organization that distribute OS image file which can be installed in Removable Device
+
+USAGE:
+ 1) Download & install Server part on linux server
+ 2) Configure the Linux server (ex: firewall, mySQL, etc)
+ 3) Download client part on Windows
+ 4) Build client part source code with Visual Studio
