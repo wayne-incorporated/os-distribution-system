@@ -1,0 +1,18 @@
+SCOPE:
+ Bug fix
+ Documentation
+ Add new feature
+ Refactoring code
+ Update version/dependancies
+ Improve error/help message
+ Improve resource usage
+ Add test case
+
+HOW TO:
+ 1) Make branch
+ 2) Do it
+ 3) Create merge request
+ 4) Submit merge request
+
+BENIFIT:
+ Wayne Inc. will announce in Aug.
