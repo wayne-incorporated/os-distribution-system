@@ -62,10 +62,10 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	// ~ Added by LEE jeun jeun@wayne-inc.com
 	DOUBLE realCapacity = GetSelectedDiskCapacity();
 	qDebug() << "real capacity: " << realCapacity << "GB";
-	jsonObject.insert("realCapacity", realCapacity);
+	//jsonObject.insert("realCapacity", realCapacity);
 
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
-	jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
+	//jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
 	
 	/*int ramSize = getRamCapacity();
 	qDebug() << "RAM Capacity: " << ramSize;
@@ -76,29 +76,29 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("ramClockSpeed", ramClockSpeed);*/
 	RAM = getRamInfo();
 	qDebug() << RAM.byteToGB() << "GB";
-	jsonObject.insert("ramSize", RAM.byteToGB());
+	//jsonObject.insert("ramSize", RAM.byteToGB());
 
 	qDebug() << RAM.ClockSpeed << "MHz";
-	jsonObject.insert("ramClockSpeed", RAM.ClockSpeed);
+	//jsonObject.insert("ramClockSpeed", RAM.ClockSpeed);
 
 	OS = getOSInfo();
 	QString LocalOSver = OS.OSver.c_str(), LocalOSbit = QString::fromWCharArray(OS.bit);
 	qDebug() << LocalOSver << " " << LocalOSbit;
-	jsonObject.insert("LocalOSinfo", LocalOSver + " " + LocalOSbit);
+	//jsonObject.insert("LocalOSinfo", LocalOSver + " " + LocalOSbit);
 
 	QString CPU = GetCpuName();
 	//jsonObject.insert("customerInfo0", "CPU: " + CPU);
 	qDebug() << CPU;
-	jsonObject.insert("CPU", CPU);
+	//jsonObject.insert("CPU", CPU);
 
 	QString GPU = GetGpuName();
 	//jsonObject.insert("customerInfo1", "GPU: " + GPU);
 	qDebug() << GPU;
-	jsonObject.insert("GPU", GPU);
+	//jsonObject.insert("GPU", GPU);
 	// Added by LEE jeun jeun@wayne-inc.com ~
 	
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
-	/*QList<QHostAddress> list = QNetworkInterface::allAddresses();
+	QList<QHostAddress> list = QNetworkInterface::allAddresses();
 
 	for (int nIter = 0; nIter<list.count(); nIter++)
 
@@ -114,7 +114,7 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 			}
 		}
 
-	}*/ 
+	} 
 	// Modified by LEE jeun jeun@wayne-inc.com ~
     jsonDoc.setObject(jsonObject);
     qDebug()<<"send Data : "<<jsonDoc.toJson()<<endl;

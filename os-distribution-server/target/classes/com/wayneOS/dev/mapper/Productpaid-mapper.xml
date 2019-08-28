@@ -11,7 +11,7 @@
 		deviceType,
 		deviceVolume,
 		imgName, 
-		userIPAddress, 
+		userIPAddress,
 		lastReleaseDate,
 		releaseCount, 
 		customerInfo0,
@@ -23,8 +23,8 @@
 		#{serialNumber},
 		#{deviceType},
 		#{deviceVolume},
-		#{imgName}, 
-		#{userIPAddress}, 
+		#{imgName},
+		#{userIPAddress},
 		NOW(),
 		#{releaseCount}, 
 		#{customerInfo0},
@@ -46,7 +46,7 @@
 		deviceType = #{deviceType},
 		deviceVolume= #{deviceVolume},
 		imgName = #{imgName},
-		userIPAddress = #{userIPAddress}, 
+		userIPAddress = #{userIPAddress},
 		lastReleaseDate = #{lastReleaseDate},
 		releaseCount = #{releaseCount}, 
 		customerInfo0 = #{customerInfo0},
@@ -94,7 +94,7 @@
 <update id="UpdateLocalData">
 	UPDATE PRODUCTPAID /* PRODUCTPAID UpdateLocalData */
 	SET 
-		userIPAddress = #{userIPAddress}, 
+		userIPAddress = #{userIPAddress},
 		releaseCount = #{releaseCount} 
 	WHERE 
 		vendorID = #{vendorID} AND

@@ -27,7 +27,7 @@ $(document).ready(function(){
 	  height		: "700", 
 	  jsonReader 	: { repeatitems: false },
       colNames		: ['idx','vendorID','productID','serialNumber','deviceType',
-              		   'deviceVolume','realCapacity','imgName','userIPAddress','ramSize','ramClockSpeed','CPU','GPU','LocalOSinfo','initialReleaseDate','lastReleaseDate',
+              		   'deviceVolume','imgName','userIPAddress','lastReleaseDate',
               		   'releaseCount','customerInfo0','customerInfo1','flag'], //칼럼 이름
       colModel		: [ //데이터 매핑 및 로우 속성
             {name:'idx', width:"4%"},
@@ -36,15 +36,8 @@ $(document).ready(function(){
           	{name:'serialNumber',	width:"8%"},
           	{name:'deviceType',		width:"8%"},
           	{name:'deviceVolume',	width:"8%"},
-		{name:'realCapacity', width:"8%"},
           	{name:'imgName', 		width:"8%"},
           	{name:'userIPAddress',	width:"8%"},
-		{name:'ramSize', width:"8%"},
-		{name:'ramClockSpeed', width:"8%"},
-		{name:'CPU', width:"8%"},
-		{name:'GPU', width:"8%"},
-		{name:'LocalOSinfo', width:"8%"},
-		{name:'initialReleaseDate',width:"8%",formatoptions: { srcformat: "ISO8601Long", newformat: "m/d/Y h:i A" }},
           	{name:'lastReleaseDate',width:"8%" ,formatoptions: { srcformat: "ISO8601Long", newformat: "m/d/Y h:i A" }},
           	{name:'releaseCount',	width:"8%"},
           	{name:'customerInfo0',	width:"8%"},
@@ -81,14 +74,7 @@ $(document).ready(function(){
 		jQuery("#serialNumber").val(rowdata.serialNumber);
 		jQuery("#deviceType").val(rowdata.deviceType);
 		jQuery("#deviceVolume").val(rowdata.deviceVolume);
-		jQuery("#realCapacity").val(rowdata.realCapacity);
 		jQuery("#userIPAddress").val(rowdata.userIPAddress);
-		jQuery("#ramSize").val(rowdata.ramSize);
-		jQuery("#ramClockSpeed").val(rowdata.ramClockSpeed);
-		jQuery("#CPU").val(rowdata.CPU);
-		jQuery("#GPU").val(rowdata.GPU);
-		jQuery("#LocalOSinfo").val(rowdata.LocalOSinfo);
-		jQuery("#initialReleaseDate").val(rowdata.initialReleaseDate);
 		jQuery("#lastReleaseDate").val(rowdata.lastReleaseDate);
 		jQuery("#releaseCount").val(rowdata.releaseCount);
 		jQuery("#customerInfo0").val(rowdata.customerInfo0);
@@ -142,20 +128,13 @@ $("#btnInsert").click(function() {
 	var serialNumber = jQuery("#serialNumber").val();
 	var deviceType = jQuery("#deviceType").val();
 	var deviceVolume = jQuery("#deviceVolume").val();
-	var realCapacity = jQuery("#realCapacity").val();
 	var userIPAddress = jQuery("#userIPAddress").val();
-	var ramSize = jQuery("#ramSize").val();
-	var ramClockSpeed = jQuery("#ramClockSpeed").val();
-	var CPU = jQuery("#CPU").val();
-	var GPU = jQuery("#GPU").val();
-	var LocalOSinfo = jQuery("#LocalOSinfo").val();
 	//var lastReleaseDate = jQuery("#lastReleaseDate").val();
 	var imgName = jQuery("#imgName").val();
 	var releaseCount = jQuery("#releaseCount").val();
 	var customerInfo0 = jQuery("#customerInfo0").val();
 	var customerInfo1 = jQuery("#customerInfo1").val();		
 	var date= new Date();
-	var initialReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	var lastReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	
 	var addData = {
@@ -166,15 +145,8 @@ $("#btnInsert").click(function() {
 		"serialNumber" : serialNumber,
 		"deviceType" : deviceType,
 		"deviceVolume" : deviceVolume,
-		"realCapacity" : realCapacity,
 		"imgName" : imgName,
 		"userIPAddress" : userIPAddress,
-		"ramSize" : ramSize,
-		"ramClockSpeed" : ramClockSpeed,
-		"CPU" : CPU,
-		"GPU" : GPU,
-		"LocalOSinfo" : LocalOSinfo,
-		"initialReleaseDate" : initialReleaseDate,
 		"lastReleaseDate" : lastReleaseDate,
 		"releaseCount" : releaseCount,
 		"customerInfo0" : customerInfo0,
@@ -203,15 +175,8 @@ $("#btnInit").click(function() {
 	jQuery("#serialNumber").val('');
 	jQuery("#deviceType").val('');
 	jQuery("#deviceVolume").val('');
-	jQuery("#realCapacity").val('');
 	jQuery("#imgName").val('');
 	jQuery("#userIPAddress").val('');
-	jQuery("#ramSize").val('');
-	jQuery("#ramClockSpeed").val('');
-	jQuery("#CPU").val('');
-	jQuery("#GPU").val('');
-	jQuery("#LocalOSinfo").val('');
-	jQuery("#initialReleaseDate").val('');
 	jQuery("#lastReleaseDate").val('');
 	jQuery("#releaseCount").val('');
 	jQuery("#customerInfo0").val('');
@@ -243,15 +208,8 @@ $("#btnSave").click(function() {
 	var serialNumber = jQuery("#serialNumber").val();
 	var deviceType = jQuery("#deviceType").val();
 	var deviceVolume = jQuery("#deviceVolume").val();
-	var realCapacity = jQuery("#realCapacity").val();
 	var imgName = jQuery("#imgName").val();
 	var userIPAddress = jQuery("#userIPAddress").val();
-	var ramSize = jQuery("#ramSize").val();
-	var ramClockSpeed = jQuery("#ramClockSpeed").val();
-	var CPU = jQuery("#CPU").val();
-	var GPU = jQuery("#GPU").val();
-	var LocalOSinfo = jQuery("#LocalOSinfo").val();
-	var initialReleaseDate = jQuery("#initialReleaseDate").val();
 	var lastReleaseDate = jQuery("#lastReleaseDate").val();
 	var releaseCount = jQuery("#releaseCount").val();
 	var customerInfo0 = jQuery("#customerInfo0").val();
@@ -264,15 +222,8 @@ $("#btnSave").click(function() {
 	$("#list").setCell(rowid, 'serialNumber', serialNumber);
 	$("#list").setCell(rowid, 'deviceType', deviceType);
 	$("#list").setCell(rowid, 'deviceVolume', deviceVolume);
-	$("#list").setCell(rowid, 'realCapacity', realCapacity);
 	$("#list").setCell(rowid, 'imgName', imgName);
 	$("#list").setCell(rowid, 'userIPAddress', userIPAddress);
-	$("#list").setCell(rowid, 'ramSize', ramSize);
-	$("#list").setCell(rowid, 'ramClockSpeed', ramClockSpeed);
-	$("#list").setCell(rowid, 'CPU', CPU);
-	$("#list").setCell(rowid, 'GPU', GPU);
-	$("#list").setCell(rowid, 'LocalOSinfo', LocalOSinfo);
-	$("#list").setCell(rowid, 'initialReleaseDate', initialReleaseDate);
 	$("#list").setCell(rowid, 'lastReleaseDate', lastReleaseDate);
 	$("#list").setCell(rowid, 'releaseCount', releaseCount);
 	$("#list").setCell(rowid, 'customerInfo0', customerInfo0);
@@ -392,8 +343,6 @@ $("#main_Iframe", parent.document).width(1450);
 					
 						<td>serialNumber</td>
 						<td><input type="text" id="serialNumber" maxlength="100" class="input"></td>
-						<td>realCapacity</td>
-						<td><input type="text" id="realCapacity" maxlength="16" class="input"></td>
 					</tr>
 					
 					<tr>
@@ -402,24 +351,6 @@ $("#main_Iframe", parent.document).width(1450);
 						<td>userIPAddress</td>
 						<td><input type="text" id="userIPAddress" maxlength="15" class="input"></td>
 					</tr>
-<tr>
-	<td>ramSize</td>
-	<td><input type="text" id="ramSize" maxlength="16" class="input"></td>
-	<td>ramClockSpeed</td>
-	<td><input type="text" id="ramClockSpeed" maxlength="16" class="input"></td>
-</tr>
-<tr>
-	<td>CPU</td>
-	<td><input type="text" id="CPU" maxlength="100" class="input"></td>
-	<td>GPU</td>
-	<td><input type="text" id="GPU" maxlength="100" class="input"></td>
-</tr>
-<tr>
-	<td>LocalOSinfo</td>
-	<td><input type="text" id="LocalOSinfo" maxlength="64" class="input"></td>
-	<td>InitialReleaseDate</td>
-	<td><input type="text" id="initialReleaseDate" maxlength="15" class="input" readonly="readonly"></td>
-</tr>
 					<tr>
 						<td>LastReleaseDate</td>
 						<td><input type="text" id="lastReleaseDate" maxlength="15" class="input" readonly="readonly"></td>
