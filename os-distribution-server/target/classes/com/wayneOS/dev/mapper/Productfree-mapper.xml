@@ -39,9 +39,8 @@
 	UPDATE PRODUCTFREE SET vendorID = #{vendorID},
 		productID = #{productID},
 		serialNumber = #{serialNumber},deviceType = #{deviceType},
-		deviceVolume=#{deviceVolume}, imgName=#{imgName}, userIPAddress=#{userIPAddress}, 
-		lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount} , 
-		customerInfo0=#{customerInfo0} ,customerInfo1=#{customerInfo1}
+		deviceVolume=#{deviceVolume}, imgName=#{imgName}, userIPAddress=#{userIPAddress}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
+		customerInfo0=#{customerInfo0},customerInfo1=#{customerInfo1}
 	WHERE idx=#{idx}
 </update>
 
@@ -83,7 +82,8 @@
 <update id="UpdateLocalData">
 	UPDATE PRODUCTFREE /* PRODUCTFREE UpdateLocalData */
 	SET 
-		userIPAddress = #{userIPAddress}, 
+		imgName = #{imgName},
+		userIPAddress = #{userIPAddress},
 		releaseCount = #{releaseCount} 
 	WHERE 
 		vendorID = #{vendorID} AND
