@@ -40,7 +40,7 @@ public class OSFileController {
 	@Autowired
 	ImgService imgService;
 	
-	private int sendFileSize = 1024 * 1024 * 30;
+	private int sendFileSize = 1024 * 1024 * 32;
 	/**
 	 * 사용자 디바이스 정보를 받아온 후 해당 이미지가 있는지 검사
 	 */
@@ -176,6 +176,8 @@ public class OSFileController {
 		
 		File osFile = new File(osFilePath); 
 		
+		response.setContentType("application/json;charset=UTF-8");
+		response.setHeader("Content-Type", "application/json;charset=UTF-8");
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition", "attachment;filename=" + java.net.URLEncoder.encode("wayneOSForUpdateFile" + slideIndex, "utf-8") + ";");
 	    response.setHeader("Connection", "keep-alive");

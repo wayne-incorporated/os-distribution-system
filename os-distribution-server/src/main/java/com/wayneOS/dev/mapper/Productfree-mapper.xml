@@ -12,7 +12,8 @@
 		deviceVolume,
 		realCapacity,
 		imgName,
-		userIPAddress,
+		internalIP,
+		externalIP,
 		ramSize,
 		ramClockSpeed,
 		CPU,
@@ -31,7 +32,8 @@
 		#{deviceVolume},
 		#{realCapacity},
 		#{imgName},
-		#{userIPAddress},
+		#{internalIP},
+		#{externalIP},
 		#{ramSize},
 		#{ramClockSpeed},
 		#{CPU},
@@ -53,7 +55,9 @@
 	UPDATE PRODUCTFREE SET vendorID = #{vendorID},
 		productID = #{productID},
 		serialNumber = #{serialNumber},deviceType = #{deviceType},
-		deviceVolume=#{deviceVolume}, realCapacity=#{realCapacity}, imgName=#{imgName}, userIPAddress=#{userIPAddress}, ramSize=#{ramSize}, ramClockSpeed=#{ramClockSpeed}, CPU=#{CPU}, GPU=#{GPU}, LocalOSinfo=#{LocalOSinfo}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
+		deviceVolume=#{deviceVolume}, realCapacity=#{realCapacity}, imgName=#{imgName}, internalIP=#{internalIP}, 
+		externalIP=#{externalIP}, ramSize=#{ramSize}, ramClockSpeed=#{ramClockSpeed}, CPU=#{CPU}, GPU=#{GPU},
+		LocalOSinfo=#{LocalOSinfo}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
 		customerInfo0=#{customerInfo0},customerInfo1=#{customerInfo1}
 	WHERE idx=#{idx}
 </update>
@@ -96,9 +100,9 @@
 <update id="UpdateLocalData">
 	UPDATE PRODUCTFREE /* PRODUCTFREE UpdateLocalData */
 	SET 
-		realCapacity = #{realCapacity},
 		imgName = #{imgName},
-		userIPAddress = #{userIPAddress},
+		internalIP = #{internalIP},
+		externalIP = #{externalIP},
 		ramSize = #{ramSize},
 		ramClockSpeed = #{ramClockSpeed},
 		CPU = #{CPU},
@@ -115,8 +119,7 @@
 </update>
 
 <select id="SelectOne" resultType="Map">
-	SELECT *  /* PRODUCTFREE SelectOne */
-	FROM PRODUCTFREE
+	SELECT * FROM PRODUCTFREE
 	WHERE 
 		vendorID = #{vendorID} AND
 		productID = #{productID} AND

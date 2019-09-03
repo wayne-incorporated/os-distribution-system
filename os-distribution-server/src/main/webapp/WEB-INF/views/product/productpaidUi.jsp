@@ -27,7 +27,8 @@ $(document).ready(function(){
 	  height		: "700", 
 	  jsonReader 	: { repeatitems: false },
       colNames		: ['idx','vendorID','productID','serialNumber','deviceType',
-              		   'deviceVolume','realCapacity','imgName','userIPAddress','ramSize','ramClockSpeed','CPU','GPU','LocalOSinfo','initialReleaseDate','lastReleaseDate',
+              		   'deviceVolume','realCapacity','imgName','internalIP','externalIP',
+              		   'ramSize','ramClockSpeed','CPU','GPU','LocalOSinfo','initialReleaseDate','lastReleaseDate',
               		   'releaseCount','customerInfo0','customerInfo1','flag'], //칼럼 이름
       colModel		: [ //데이터 매핑 및 로우 속성
             {name:'idx', width:"4%"},
@@ -36,15 +37,16 @@ $(document).ready(function(){
           	{name:'serialNumber',	width:"8%"},
           	{name:'deviceType',		width:"8%"},
           	{name:'deviceVolume',	width:"8%"},
-		{name:'realCapacity', width:"8%"},
+			{name:'realCapacity', width:"8%"},
           	{name:'imgName', 		width:"8%"},
-          	{name:'userIPAddress',	width:"8%"},
-		{name:'ramSize', width:"8%"},
-		{name:'ramClockSpeed', width:"8%"},
-		{name:'CPU', width:"8%"},
-		{name:'GPU', width:"8%"},
-		{name:'LocalOSinfo', width:"8%"},
-		{name:'initialReleaseDate',width:"8%",formatoptions: { srcformat: "ISO8601Long", newformat: "m/d/Y h:i A" }},
+          	{name:'internalIP',	width:"8%"},
+          	{name:'externalIP', width:"8%"},
+			{name:'ramSize', width:"8%"},
+			{name:'ramClockSpeed', width:"8%"},
+			{name:'CPU', width:"8%"},
+			{name:'GPU', width:"8%"},
+			{name:'LocalOSinfo', width:"8%"},
+			{name:'initialReleaseDate',width:"8%",formatoptions: { srcformat: "ISO8601Long", newformat: "m/d/Y h:i A" }},
           	{name:'lastReleaseDate',width:"8%" ,formatoptions: { srcformat: "ISO8601Long", newformat: "m/d/Y h:i A" }},
           	{name:'releaseCount',	width:"8%"},
           	{name:'customerInfo0',	width:"8%"},
@@ -82,7 +84,8 @@ $(document).ready(function(){
 		jQuery("#deviceType").val(rowdata.deviceType);
 		jQuery("#deviceVolume").val(rowdata.deviceVolume);
 		jQuery("#realCapacity").val(rowdata.realCapacity);
-		jQuery("#userIPAddress").val(rowdata.userIPAddress);
+		jQuery("#internalIP").val(rowdata.internalIP);
+		jQuery("#externalIP").val(rowdata.externalIP);
 		jQuery("#ramSize").val(rowdata.ramSize);
 		jQuery("#ramClockSpeed").val(rowdata.ramClockSpeed);
 		jQuery("#CPU").val(rowdata.CPU);
@@ -143,7 +146,8 @@ $("#btnInsert").click(function() {
 	var deviceType = jQuery("#deviceType").val();
 	var deviceVolume = jQuery("#deviceVolume").val();
 	var realCapacity = jQuery("#realCapacity").val();
-	var userIPAddress = jQuery("#userIPAddress").val();
+	var internalIP = jQuery("#internalIP").val();
+	var externalIP = jQuery("#externalIP").val();
 	var ramSize = jQuery("#ramSize").val();
 	var ramClockSpeed = jQuery("#ramClockSpeed").val();
 	var CPU = jQuery("#CPU").val();
@@ -168,7 +172,8 @@ $("#btnInsert").click(function() {
 		"deviceVolume" : deviceVolume,
 		"realCapacity" : realCapacity,
 		"imgName" : imgName,
-		"userIPAddress" : userIPAddress,
+		"internalIP" : internalIP,
+		"externalIP" : externalIP,
 		"ramSize" : ramSize,
 		"ramClockSpeed" : ramClockSpeed,
 		"CPU" : CPU,
@@ -205,7 +210,8 @@ $("#btnInit").click(function() {
 	jQuery("#deviceVolume").val('');
 	jQuery("#realCapacity").val('');
 	jQuery("#imgName").val('');
-	jQuery("#userIPAddress").val('');
+	jQuery("#internalIP").val('');
+	jQuery("#externalIP").val('');
 	jQuery("#ramSize").val('');
 	jQuery("#ramClockSpeed").val('');
 	jQuery("#CPU").val('');
@@ -245,7 +251,8 @@ $("#btnSave").click(function() {
 	var deviceVolume = jQuery("#deviceVolume").val();
 	var realCapacity = jQuery("#realCapacity").val();
 	var imgName = jQuery("#imgName").val();
-	var userIPAddress = jQuery("#userIPAddress").val();
+	var internalIP = jQuery("#internalIP").val();
+	var externalIP = jQuery("#externalIP").val();
 	var ramSize = jQuery("#ramSize").val();
 	var ramClockSpeed = jQuery("#ramClockSpeed").val();
 	var CPU = jQuery("#CPU").val();
@@ -266,7 +273,8 @@ $("#btnSave").click(function() {
 	$("#list").setCell(rowid, 'deviceVolume', deviceVolume);
 	$("#list").setCell(rowid, 'realCapacity', realCapacity);
 	$("#list").setCell(rowid, 'imgName', imgName);
-	$("#list").setCell(rowid, 'userIPAddress', userIPAddress);
+	$("#list").setCell(rowid, 'internalIP', internalIP);
+	$("#list").setCell(rowid, 'externalIP', externalIP);
 	$("#list").setCell(rowid, 'ramSize', ramSize);
 	$("#list").setCell(rowid, 'ramClockSpeed', ramClockSpeed);
 	$("#list").setCell(rowid, 'CPU', CPU);
@@ -395,12 +403,17 @@ $("#main_Iframe", parent.document).width(1450);
 						<td>realCapacity</td>
 						<td><input type="text" id="realCapacity" maxlength="16" class="input"></td>
 					</tr>
-					
+					<tr>
+						<td></td>
+						<td></td>
+						<td>externalIP</td>
+						<td><input type="text" id="externalIP" maxlength="15" class="input"></td>
+					</tr>
 					<tr>
 						<td>deviceVolume</td>
 						<td><select id="deviceVolume" /></select></td>
-						<td>userIPAddress</td>
-						<td><input type="text" id="userIPAddress" maxlength="15" class="input"></td>
+						<td>internalIP</td>
+						<td><input type="text" id="internalIP" maxlength="15" class="input"></td>
 					</tr>
 <tr>
 	<td>ramSize</td>
