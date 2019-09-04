@@ -16,3 +16,9 @@ USAGE:
  2) Configure the Linux server (ex: firewall, mySQL, etc)
  3) Download client part on Windows
  4) Build client part source code with Visual Studio
+ 
+LICENSE:
+ https://gitlab.com/wayne-inc/os-distribution-system/blob/master/LICENSE
+ 
+CONTRIBUTING:
+ https://gitlab.com/wayne-inc/os-distribution-system/blob/master/CONTRIBUTING
