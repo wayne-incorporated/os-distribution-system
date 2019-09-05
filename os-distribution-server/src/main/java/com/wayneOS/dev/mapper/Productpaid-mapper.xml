@@ -10,14 +10,8 @@
 		serialNumber, 
 		deviceType,
 		deviceVolume,
-		realCapacity,
 		imgName, 
 		userIPAddress,
-		ramSize,
-		ramClockSpeed,
-		CPU,	
-		GPU,
-		LocalOSinfo, 
 		lastReleaseDate,
 		releaseCount, 
 		customerInfo0,
@@ -29,14 +23,8 @@
 		#{serialNumber},
 		#{deviceType},
 		#{deviceVolume},
-		#{realCapacity},
-		#{imgName}, 
+		#{imgName},
 		#{userIPAddress},
-		#{ramSize},
-		#{ramClockSpeed},
-		#{CPU},
-		#{GPU}, 
-		#{LocalOSinfo},
 		NOW(),
 		#{releaseCount}, 
 		#{customerInfo0},
@@ -57,14 +45,8 @@
 		serialNumber = #{serialNumber},
 		deviceType = #{deviceType},
 		deviceVolume= #{deviceVolume},
-		realCapacity=#{realCapacity},
 		imgName = #{imgName},
 		userIPAddress = #{userIPAddress},
-		ramSize = #{ramSize},
-		ramClockSpeed = #{ramClockSpeed},
-		CPU = #{CPU},
-		GPU = #{GPU}, 
-		LocalOSinfo = #{LocalOSinfo},
 		lastReleaseDate = #{lastReleaseDate},
 		releaseCount = #{releaseCount}, 
 		customerInfo0 = #{customerInfo0},
@@ -112,17 +94,7 @@
 <update id="UpdateLocalData">
 	UPDATE PRODUCTPAID /* PRODUCTPAID UpdateLocalData */
 	SET 
-		realCapacity = #{realCapacity},
 		userIPAddress = #{userIPAddress},
-		ramSize = #{ramSize},
-		ramClockSpeed = #{ramClockSpeed},
-		CPU = #{CPU},
-		GPU = #{GPU}, 
-		LocalOSinfo = #{LocalOSinfo},
-		initialReleaseDate = CASE
-		WHEN releaseCount=0 THEN NOW()
-		ELSE initialReleaseDate
-		END,
 		releaseCount = #{releaseCount} 
 	WHERE 
 		vendorID = #{vendorID} AND

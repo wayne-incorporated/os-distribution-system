@@ -10,15 +10,8 @@
 		serialNumber,
 		deviceType,
 		deviceVolume,
-		realCapacity,
 		imgName,
 		userIPAddress,
-		ramSize,
-		ramClockSpeed,
-		CPU,
-		GPU,
-		LocalOSinfo,
-		initialReleaseDate,
 		lastReleaseDate,
 		releaseCount,
 		customerInfo0,
@@ -29,15 +22,8 @@
 		#{serialNumber},
 		#{deviceType},
 		#{deviceVolume},
-		#{realCapacity},
 		#{imgName},
 		#{userIPAddress},
-		#{ramSize},
-		#{ramClockSpeed},
-		#{CPU},
-		#{GPU},
-		#{LocalOSinfo},
-		NOW(),
 		NOW(),
 		#{releaseCount},
 		#{customerInfo0},
@@ -53,7 +39,7 @@
 	UPDATE PRODUCTFREE SET vendorID = #{vendorID},
 		productID = #{productID},
 		serialNumber = #{serialNumber},deviceType = #{deviceType},
-		deviceVolume=#{deviceVolume}, realCapacity=#{realCapacity}, imgName=#{imgName}, userIPAddress=#{userIPAddress}, ramSize=#{ramSize}, ramClockSpeed=#{ramClockSpeed}, CPU=#{CPU}, GPU=#{GPU}, LocalOSinfo=#{LocalOSinfo}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
+		deviceVolume=#{deviceVolume}, imgName=#{imgName}, userIPAddress=#{userIPAddress}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
 		customerInfo0=#{customerInfo0},customerInfo1=#{customerInfo1}
 	WHERE idx=#{idx}
 </update>
@@ -96,14 +82,8 @@
 <update id="UpdateLocalData">
 	UPDATE PRODUCTFREE /* PRODUCTFREE UpdateLocalData */
 	SET 
-		realCapacity = #{realCapacity},
 		imgName = #{imgName},
 		userIPAddress = #{userIPAddress},
-		ramSize = #{ramSize},
-		ramClockSpeed = #{ramClockSpeed},
-		CPU = #{CPU},
-		GPU = #{GPU},
-		LocalOSinfo = #{LocalOSinfo}, 
 		releaseCount = #{releaseCount} 
 	WHERE 
 		vendorID = #{vendorID} AND
