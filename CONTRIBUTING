@@ -9,8 +9,8 @@ SCOPE:
  Add test case
 
 HOW TO:
- 1) Make branch
- 2) Do it
+ 1) Fork the project
+ 2) Modify it
  3) Create merge request
  4) Submit merge request
 
@@ -20,3 +20,20 @@ BENIFIT:
 QUESTION:
  jeun@wayne-inc.com
  www.wayne-inc.com
+ 
+Format of the branch name:
+ <type>/<scope>
+ ex) feat/test
+
+Format of the commit message:
+ <type>(<scope>): <subject>
+ <body>
+ <footer>
+
+Allowed <type> values:
+ feat(new feature for the user, not a new feature for build script)
+ fix(bug fix for the user, not a fix to a build script)
+ docs(changes to the documentation)
+ refactor(refactoring production code, eg. renaming a variable)
+ test(adding missing tests, refactoring tests; no production code change)
+ chore(updating grunt tasks etc; no production code change)
