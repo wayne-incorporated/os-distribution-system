@@ -14,14 +14,7 @@ WidgetSelectDiskSize::WidgetSelectDiskSize(QWidget *parent) :
     ui(new Ui::WidgetSelectDiskSize)
 {
     ui->setupUi(this); 
-	/*ui->textEdit->setFixedSize((int)(windowsDpiScale() * 2 * ui->textEdit->width()), (int)(windowsDpiScale() * 2 * ui->textEdit->height()));
-	ui->textEdit->move(QPoint(ui->textEdit->x() * 2 * windowsDpiScale(), ui->textEdit->y() * 2 * windowsDpiScale()));
-	ui->formLayoutWidget->setFixedSize((int)(windowsDpiScale() * 2 * ui->formLayoutWidget->width()), (int)(windowsDpiScale() * 2 * ui->formLayoutWidget->height()));
-	ui->formLayoutWidget->move(QPoint(ui->formLayoutWidget->x() * 2 * windowsDpiScale(), ui->formLayoutWidget->y() * 2 * windowsDpiScale()));
-	ui->btnPrev->setFixedSize((int)(windowsDpiScale() * 2 * ui->btnPrev->width()), (int)(windowsDpiScale() * 2 * ui->btnPrev->height()));
-	ui->btnPrev->move(QPoint(ui->btnPrev->x() * 2 * windowsDpiScale(), ui->btnPrev->y() * 2 * windowsDpiScale()));
-	ui->btnNext->setFixedSize((int)(windowsDpiScale() * 2 * ui->btnNext->width()), (int)(windowsDpiScale() * 2 * ui->btnNext->height()));
-	ui->btnNext->move(QPoint(ui->btnNext->x() * 2 * windowsDpiScale(), ui->btnNext->y() * 2 * windowsDpiScale()));*/
+	
 
 }
 
