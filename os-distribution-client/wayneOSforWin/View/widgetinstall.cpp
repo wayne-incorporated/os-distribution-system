@@ -20,7 +20,7 @@ WidgetInstall::WidgetInstall(QWidget *parent) : QWidget(parent),ui(new Ui::Widge
 	idx = 0, cnt = 0, p = 0;
 	display = "Downloading Files";
 	connect(ViewManager::GetInstance()->timer, SIGNAL(timeout()), this, SLOT(setDynamic()));
-	ViewManager::GetInstance()->timer->start(500);
+	//ViewManager::GetInstance()->timer->start(500);
 	// Added by LEE Jeun@wayne-inc.com
 	status = STATUS_IDLE;
 	ui->progressBar->reset();
@@ -97,10 +97,17 @@ void WidgetInstall::startInstall()
 		return;
 	}
 	
+	// ~ Added by LEE Jeun jeun@wayne-inc.com
+	QString extracted = HttpManager::GetInstance()->httpThread.getFileName();
+	extracted.chop(4);
+	extracted += ".bin";
+	// Added by LEE Jeun jeun@wayne-inc.com
+
 	QDir dir;
-	QString path = dir.absoluteFilePath("updStatus/wayneUpdateFile");
+	QString path = dir.absoluteFilePath(QString("updStatus/") + QString(extracted.toStdString().c_str())); // ~ Modified by LEE Jeun jeun@wayne-inc.com
 	
 	QByteArray charPath = path.toLocal8Bit();
+
 	if (HttpManager::GetInstance()->httpThread.getFileName() != "dummy.img") // Modified by LEE Jeun jeun@wayne-inc.com
 	{
 		hFile = getHandleOnFile(charPath.data(), GENERIC_READ);
@@ -241,6 +248,10 @@ void WidgetInstall::startInstall()
 void WidgetInstall::RequestServerData()
 {
 	ui->btnNext->setEnabled(false);
+	// ~ Added by LEE Jeun jeun@wayne-inc.com
+	p = 0;
+	ViewManager::GetInstance()->timer->start(500);
+	// Added by LEE JEun jeun@wayne-inc.com ~
 	QObject::connect(&(HttpManager::GetInstance()->httpThread), SIGNAL(DonwloadStatus(int, int)), this, SLOT(DonwloadStatus(int, int)));
 	HttpManager::GetInstance()->RequestOSData();
 }
@@ -277,16 +288,34 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 		//QString status = "Installing...";
 		//ui->labelStatus->setText(display);
 		//Write logic call...
-		HttpManager::GetInstance()->httpThread.updateFile->close();
-		try
-		{
-			this->startInstall();
-		}
-		catch (std::exception & e)
-		{
-			qDebug() << "install Fail!";
-			this->CompleteUpdateFileDelete();
+		// ~ Added by LEE Jeun jeun@wayne-inc.com
+		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXTRACT;
 
+		display = "Extracting";
+		ui->labelStatus->setText(display);
+
+		QString filename = HttpManager::GetInstance()->httpThread.getFileName();
+
+		int result = extract(filename);
+
+		if (result == -1)
+		{
+			QMessageBox::critical(NULL, "Error", "can not extract downloaded file!");
+			QApplication::exit(-1);
+		}
+		// Added by LEE Jeun jeun@wayne-inc.com ~
+
+		else
+		{
+			try
+			{
+				this->startInstall();
+			}
+			catch (std::exception & e)
+			{
+				qDebug() << "install Fail!";
+				this->CompleteUpdateFileDelete();
+			}
 		}
 	}
 
@@ -308,7 +337,35 @@ void WidgetInstall::CompleteUpdateFileDelete()
 void
 WidgetInstall::setDynamic()
 {
-	if (ViewManager::GetInstance()->flag==ViewManager::GetInstance()->DOWNLOAD)
+	if (p < 3)
+	{
+		display += " . ";
+		++p;
+		ui->labelStatus->setText(display);
+	}
+
+	else
+	{
+		if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->DOWNLOAD)
+		{
+			display = "Downloading Files " 
+				+ QString::number(idx) + " / " + QString::number(cnt);
+		}
+
+		else if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->INSTALL)
+		{
+			display = "Installing";
+		}
+
+		else
+		{
+			display = "Extracting";
+		}
+
+		p = 0;
+		ui->labelStatus->setText(display);
+	}
+	/*if (ViewManager::GetInstance()->flag==ViewManager::GetInstance()->DOWNLOAD)
 	{
 		if (p < 3)
 		{
@@ -323,7 +380,8 @@ WidgetInstall::setDynamic()
 			ui->labelStatus->setText(display);
 		}
 	}
-	else
+	
+	else if(ViewManager::GetInstance()->flag==ViewManager::GetInstance()->INSTALL)
 	{
 		if (p < 3)
 		{
@@ -338,5 +396,124 @@ WidgetInstall::setDynamic()
 			ui->labelStatus->setText(display);
 		}
 	}
+
+	else
+	{
+		if (p < 3)
+		{
+			display += " . ";
+			++p;
+			ui->labelStatus->setText(display);
+		}
+		else
+		{
+			display = "Extracting";
+			p = 0;
+			ui->labelStatus->setText(display);
+		}
+	}*/
 }
-// Added by LEE Jeun jeun@wayne-inc.com
+
+int WidgetInstall::extract(const QString& filename) // this is for extracting .zip files.
+{
+	p = 0;
+
+	ui->progressBar->reset();
+	ui->progressBar->setRange(0, 100);
+
+	unsigned long long totalSz = 0;
+
+	QString uzFilename = filename;
+	uzFilename.chop(4);
+	uzFilename += ".bin";
+
+	QDir dir;
+	QString path = dir.absoluteFilePath("updStatus/" + filename);
+	QByteArray charpath = path.toLocal8Bit();
+
+	QFile uzf("updStatus/" + uzFilename);
+	uzf.open(QIODevice::WriteOnly);
+
+	unzFile uf = unzOpen(charpath.toStdString().c_str());
+
+	if (uf == NULL)
+	{
+		qDebug() << "failed to open .zip file!";
+
+		return -1;
+	}
+
+	if (unzGoToFirstFile(uf) != UNZ_OK)
+	{
+		qDebug() << "error occured!";
+
+		uzf.close();
+		unzClose(uf);
+
+		return -1;
+	}
+
+	const int MAX_FILENAME = 256;
+	const int MAX_COMMENT = 256;
+
+	unsigned long long curTot = 0;
+
+	char oriFileName[MAX_FILENAME];
+	char comment[MAX_COMMENT];
+
+	unz_file_info64 info;
+	unzGetCurrentFileInfo64(uf, &info, oriFileName, MAX_FILENAME, NULL, 0, comment, MAX_COMMENT);
+
+	totalSz = info.uncompressed_size;
+
+	qDebug() << "filename : " << oriFileName;
+	qDebug() << "comment : " << comment;
+	qDebug() << "compressed size : " << info.compressed_size << " bytes";
+	qDebug() << "uncompressed size : " << info.uncompressed_size << " bytes";
+
+	if (unzOpenCurrentFile(uf) != UNZ_OK)
+	{
+		qDebug() << "error occured!";
+
+		uzf.close();
+		unzClose(uf);
+
+		return -1;
+	}
+
+	const int BUFSIZE = 20480;
+	Bytef in[BUFSIZE];
+	unsigned long long readSz = 0;
+
+	while (readSz = unzReadCurrentFile(uf, in, BUFSIZE))
+	{
+		if (readSz < 0)
+		{
+			qDebug() << "error occured!";
+
+			uzf.close();
+			unzClose(uf);
+
+			return -1;
+		}
+
+		uzf.write((const char*)in, readSz);
+
+		curTot += readSz;
+
+		qDebug() << curTot << "/" << totalSz << " completed...";
+
+		ui->progressBar->setValue((100 * curTot) / totalSz);
+
+		QApplication::processEvents();
+	}
+
+	qDebug() << "decompression completed : " << filename << " - > " << uzFilename;
+
+	unzCloseCurrentFile(uf);
+	uzf.close();
+	unzClose(uf);
+
+	return 0;
+}
+// Added by LEE Jeun jeun@wayne-inc.com ~

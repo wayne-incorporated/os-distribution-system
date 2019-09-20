@@ -60,12 +60,12 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("productRevision", productRevision);
 	jsonObject.insert("serialNumber", serialNumber);
 	// ~ Added by LEE jeun jeun@wayne-inc.com
-	DOUBLE realCapacity = GetSelectedDiskCapacity();
-	qDebug() << "real capacity: " << realCapacity << "GB";
+	LONGLONG realCapacity = GetSelectedDiskCapacity();
+	qDebug() << "real capacity: " << realCapacity << " bytes";
 	jsonObject.insert("realCapacity", realCapacity);
 
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
-	jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
+	jsonObject.insert("externalIP", HttpManager::GetInstance()->httpThread.IPAddr);
 	
 	/*int ramSize = getRamCapacity();
 	qDebug() << "RAM Capacity: " << ramSize;
@@ -98,7 +98,7 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	// Added by LEE jeun jeun@wayne-inc.com ~
 	
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
-	/*QList<QHostAddress> list = QNetworkInterface::allAddresses();
+	QList<QHostAddress> list = QNetworkInterface::allAddresses();
 
 	for (int nIter = 0; nIter<list.count(); nIter++)
 
@@ -109,12 +109,11 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 			if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol)
 			{
 				qDebug() << list[nIter].toString();
-				jsonObject.insert("userIPAddress", list[nIter].toString());
+				jsonObject.insert("internalIP", list[nIter].toString());
 				break;
 			}
 		}
-
-	}*/ 
+	}
 	// Modified by LEE jeun jeun@wayne-inc.com ~
     jsonDoc.setObject(jsonObject);
     qDebug()<<"send Data : "<<jsonDoc.toJson()<<endl;
@@ -317,7 +316,7 @@ QString ReqOsData::GetGpuName()
 	return ProcessorName;
 }
 
-DOUBLE ReqOsData::GetSelectedDiskCapacity()
+LONGLONG ReqOsData::GetSelectedDiskCapacity()
 {
 	QString path = InfoManager::GetInstance()->mDriveInstallPath.section("", 2, 3);
 	TCHAR DrivePath[8];
@@ -327,7 +326,7 @@ DOUBLE ReqOsData::GetSelectedDiskCapacity()
 	//UINT DiskType = GetDriveType(DrivePath);
 	BOOL bResult = GetDiskFreeSpaceEx(DrivePath, &lpFreeByteAvailableToCaller, &lpTotalNumberOfBytes, &lpTotalNumberOfFreeBytes);
 	if (!bResult) return 0;
-	DOUBLE selectedDiskCapacity = (lpTotalNumberOfBytes.QuadPart) / (1024.0*1024.0*1024.0);
+	LONGLONG selectedDiskCapacity = lpTotalNumberOfBytes.QuadPart;
 	return selectedDiskCapacity;
 }
 /*QString ReqOsData::GetGpuName()

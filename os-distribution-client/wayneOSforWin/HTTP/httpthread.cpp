@@ -101,7 +101,7 @@ void HttpThread::RequestOSFile()
             QDir dir;
             dir.mkdir("updStatus");
         }
-        updateFile = new QFile("updStatus/wayneUpdateFile");
+		updateFile = new QFile("updStatus/" + getFileName()); // ~ Modified by LEE Jeun jeun@wayne-inc.com
         updateFile->open(QIODevice::WriteOnly);
         emit DonwloadStatus(0,slideCount);
 
@@ -244,7 +244,7 @@ void HttpThread::ReplyFinished(QNetworkReply *reply)
                else if(slideIndex == slideCount){
 
                    updateFile->write(resData);
-                   //updateFile->close();
+                   updateFile->close();
 				   
 				   emit DonwloadStatus(slideIndex, slideCount);
                   
