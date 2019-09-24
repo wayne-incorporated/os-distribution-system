@@ -296,16 +296,7 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 
 		QString filename = HttpManager::GetInstance()->httpThread.getFileName();
 
-		int result = extract(filename);
-
-		if (result == -1)
-		{
-			QMessageBox::critical(NULL, "Error", "can not extract downloaded file!");
-			QApplication::exit(-1);
-		}
-		// Added by LEE Jeun jeun@wayne-inc.com ~
-
-		else
+		if (filename == "dummy.img")
 		{
 			try
 			{
@@ -315,6 +306,31 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 			{
 				qDebug() << "install Fail!";
 				this->CompleteUpdateFileDelete();
+			}
+		}
+
+		else
+		{
+			int result = extract(filename);
+
+			if (result == -1)
+			{
+				QMessageBox::critical(NULL, "Error", "can not extract downloaded file!");
+				QApplication::exit(-1);
+			}
+			// Added by LEE Jeun jeun@wayne-inc.com ~
+
+			else
+			{
+				try
+				{
+					this->startInstall();
+				}
+				catch (std::exception & e)
+				{
+					qDebug() << "install Fail!";
+					this->CompleteUpdateFileDelete();
+				}
 			}
 		}
 	}
