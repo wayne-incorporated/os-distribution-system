@@ -36,7 +36,7 @@
 						window.location.href = "mainUi.do";
 					}
 					else{
-						alert("ID와 Password를 다시 확인해주세요.");
+						alert("Please check your ID and Password again.");
 					}
 				},
 				error : function(xhr, status, error) {
@@ -45,7 +45,7 @@
 			});
 			}
 			else{
-				alert("ID와 Password를 입력해주세요.");
+				alert("Please input your ID and Password.");
 			}
 		});
 

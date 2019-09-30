@@ -6,8 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- <script type="text/javascript"
+	src="/resources/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script> -->
 <script type="text/javascript"
-	src="/resources/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+	src="/resources/smarteditor/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resources/jquery/jquery.js"></script>
 <script type="text/javascript"src="/resources/jquery/jquery-1.11.2.min.js"></script>
 
@@ -48,7 +50,7 @@
 	
 		<select name="language" id = "language" onchange="javascript:selectEvent(this)">
 			<%-- <option value="${language}">language</option> --%>
-    		<option value="kr">한국어</option>
+    		<option value="kr">Korean</option>
 	    	<option value="eng">English</option>
 		</select>
 		
@@ -56,7 +58,7 @@
 
 		
 			<tr>
-				<td><textarea rows="10" cols="50" id="ir1" name="content"><c:out
+				<td><textarea rows="10" cols="87" id="ir1" name="content"><c:out
 							value="${content }"></c:out></textarea></td>
 				<script type="text/javascript">
 					var oEditors = [];
@@ -64,7 +66,7 @@
 							.createInIFrame({
 								oAppRef : oEditors,
 								elPlaceHolder : "ir1",
-								sSkinURI : "/resources/smarteditor/SmartEditor2Skin.html",
+								sSkinURI : "/resources/smarteditor/SmartEditor2Skin_en_US.html",
 								htParams : {
 									bUseToolbar : true, // 툴바 사용 여부
 									bUseVerticalResizer : true, // 입력창 크기 조절바 사용여부
@@ -81,7 +83,7 @@
 				</script>
 			</tr>
 			<tr>
-				<td><input type="button" id="save" value="저장"> <script
+				<td><input type="button" id="save" value="Save"> <script
 						type="text/javascript">
 					$("#save").click(
 							function() {

@@ -10,11 +10,11 @@
 <body>
 
 <div class="buttons">
-        <a href="#" class="button save">저장</a>
-        <a href="#" class="button add">추가</a>
-        <a href="#" class="button delete">삭제</a>
-        <a href="#" class="button">조회</a>
-        <a href="#" class="button">초기화</a>
+        <a href="#" class="button save">Save</a>
+        <a href="#" class="button add">Add</a>
+        <a href="#" class="button delete">Delete</a>
+        <a href="#" class="button">Reload</a>
+        <a href="#" class="button">Reset</a>
         </div>
 </body>
 </html>

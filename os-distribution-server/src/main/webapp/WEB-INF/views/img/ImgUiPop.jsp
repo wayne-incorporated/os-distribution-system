@@ -22,10 +22,10 @@
 		
 		$("#list").jqGrid({
 			url : "/OSResourceRead.do",
-			loadtext : '로딩중..',
+			loadtext : 'Loading..',
 			datatype : "json",
 			mtype : "post",
-			width : "450",
+			width : "480",
 			height : "430",
 			jsonReader : {
 				repeatitems : false
@@ -41,12 +41,12 @@
 			}],
 
 			rowList : [ 10, 20, 30 ],
-			caption : "Image파일 리스트",
+			caption : "Image File List",
 			pager : '#pager',
 			rowNum : '10',
 			viewrecords : true,
 
-			emptyrecords : "데이터 없음",
+			emptyrecords : "No data",
 			loadonce : false,
 			pager : $("#pager"),
 			contentType : "application/json; charset=utf-8",

@@ -10,7 +10,7 @@
 <form method="post" enctype="multipart/form-data" action="OSUpload.do">
 
 	<input type="file" name="osfile" id = "osfile">
-	<input type=submit value="등록하기">
+	<input type=submit value="Register">
 	
 </form>
 </body>
