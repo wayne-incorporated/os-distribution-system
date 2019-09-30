@@ -22,21 +22,20 @@
 				<li><img src="/resources/images/logo.JPG" class="logo" /></li>
 				<li><a href="#"><span class="iconic home"></span> Home</a></li>
 				<li><a href="#"><span class="iconic plus-alt"></span>
-						Client 관리</a>
+						Client Management</a>
 					<ul>
-						<li><a href="javascript:changeIframeUrl('HTMLEditUi.do')">소개변경</a></li>
-						<li><a href="javascript:changeIframeUrl('LicenseEditUi.do')">license
-								변경</a></li>
+						<li><a href="javascript:changeIframeUrl('HTMLEditUi.do')">Edit introduction</a></li>
+						<li><a href="javascript:changeIframeUrl('LicenseEditUi.do')">Edit License</a></li>
 					</ul></li>
 
 				<li><a href="#"><span class="iconic magnifying-glass"></span>
-						DB관리</a>
+						DB Management</a>
 					<ul>
-						<li><a href="javascript:changeIframeUrl('userUi.do')">사용자관리</a></li>
-						<li><a href="javascript:changeIframeUrl('devicevolumeUi.do')">디바이스 관리</a></li>
-						<li><a href="javascript:changeIframeUrl('imgUi.do')">설치파일관리</a></li>
-						<li><a href="javascript:changeIframeUrl('productpaidUi.do')">유료배포 이력관리</a></li>
-						<li><a href="javascript:changeIframeUrl('productfreeUi.do')">무료배표 이력관리</a></li>
+						<li><a href="javascript:changeIframeUrl('userUi.do')">Admin Management</a></li>
+						<li><a href="javascript:changeIframeUrl('devicevolumeUi.do')">Device Management</a></li>
+						<li><a href="javascript:changeIframeUrl('imgUi.do')">OS File Management</a></li>
+						<li><a href="javascript:changeIframeUrl('productpaidUi.do')">Paid User Records</a></li>
+						<li><a href="javascript:changeIframeUrl('productfreeUi.do')">Free User Records</a></li>
 					</ul></li>
 			</ul>
 		</nav>
