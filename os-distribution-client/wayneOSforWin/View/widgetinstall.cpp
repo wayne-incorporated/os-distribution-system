@@ -456,6 +456,9 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 	{
 		qDebug() << "failed to open .zip file!";
 
+		uzf.close();
+		unzClose(uf);
+
 		return -1;
 	}
 
