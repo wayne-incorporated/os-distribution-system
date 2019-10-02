@@ -1,0 +1,22 @@
+# User-specific files
+.vs/
+
+# Build result
+*.dll
+*.exe
+*.manifest
+*.ilk
+*.iobj
+*.ipdb
+*.pdb
+*.tlog/
+*.log
+*.obj
+*.idb
+*.res
+*.CopyComplete
+GeneratedFiles/
+
+# exception
+!libeay32.dll
+!ssleay32.dll
