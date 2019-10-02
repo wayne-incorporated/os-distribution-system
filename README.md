@@ -21,7 +21,8 @@
   - ImageWriter
   - The OpenSSL ToolKit
 
-  
+
+
 
 - ## Server
 
@@ -45,6 +46,8 @@
   - MySQL
   - smarteditor2 2.10.0
 
+
+
 # How to set up the project
 
 - ## Client
@@ -61,6 +64,9 @@
   8. For downloding and installing external libraries, recommend using vcpkg. You can download in https://github.com/microsoft/vcpkg. And follow the description on this site. You can easily download/install and build zlib, minizip by vcpkg.
   9. After all of the above are done, setting up is completed. You can build the client project by Visual Studio 2017.
 
+
+
+
 - ## Server
 
   1. Download and install Java SDK in Oracle homepage.
@@ -70,6 +76,8 @@
   5. Download Spring Tool Suite 3.9.9 https://spring.io/tools3/sts/legacy
   6. Make Spring, MySQL and MyBatis work together.
   7. After all of the above are done, you can build and run the server on your local pc.
+
+
 
 ## How the OS distribution system works
 
@@ -91,6 +99,8 @@ When users run the installer(client) to install Wayne OS on their disk...
 12. After decompression is completed, the client starts to install Wayne OS on users disk.
 13. After Installation is completed, the client shows the complete page to notify users that it is done.
 
+
+
 ## SYNOPSIS
 
 A server-client system that distribute OS image file to user.
@@ -103,42 +113,48 @@ A server-client system that distribute OS image file to user.
 6. Server send OS image file to client program
 7. Client program install the OS image to the Removable Device
 
+
+
 ## FOR WHOM?
 
 Organization that distribute OS image file which can be installed in Removable Device
+
+
 
 ## LICENSE
 
 - Open-Source Library License
   - Qt Framework
-    - full development framework with tools designed to streamline the creation of applications and user interfaces for desktop, embedded, and mobile platforms. [https://www.qt.io/](https://www.qt.io/)
-      Copyright 2019 The Qt Company
+    - full development framework with tools designed to streamline the creation of applications and user interfaces for desktop, embedded, and mobile platforms.  [https://www.qt.io/](https://www.qt.io/)   
+      Copyright 2019 The Qt Company  
       the GNU Lesser General Public License version 3 (LGPLv3)
   - zlib
-    - Compression library, [http://www.zlib.net/](http://www.zlib.net/)
-      Copyright 1995-2013 Jean-loup Gailly and Mark Adler.
+    - Compression library, [http://www.zlib.net/](http://www.zlib.net/)  
+      Copyright 1995-2013 Jean-loup Gailly and Mark Adler.  
       zlib License
   - minizip
-    - For zip and unzip additional library, [http://www.winimage.com/zLibDll/minizip.html](http://www.winimage.com/zLibDll/minizip.html)
-      Copyright 1998-2010 Gilles Vollant (minizip) 
-      (http://www.winimage.com/zLibDll/minizip.html)
+    - For zip and unzip additional library, [http://www.winimage.com/zLibDll/minizip.html](http://www.winimage.com/zLibDll/minizip.html)  
+      Copyright 1998-2010 Gilles Vollant (minizip)   
+      (http://www.winimage.com/zLibDll/minizip.html)  
       zlib License
   - ImageWriter
-    - The utility to read and write raw image files to SD and USB memory devices
-      Original version developed by Justin Davis 
-      <[tuxdavis@gmail.com](mailto:tuxdavis@gmail.com)>
-      Maintained by the ImageWriter developers
-      (http://sourceforge.net/projects/win32diskimager)
+    - The utility to read and write raw image files to SD and USB memory devices  
+      Original version developed by Justin Davis   
+      <[tuxdavis@gmail.com](mailto:tuxdavis@gmail.com)>  
+      Maintained by the ImageWriter developers  
+      (http://sourceforge.net/projects/win32diskimager)  
       the General Public License v2 (GPL-2)
   - SmartEditor2
-    - The WYSIWYG editor based on the web written by JavaScript
-      Copyright (C) NAVER corp. https://github.com/naver/smarteditor2the 
-      GNU Lesser General Public License version 2.1 (LGPL v2.1)
+    - The WYSIWYG editor based on the web written by JavaScript  
+      Copyright (C) NAVER corp. https://github.com/naver/smarteditor2  
+      the GNU Lesser General Public License version 2.1 (LGPL v2.1)
   - OpenSSL shared Library (we use only The OpenSSL ToolKit dll files)
-    - an open-source implementation of the SSL/TLS protocols written in C and distributed as two shared libraries. [https://www.openssl.org/](https://www.openssl.org/)
-      Copyright (c) 1998-2018 The OpenSSL Project.
+    - an open-source implementation of the SSL/TLS protocols written in C and distributed as two shared libraries. [https://www.openssl.org/](https://www.openssl.org/)  
+      Copyright (c) 1998-2018 The OpenSSL Project.  
       OpenSSL License, SSLeay License
 - https://gitlab.com/wayne-inc/os-distribution-system/blob/master/LICENSE
+
+
 
 ## CONTRIBUTING
 
