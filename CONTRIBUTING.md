@@ -13,13 +13,13 @@
 
 - Format of the branch name
 
-  <type>/<scope>
+  [type]/[scope]
 
   ​	ex) feature/test
 
 - Format of the commit message
 
-  <type>(<scope>):<subject>
+  [type] ([scope]) : [subject]
 
   [body]
 
