@@ -12,39 +12,44 @@
 
   - vcpkg
 
-  ##### Language/External
+  - ##### Language/External
 
-  - C++
-  - Qt 5.11.1 msvc 2015 32bit
-  - zlib 1.2.11
-  - minizip 1.2.11
-  - ImageWriter
-  - The OpenSSL ToolKit
+    - C++
+    - Qt 5.11.1 msvc 2015 32bit
+    - zlib 1.2.11
+    - minizip 1.2.11
+    - ImageWriter
+    - The OpenSSL ToolKit
 
-
+  
 
 
 - ## Server
 
   - Windows 10 pro
+  
   - Spring Tool Suite 3.9.9
+  
   - Java SDK 12.0.2 64bit
-  - MySQL 8.0
-  - Pivotal tc server Developer Edition v4.0 based on Tomcat 9.0.13
+  
+- MySQL 8.0
+  
+- Pivotal tc server Developer Edition v4.0 based on Tomcat 9.0.13
+  
   - Maven 3.6.1
-
-  ##### Language/External
-
-  - Java
-  - JavaScript
-  - jsp
-  - xml
-  - html
-  - css
-  - Spring Framework
-  - MyBatis
-  - MySQL
-  - smarteditor2 2.10.0
+  
+  - ##### Language/External
+  
+    - Java
+    - JavaScript
+    - jsp
+    - xml
+    - html
+    - css
+    - Spring Framework
+    - MyBatis
+    - MySQL
+    - smarteditor2 2.10.0
 
 
 
@@ -58,7 +63,7 @@
   3. Install Qt 5.11.1 msvc 2015 32bit by using online installer.
   4. Add Qt VS Tool on Visual Studio 2017.
   5. Configure environment variables, MSVC path.
-  6. Download QtWebKit module and copy each file into right path 
+  6. Download QtWebKit module and copy each file into right path  
      https://drive.google.com/open?id=11gOMQCYOvfPkDN3WfsY-Jd2H3043Mvfa
   7. Test by creating initial Qt project. If building is success, Qt setting is done.
   8. For downloding and installing external libraries, recommend using vcpkg. You can download in https://github.com/microsoft/vcpkg. And follow the description on this site. You can easily download/install and build zlib, minizip by vcpkg.
