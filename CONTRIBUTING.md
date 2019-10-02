@@ -2,12 +2,11 @@
 
 - Bug fix
 - Documentation
+- Redesign UI/UX
 - Add new feature
-- Refactoring code
-- Update version/dependancies
+- Update version/dependancies/test-case
 - Improve error/help message
-- Improve resource usage
-- Add test case
+- Refactoring code
 
 ## RULES
 
@@ -35,21 +34,28 @@
 
 ## HOW TO CONTRIBUTE
 
-1. Fork or Clone the project
+1. Fork the project
 2. Create a new branch for what you try to work on
 3. Working on your own branch
 4. If you want to implement what you did on this project, Create merge request
 5. Review your work with the maintainer or owner of this project
 6. If maintainer or owner want to accept your work on this project, they will merge your work on the master branch
 
-## BENEFIT
+## CONTRIBUTORS' BENEFIT (For Indonesian competition)
 
- Wayne Inc. will announce it.
+ 1st Ranker: 
+ 2nd Ranker: 
+
+## Competition judgement factors
+
+1. Quantity of merge/commit
+2. Quality of contiribution
+3. Difficulty of contribution
 
 ## QUESTION
 
  If you want to ask for anything about this project, please contact with below address.
 
-jeun@wayne-inc.com
-
+chatting: 
+e-mail: jeun@wayne-inc.com
 www.wayne-inc.com
