@@ -163,4 +163,4 @@ Organization that distribute OS image file which can be installed in Removable D
 
 ## CONTRIBUTING
 
-https://gitlab.com/wayne-inc/os-distribution-system/blob/master/CONTRIBUTING
+https://gitlab.com/wayne-inc/os-distribution-system/blob/master/CONTRIBUTING.md
