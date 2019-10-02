@@ -32,10 +32,10 @@
   
   - Java SDK 12.0.2 64bit
   
-- MySQL 8.0
-  
-- Pivotal tc server Developer Edition v4.0 based on Tomcat 9.0.13
-  
+  - MySQL 8.0
+    
+  - Pivotal tc server Developer Edition v4.0 based on Tomcat 9.0.13
+    
   - Maven 3.6.1
   
   - ##### Language/External
