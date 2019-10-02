@@ -41,21 +41,10 @@
 5. Review your work with the maintainer or owner of this project
 6. If maintainer or owner want to accept your work on this project, they will merge your work on the master branch
 
-## CONTRIBUTORS' BENEFIT (For Indonesian competition)
-
- 1st Ranker: 
- 2nd Ranker: 
-
-## Competition judgement factors
-
-1. Quantity of merge/commit
-2. Quality of contiribution
-3. Difficulty of contribution
-
 ## QUESTION
 
  If you want to ask for anything about this project, please contact with below address.
 
-chatting: 
+chatting: wayne-inc-cr.slack.com
 e-mail: jeun@wayne-inc.com
 www.wayne-inc.com
