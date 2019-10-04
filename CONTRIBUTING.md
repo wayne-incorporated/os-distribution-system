@@ -45,8 +45,4 @@
 
  If you want to ask for anything about this project, please contact with below address.
 
-chatting: wayne-inc-cr.slack.com
-
 e-mail: jeun@wayne-inc.com
-
-www.wayne-inc.com
