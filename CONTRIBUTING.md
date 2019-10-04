@@ -1,12 +1,12 @@
 ## SCOPE
 
-- Bug fix
-- Documentation
-- Redesign UI/UX
-- Add new feature
-- Update version/dependencies/test-case
-- Improve error/help message
-- Refactoring code
+1. Documentation
+2. Redesign UI/UX
+3. Bug fix
+4. Add new feature
+5. Update version/dependencies/test-case
+6. Improve error/help message
+7. Refactoring code
 
 ## RULES
 
