@@ -36,7 +36,7 @@ The Priority of contribution (1 is the first priority)
 
 - Format of the title of the merge request
 
-- same with the commit message
+    - same with the commit message
   
 - Allowed [type] values
   - feature (new feature for the user, not a new feature for build script)
