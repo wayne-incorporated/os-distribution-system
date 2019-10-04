@@ -22,7 +22,7 @@ Difficulty of contribution (low priority)
 ## Plan
 
 4th Oct. 2019 - Explanation seminar in JKT   
-(https://www.wayne-inc.com/post/new-os-solution-for-pc-open-source-competition-seminar)
+(https://www.wayne-inc.com/post/new-os-solution-for-pc-open-source-competition-seminar)  
 4th Oct. 2019 - Start competition  
 22nd Oct. 2019 - Close competition  
 23-24th Oct. 2019 - Announce Ranker  
