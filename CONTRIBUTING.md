@@ -36,10 +36,8 @@ The Priority of contribution (1 is the first priority)
 
 - Format of the title of the merge request
 
-  - same with the commit message
-
-     
-
+- same with the commit message
+  
 - Allowed [type] values
   - feature (new feature for the user, not a new feature for build script)
   - uiux (redesign UI/UX of the client or the server)
@@ -64,11 +62,11 @@ The Priority of contribution (1 is the first priority)
 6.  Here is the way.
 
    1. Documentation
-   - you can edit or add the document on the remote repository in your account. create a new branch named like doc/[name] from your master branch. name can be the file name you want to edit or you created. edit or write the document on the new branch. 
+      - you can edit or add the document on the remote repository in your account. create a new branch named like doc/[name] from your master branch. name can be the file name you want to edit or you created. edit or write the document on the new branch. 
    2. Redesign UI/UX
-   - You may not be able to redesign UI/UX on the remote repository. so clone the project on your local repository. you can download the source code by clicking the button next to Web IDE button. you can also download it by using the command on git bash.   
+      - You may not be able to redesign UI/UX on the remote repository. so clone the project on your local repository. you can download the source code by clicking the button next to Web IDE button. you can also download it by using the command on git bash.   
         [git clone https://gitlab.com/(UserName)/os-distribution-system]  
-     UserName is your username.   
+        UserName is your username.   
         At first, you need to arrange IDE for this project. read README.md in advance of setting IDE. after setting up IDE is done, you can redesign UI/UX of this project. create a new branch named like uiux/client or uiux/server from your master branch.   
         In case of the client, you can redesign UI/UX by using Qt Designer or writing source code. for this, you need to learn about Qt framework. there is the well-defined documentation on https://doc.qt.io/   
         In case of the server, you can redesign UI/UX by replacing image, modifying source code in jsp, css, JavaScript, etc. redesign UI/UX on the new branch.  
@@ -79,14 +77,14 @@ The Priority of contribution (1 is the first priority)
    4. Add new feature
 
       - If you want to add new feature, discuss with the maintainer or owner of this project at first. If the maintainer or owner accept your opinion, you can work on it.  
-     clone the project on your local repository and arrange IDE for this project. and then, create a new branch named like feature/[name] from your master branch. you can write source code for new feature on this project on the new branch.
+        clone the project on your local repository and arrange IDE for this project. and then, create a new branch named like feature/[name] from your master branch. you can write source code for new feature on this project on the new branch.
    
-5. Update version/dependencies/test-case
+   5. Update version/dependencies/test-case
    
    6. Improve error/help message
-
+   
    7. Refactoring code
-
+   
 7. Before pushing it, Test your work whether it is working well. you have to push the commit for your work when it is the stable version.
 
 8. If you want to implement what you did on the official, Create a merge request. when you send a merge request, leave a well-defined comment that describes what you did and difference between before and after.
