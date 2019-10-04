@@ -73,11 +73,11 @@ The Priority of contribution (1 is the first priority)
         - If you want to add new feature, discuss with the maintainer or owner of this project at first. If the maintainer or owner accept your opinion, you can work on it.  
         clone the project on your local repository and arrange IDE for this project. and then, create a new branch named like feature/[name] from your master branch. you can write source code for new feature on this project on the new branch.
    
-   5. Update version/dependencies/test-case
+    5. Update version/dependencies/test-case
    
-   6. Improve error/help message
+    6. Improve error/help message
    
-   7. Refactoring code
+    7. Refactoring code
    
 7. Before pushing it, Test your work whether it is working well. you have to push the commit for your work when it is the stable version.
 
