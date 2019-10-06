@@ -1,9 +1,7 @@
 ## Benefits for Contributors
 
-Contributor can use own contribution result/history for own portfolio/career  
-(Project/company name can be mentioned)  
+Contributor can use own contribution result/history for own portfolio/career (project/company name can be mentioned)  
 Contributor gets priority in Wayne Inc.'s recruiting/partnership
-
 
 ## Prize for TOP 5 Contributors
 
@@ -24,13 +22,13 @@ Difficulty of contribution (low priority)
 4th Oct. 2019 - Explanation seminar in JKT   
 (https://www.wayne-inc.com/post/new-os-solution-for-pc-open-source-competition-seminar)  
 4th Oct. 2019 - Start competition  
-22nd Oct. 2019 - Close competition  
-23-24th Oct. 2019 - Announce Ranker  
-25-30th Oct. 2019 - Prize will be offered to ranker (Prize day in Jakarta)
+22nd Nov. 2019 - Close competition  
+23-24th Nov. 2019 - Announce Ranker  
+25-30th Nov. 2019 - Prize will be offered to ranker (Prize day in Jakarta)
 
 ## Rules
 
 Only the maintainer of project can judge ranking  
 Contributors cannot complain for judgment result to maintainer  
-Prize will be offered off-line (no remittance)  
-Top 5 ranker must attend Prize day, for getting prize
+Prize will be offered in off-line (no remittance)  
+Top 5 rankers must attend on Prize day, for getting prize
