@@ -79,7 +79,7 @@ The Priority of contribution (1 is the first priority)
       
     6. Improve error/help message
       
-   7. Refactoring code
+    7. Refactoring code
    
 7. Before pushing it, Test your work whether it is working well. you have to push the commit for your work when it is the stable version.
 
