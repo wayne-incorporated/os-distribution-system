@@ -21,7 +21,10 @@
     - ImageWriter
     - The OpenSSL ToolKit
 
-  
+
+
+
+
 
 
 - ## Server
@@ -53,6 +56,8 @@
 
 
 
+
+
 # How to set up the project
 
 - ## Client
@@ -72,6 +77,8 @@
 
 
 
+
+
 - ## Server
 
   1. Download and install Java SDK in Oracle homepage.
@@ -81,6 +88,8 @@
   5. Download Spring Tool Suite 3.9.9 https://spring.io/tools3/sts/legacy
   6. Make Spring, MySQL and MyBatis work together.
   7. After all of the above are done, you can build and run the server on your local pc.
+
+
 
 
 
@@ -106,6 +115,8 @@ When users run the installer(client) to install Wayne OS on their disk...
 
 
 
+
+
 ## SYNOPSIS
 
 A server-client system that distribute OS image file to user.
@@ -120,9 +131,13 @@ A server-client system that distribute OS image file to user.
 
 
 
+
+
 ## FOR WHOM?
 
 Organization that distribute OS image file which can be installed in Removable Device
+
+
 
 
 
@@ -161,6 +176,9 @@ Organization that distribute OS image file which can be installed in Removable D
 
 
 
+
+
 ## CONTRIBUTING
 
 https://gitlab.com/wayne-inc/os-distribution-system/blob/master/CONTRIBUTING.md
+
