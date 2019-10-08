@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -176,6 +177,8 @@ public class OSFileController {
 		
 		File osFile = new File(osFilePath); 
 		
+		response.setContentType("application/octet-stream");
+		//response.setHeader("Content-Type", "application/octet-stream");
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition", "attachment;filename=" + java.net.URLEncoder.encode("wayneOSForUpdateFile" + slideIndex, "utf-8") + ";");
 	    response.setHeader("Connection", "keep-alive");
@@ -221,11 +224,11 @@ public class OSFileController {
 				long pos = sendByte.length * slideIndex ;
 				int readSize = sendByte.length;
 				fis.skip(pos);
-				fis.read(sendByte , 0, readSize-1);
-		
-				logger.info("reading byte : " +pos +" ~ " + (pos+sendByte.length-1) ); 
+				fis.read(sendByte , 0, readSize);
+				
+				logger.info("reading byte : " +pos +" ~ " + (pos+sendByte.length) ); 
 			
-		
+				
 			}
 			
 			else if(slideIndex == slideCount -1){
@@ -242,7 +245,6 @@ public class OSFileController {
 				
 				fis.read(sendByte,0,(int)lastSize);
 				
-				
 				//logger.info("last reading byte : " +pos +" ~ " + pos+osFilePath.length());
 			}
 			else if(slideIndex> slideCount){
@@ -250,7 +252,6 @@ public class OSFileController {
 			}
 			
 			FileCopyUtils.copy(sendByte,out);
-			
 		
 		}
 		catch(IOException e){
@@ -261,6 +262,8 @@ public class OSFileController {
 		fis.close();
 		out.close();
 		
+		String mimeType = response.getContentType();
+		System.out.println(mimeType);
 		/*
 		HashMap<String, Object> returnMap = new HashMap<String, Object>();
 		returnMap.put("data", sendByte);

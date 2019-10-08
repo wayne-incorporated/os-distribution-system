@@ -62,11 +62,11 @@ public class MemberServiceImpl implements MemberService {
 		resultMap = memberDAO.SelectMember(map);
 
 		if (resultMap != null) {
-			System.out.println("로그인 성공");
+			System.out.println("Succeed to log in");
 			return true;
 
 		} else {
-			System.out.println("로그인 실패");
+			System.out.println("Fail to log in");
 			return false;
 		}
 

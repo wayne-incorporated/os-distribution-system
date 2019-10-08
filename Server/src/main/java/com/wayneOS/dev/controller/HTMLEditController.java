@@ -70,7 +70,7 @@ public class HTMLEditController {
 			String path = request.getSession().getServletContext().getRealPath("/resources/Info/mainInfo-Eng.html");
 			
 			// 읽기
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), "utf-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), "UTF-8"));
 			String temp = "";
 			while ((temp = br.readLine()) != null) {
 				content += temp + "\n";
@@ -105,6 +105,8 @@ public class HTMLEditController {
 			}
 		
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
+			String utf8encoding = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
+			writer.write(utf8encoding);
 			writer.write(content);
 			writer.close();
 		} catch (Exception e) {

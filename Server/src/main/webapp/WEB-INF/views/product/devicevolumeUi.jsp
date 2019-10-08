@@ -22,7 +22,7 @@
 		
 		$("#list").jqGrid({
 			url : "/devicevolume/Inqdevicevolume.do",
-			loadtext : '로딩중..',
+			loadtext : 'Loading..',
 			datatype : "json",
 			mtype : "post",
 			width : "650",
@@ -44,12 +44,12 @@
 			} ],
 
 			rowList : [ 10, 20, 30 ],
-			caption : "디바이스 관리",
+			caption : "Device Management",
 			pager : '#pager',
 			rowNum : '10',
 			viewrecords : true,
 
-			emptyrecords : "데이터 없음",
+			emptyrecords : "No data",
 			loadonce : false,
 			pager : $("#pager"),
 			contentType : "application/json; charset=utf-8",
@@ -200,13 +200,13 @@
 		<div class="crud_area_box" id="crud_area_box">
 		<table class="table_area" id="table_area">
 				<tr class="center">
-					<td><input type="button" value="조회" id="btnSelect"
+					<td><input type="button" value="Reload" id="btnSelect"
 						class="button"></td>
-					<td><input type="button" value="초기화" id="btnInit"
+					<td><input type="button" value="Reset" id="btnInit"
 						class="button"></td>
-					<td><input type="button" value="추가" id="btnInsert"
+					<td><input type="button" value="Add" id="btnInsert"
 						class="button add"></td>
-					<td><input type="button" value="삭제" id="btnDelete"
+					<td><input type="button" value="Delete" style="width:60pt;" id="btnDelete"
 						class="button delete"></td>
 				</tr>
 				<tr>
@@ -221,7 +221,7 @@
 		<div>
 			
 			<div class="save_area">
-				<input type="button" value="저장" id="btnSave" class="button save">
+				<input type="button" value="Save" style="width:60pt;" id="btnSave" class="button save">
 			</div>
 		</div>
 	</div>
