@@ -24,7 +24,7 @@
 				<li><a href="#"><span class="iconic plus-alt"></span>
 						Client Management</a>
 					<ul>
-						<li><a href="javascript:changeIframeUrl('HTMLEditUi.do')">Edit introduction</a></li>
+						<li><a href="javascript:changeIframeUrl('HTMLEditUi.do')">Edit Introduction</a></li>
 						<li><a href="javascript:changeIframeUrl('LicenseEditUi.do')">Edit License</a></li>
 					</ul></li>
 
