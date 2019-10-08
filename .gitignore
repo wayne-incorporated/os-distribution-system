@@ -1,3 +1,5 @@
+### Client part ###
+
 # User-specific files
 .vs/
 
@@ -20,3 +22,22 @@ GeneratedFiles/
 # exception
 !libeay32.dll
 !ssleay32.dll
+
+### End of Client part ###
+
+### Server part ###
+
+# STS based on Eclipse
+.settings/
+.springBeans
+
+# Eclipse Core
+.project
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java
+target/
+
+### End of Server part ###
