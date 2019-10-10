@@ -10,16 +10,8 @@
 		serialNumber,
 		deviceType,
 		deviceVolume,
-		realCapacity,
 		imgName,
-		internalIP,
-		externalIP,
-		ramSize,
-		ramClockSpeed,
-		CPU,
-		GPU,
-		LocalOSinfo,
-		initialReleaseDate,
+		userIPAddress,
 		lastReleaseDate,
 		releaseCount,
 		customerInfo0,
@@ -30,16 +22,8 @@
 		#{serialNumber},
 		#{deviceType},
 		#{deviceVolume},
-		#{realCapacity},
 		#{imgName},
-		#{internalIP},
-		#{externalIP},
-		#{ramSize},
-		#{ramClockSpeed},
-		#{CPU},
-		#{GPU},
-		#{LocalOSinfo},
-		NOW(),
+		#{userIPAddress},
 		NOW(),
 		#{releaseCount},
 		#{customerInfo0},
@@ -55,9 +39,7 @@
 	UPDATE PRODUCTFREE SET vendorID = #{vendorID},
 		productID = #{productID},
 		serialNumber = #{serialNumber},deviceType = #{deviceType},
-		deviceVolume=#{deviceVolume}, realCapacity=#{realCapacity}, imgName=#{imgName}, internalIP=#{internalIP}, 
-		externalIP=#{externalIP}, ramSize=#{ramSize}, ramClockSpeed=#{ramClockSpeed}, CPU=#{CPU}, GPU=#{GPU},
-		LocalOSinfo=#{LocalOSinfo}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
+		deviceVolume=#{deviceVolume}, imgName=#{imgName}, userIPAddress=#{userIPAddress}, lastReleaseDate=#{lastReleaseDate}, releaseCount =#{releaseCount}, 
 		customerInfo0=#{customerInfo0},customerInfo1=#{customerInfo1}
 	WHERE idx=#{idx}
 </update>
@@ -101,13 +83,7 @@
 	UPDATE PRODUCTFREE /* PRODUCTFREE UpdateLocalData */
 	SET 
 		imgName = #{imgName},
-		internalIP = #{internalIP},
-		externalIP = #{externalIP},
-		ramSize = #{ramSize},
-		ramClockSpeed = #{ramClockSpeed},
-		CPU = #{CPU},
-		GPU = #{GPU},
-		LocalOSinfo = #{LocalOSinfo}, 
+		userIPAddress = #{userIPAddress},
 		releaseCount = #{releaseCount} 
 	WHERE 
 		vendorID = #{vendorID} AND
@@ -119,7 +95,8 @@
 </update>
 
 <select id="SelectOne" resultType="Map">
-	SELECT * FROM PRODUCTFREE
+	SELECT *  /* PRODUCTFREE SelectOne */
+	FROM PRODUCTFREE
 	WHERE 
 		vendorID = #{vendorID} AND
 		productID = #{productID} AND
