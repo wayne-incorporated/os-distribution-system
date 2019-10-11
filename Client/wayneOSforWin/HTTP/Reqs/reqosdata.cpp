@@ -327,7 +327,7 @@ LONGLONG ReqOsData::GetSelectedDiskCapacity()
 	//UINT DiskType = GetDriveType(DrivePath);
 	BOOL bResult = GetDiskFreeSpaceEx(DrivePath, &lpFreeByteAvailableToCaller, &lpTotalNumberOfBytes, &lpTotalNumberOfFreeBytes);
 	if (!bResult) return 0;
-	ULONGLONG selectedDiskCapacity = lpTotalNumberOfBytes.QuadPart;
+	LONGLONG selectedDiskCapacity = lpTotalNumberOfBytes.QuadPart;
 	return selectedDiskCapacity;
 }
 /*QString ReqOsData::GetGpuName()
