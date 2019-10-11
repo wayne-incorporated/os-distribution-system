@@ -103,6 +103,8 @@ public class LicenceEditController {
 				mav.addObject("language", "eng");
 			}
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
+			String utf8encoding = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
+			writer.write(utf8encoding);
 			writer.write(content);
 			writer.close();
 		} catch (Exception e) {
