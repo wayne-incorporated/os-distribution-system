@@ -159,7 +159,6 @@ $("#btnInsert").click(function() {
 	var customerInfo0 = jQuery("#customerInfo0").val();
 	var customerInfo1 = jQuery("#customerInfo1").val();		
 	var date= new Date();
-	var initialReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	var lastReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	
 	var addData = {
@@ -170,7 +169,6 @@ $("#btnInsert").click(function() {
 		"serialNumber" : serialNumber,
 		"deviceType" : deviceType,
 		"deviceVolume" : deviceVolume,
-		"realCapacity" : realCapacity,
 		"imgName" : imgName,
 		"internalIP" : internalIP,
 		"externalIP" : externalIP,
@@ -208,7 +206,6 @@ $("#btnInit").click(function() {
 	jQuery("#serialNumber").val('');
 	jQuery("#deviceType").val('');
 	jQuery("#deviceVolume").val('');
-	jQuery("#realCapacity").val('');
 	jQuery("#imgName").val('');
 	jQuery("#internalIP").val('');
 	jQuery("#externalIP").val('');
@@ -249,7 +246,6 @@ $("#btnSave").click(function() {
 	var serialNumber = jQuery("#serialNumber").val();
 	var deviceType = jQuery("#deviceType").val();
 	var deviceVolume = jQuery("#deviceVolume").val();
-	var realCapacity = jQuery("#realCapacity").val();
 	var imgName = jQuery("#imgName").val();
 	var internalIP = jQuery("#internalIP").val();
 	var externalIP = jQuery("#externalIP").val();
@@ -271,7 +267,6 @@ $("#btnSave").click(function() {
 	$("#list").setCell(rowid, 'serialNumber', serialNumber);
 	$("#list").setCell(rowid, 'deviceType', deviceType);
 	$("#list").setCell(rowid, 'deviceVolume', deviceVolume);
-	$("#list").setCell(rowid, 'realCapacity', realCapacity);
 	$("#list").setCell(rowid, 'imgName', imgName);
 	$("#list").setCell(rowid, 'internalIP', internalIP);
 	$("#list").setCell(rowid, 'externalIP', externalIP);
@@ -400,8 +395,6 @@ $("#main_Iframe", parent.document).width(1450);
 					
 						<td>serialNumber</td>
 						<td><input type="text" id="serialNumber" maxlength="100" class="input"></td>
-						<td>realCapacity</td>
-						<td><input type="text" id="realCapacity" maxlength="16" class="input"></td>
 					</tr>
 					<tr>
 						<td></td>
@@ -415,24 +408,6 @@ $("#main_Iframe", parent.document).width(1450);
 						<td>internalIP</td>
 						<td><input type="text" id="internalIP" maxlength="15" class="input"></td>
 					</tr>
-<tr>
-	<td>ramSize</td>
-	<td><input type="text" id="ramSize" maxlength="16" class="input"></td>
-	<td>ramClockSpeed</td>
-	<td><input type="text" id="ramClockSpeed" maxlength="16" class="input"></td>
-</tr>
-<tr>
-	<td>CPU</td>
-	<td><input type="text" id="CPU" maxlength="100" class="input"></td>
-	<td>GPU</td>
-	<td><input type="text" id="GPU" maxlength="100" class="input"></td>
-</tr>
-<tr>
-	<td>LocalOSinfo</td>
-	<td><input type="text" id="LocalOSinfo" maxlength="64" class="input"></td>
-	<td>InitialReleaseDate</td>
-	<td><input type="text" id="initialReleaseDate" maxlength="15" class="input" readonly="readonly"></td>
-</tr>
 					<tr>
 						<td>LastReleaseDate</td>
 						<td><input type="text" id="lastReleaseDate" maxlength="15" class="input" readonly="readonly"></td>

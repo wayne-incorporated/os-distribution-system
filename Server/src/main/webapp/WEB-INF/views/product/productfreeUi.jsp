@@ -28,6 +28,8 @@ $(document).ready(function(){
               		   'deviceVolume', 'realCapacity', 'imgName', 'internalIP', 'externalIP', 
               		   'ramSize', 'ramClockSpeed', 'CPU', 'GPU', 'LocalOSinfo', 'initialReleaseDate', 
               		   'lastReleaseDate', 'releaseCount','customerInfo0','customerInfo1','flag'], //칼럼 이름
+
+              		   
       colModel		: [ //데이터 매핑 및 로우 속성
               		  {name:'idx', width:"4%"},
           		  	{name:'vendorID',		width:"8%"},
@@ -156,7 +158,6 @@ $(document).ready(function(){
 		var customerInfo0 = jQuery("#customerInfo0").val();
 		var customerInfo1 = jQuery("#customerInfo1").val();		
 		var date= new Date();
-		var initialReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 		var lastReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 		
 		var addData = {
@@ -354,7 +355,7 @@ $(document).ready(function(){
 							class="button"></td>
 						<td><input type="button" value="Add" id="btnInsert"
 							class="button add"></td>
-						<td><input type="button" style="width:60pt;" value="Delete" id="btnDelete"
+						<td><input type="button" value="Delete" style="width:60pt;" id="btnDelete"
 							class="button delete"></td>
 					</tr>
 					<tr>
