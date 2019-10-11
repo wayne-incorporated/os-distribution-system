@@ -52,7 +52,7 @@ public:
 	std::string getHwInfo(const TCHAR command[]);
 	RamInfo getRamInfo();
 	OSInfo getOSInfo();
-	ULONGLONG GetSelectedDiskCapacity();
+	LONGLONG GetSelectedDiskCapacity();
 	//int getRamCapacity();
 	//int getRamClockSpeed();
 	// Added by LEE Jeun jeun@wayne-inc.com ~

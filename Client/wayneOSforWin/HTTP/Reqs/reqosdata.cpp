@@ -317,7 +317,7 @@ QString ReqOsData::GetGpuName()
 	return ProcessorName;
 }
 
-ULONGLONG ReqOsData::GetSelectedDiskCapacity()
+LONGLONG ReqOsData::GetSelectedDiskCapacity()
 {
 	QString path = InfoManager::GetInstance()->mDriveInstallPath.section("", 2, 3);
 	TCHAR DrivePath[8];
