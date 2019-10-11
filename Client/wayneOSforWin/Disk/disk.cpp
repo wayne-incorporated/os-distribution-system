@@ -36,7 +36,7 @@
 
 //serial number
 #include <WinIOCtl.h>
-#include <usbioctl.h>
+//#include <usbioctl.h>
 #include <Setupapi.h>
 
 DEFINE_GUID(GUID_DEVINTERFACE_USB_DISK,

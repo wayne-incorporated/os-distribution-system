@@ -156,7 +156,6 @@ $(document).ready(function(){
 		var customerInfo0 = jQuery("#customerInfo0").val();
 		var customerInfo1 = jQuery("#customerInfo1").val();		
 		var date= new Date();
-		var initialReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 		var lastReleaseDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 		
 		var addData = {
@@ -354,7 +353,7 @@ $(document).ready(function(){
 							class="button"></td>
 						<td><input type="button" value="Add" id="btnInsert"
 							class="button add"></td>
-						<td><input type="button" style="width:60pt;" value="Delete" id="btnDelete"
+						<td><input type="button" value="Delete" style="width:60pt;" id="btnDelete"
 							class="button delete"></td>
 					</tr>
 					<tr>

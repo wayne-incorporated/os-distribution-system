@@ -113,7 +113,8 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 				break;
 			}
 		}
-	}
+
+	} 
 	// Modified by LEE jeun jeun@wayne-inc.com ~
     jsonDoc.setObject(jsonObject);
     qDebug()<<"send Data : "<<jsonDoc.toJson()<<endl;

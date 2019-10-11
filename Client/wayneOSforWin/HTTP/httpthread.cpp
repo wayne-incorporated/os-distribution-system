@@ -113,6 +113,7 @@ void HttpThread::RequestOSFile()
 
 void HttpThread::ReplyFinished(QNetworkReply *reply)
 {
+	reply->deleteLater(); // Added by LEE jeun jeun@wayne-inc.com
     qDebug()<<"response call";
 
     if(reply->error() == QNetworkReply::NoError)
@@ -280,6 +281,7 @@ void HttpThread::ReplyFinished(QNetworkReply *reply)
 // ~ Added by LEE jeun jeun@wayne-inc.com
 void HttpThread::gotReply(QNetworkReply* networkReply)
 {
+	networkReply->deleteLater();
 	QJsonObject Jobj = QJsonDocument::fromJson(networkReply->readAll()).object();
 	IPAddr = Jobj.find("ip").value().toString();
 }
