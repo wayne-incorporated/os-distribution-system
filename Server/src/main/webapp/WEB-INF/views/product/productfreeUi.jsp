@@ -28,8 +28,6 @@ $(document).ready(function(){
               		   'deviceVolume', 'realCapacity', 'imgName', 'internalIP', 'externalIP', 
               		   'ramSize', 'ramClockSpeed', 'CPU', 'GPU', 'LocalOSinfo', 'initialReleaseDate', 
               		   'lastReleaseDate', 'releaseCount','customerInfo0','customerInfo1','flag'], //칼럼 이름
-
-              		   
       colModel		: [ //데이터 매핑 및 로우 속성
               		  {name:'idx', width:"4%"},
           		  	{name:'vendorID',		width:"8%"},

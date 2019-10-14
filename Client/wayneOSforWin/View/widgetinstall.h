@@ -12,6 +12,14 @@
 //#include "md5.h"
 #include "../HTTP/httpmanager.h"
 
+// ~ Added by LEE Jeun jeun@wayne-inc.com
+#include <QFile>
+#include <QtZlib/zlib.h>
+#include <QtZlib/zconf.h>
+#include <minizip/zip.h>
+#include <minizip/unzip.h>
+// Added by LEE Jeun jeun@wayne-inc.com ~
+
 namespace Ui {
 class WidgetInstall;
 }
@@ -26,6 +34,7 @@ public:
 
 	Ui::WidgetInstall *getUI();
 
+	int extract(const QString& filename); // ~ Added by LEE Jeun@wayne-inc.com
 	void startInstall();
 	void RequestServerData();
 	void CompleteUpdateFileDelete();
