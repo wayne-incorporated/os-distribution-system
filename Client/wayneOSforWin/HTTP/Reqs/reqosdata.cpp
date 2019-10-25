@@ -60,12 +60,12 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("productRevision", productRevision);
 	jsonObject.insert("serialNumber", serialNumber);
 	// ~ Added by LEE jeun jeun@wayne-inc.com
-	DOUBLE realCapacity = GetSelectedDiskCapacity();
-	qDebug() << "real capacity: " << realCapacity << "GB";
-	//jsonObject.insert("realCapacity", realCapacity);
+	LONGLONG realCapacity = GetSelectedDiskCapacity();
+	qDebug() << "real capacity: " << realCapacity << "Byte";
+	jsonObject.insert("realCapacity", realCapacity);
 
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
-	//jsonObject.insert("userIPAddress", HttpManager::GetInstance()->httpThread.IPAddr);
+	jsonObject.insert("externalIP", HttpManager::GetInstance()->httpThread.IPAddr);
 	
 	/*int ramSize = getRamCapacity();
 	qDebug() << "RAM Capacity: " << ramSize;
@@ -76,25 +76,25 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("ramClockSpeed", ramClockSpeed);*/
 	RAM = getRamInfo();
 	qDebug() << RAM.byteToGB() << "GB";
-	//jsonObject.insert("ramSize", RAM.byteToGB());
+	jsonObject.insert("ramSize", RAM.byteToGB());
 
 	qDebug() << RAM.ClockSpeed << "MHz";
-	//jsonObject.insert("ramClockSpeed", RAM.ClockSpeed);
+	jsonObject.insert("ramClockSpeed", RAM.ClockSpeed);
 
 	OS = getOSInfo();
 	QString LocalOSver = OS.OSver.c_str(), LocalOSbit = QString::fromWCharArray(OS.bit);
 	qDebug() << LocalOSver << " " << LocalOSbit;
-	//jsonObject.insert("LocalOSinfo", LocalOSver + " " + LocalOSbit);
+	jsonObject.insert("LocalOSinfo", LocalOSver + " " + LocalOSbit);
 
 	QString CPU = GetCpuName();
 	//jsonObject.insert("customerInfo0", "CPU: " + CPU);
 	qDebug() << CPU;
-	//jsonObject.insert("CPU", CPU);
+	jsonObject.insert("CPU", CPU);
 
 	QString GPU = GetGpuName();
 	//jsonObject.insert("customerInfo1", "GPU: " + GPU);
 	qDebug() << GPU;
-	//jsonObject.insert("GPU", GPU);
+	jsonObject.insert("GPU", GPU);
 	// Added by LEE jeun jeun@wayne-inc.com ~
 	
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
@@ -109,7 +109,7 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 			if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol)
 			{
 				qDebug() << list[nIter].toString();
-				jsonObject.insert("userIPAddress", list[nIter].toString());
+				jsonObject.insert("internalIP", list[nIter].toString());
 				break;
 			}
 		}
@@ -317,7 +317,7 @@ QString ReqOsData::GetGpuName()
 	return ProcessorName;
 }
 
-DOUBLE ReqOsData::GetSelectedDiskCapacity()
+LONGLONG ReqOsData::GetSelectedDiskCapacity()
 {
 	QString path = InfoManager::GetInstance()->mDriveInstallPath.section("", 2, 3);
 	TCHAR DrivePath[8];
@@ -327,7 +327,7 @@ DOUBLE ReqOsData::GetSelectedDiskCapacity()
 	//UINT DiskType = GetDriveType(DrivePath);
 	BOOL bResult = GetDiskFreeSpaceEx(DrivePath, &lpFreeByteAvailableToCaller, &lpTotalNumberOfBytes, &lpTotalNumberOfFreeBytes);
 	if (!bResult) return 0;
-	DOUBLE selectedDiskCapacity = (lpTotalNumberOfBytes.QuadPart) / (1024.0*1024.0*1024.0);
+	LONGLONG selectedDiskCapacity = lpTotalNumberOfBytes.QuadPart;
 	return selectedDiskCapacity;
 }
 /*QString ReqOsData::GetGpuName()

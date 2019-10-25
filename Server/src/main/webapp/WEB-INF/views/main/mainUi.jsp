@@ -5,7 +5,7 @@
 <head>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
 <meta charset="utf-8">
-<title>ChromicOS</title>
+<title>WayneOS Distribution System</title>
 <link href="/resources/css/style.css" media="screen" rel="stylesheet" type="text/css" />
 <link href="/resources/css/iconic.css" media="screen" rel="stylesheet" type="text/css" />
 <script src="/resources/js/prefix-free.js"></script>

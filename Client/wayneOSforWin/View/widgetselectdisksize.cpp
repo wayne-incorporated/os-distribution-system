@@ -15,6 +15,7 @@ WidgetSelectDiskSize::WidgetSelectDiskSize(QWidget *parent) :
 {
     ui->setupUi(this); 
 
+
 }
 
 WidgetSelectDiskSize::~WidgetSelectDiskSize()
