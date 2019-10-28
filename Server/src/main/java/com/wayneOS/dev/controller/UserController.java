@@ -87,7 +87,7 @@ public class UserController {
 	// public String InqMember(@RequestBody JqGridData gridData) {
 	public String InqMember(@RequestBody Map<String, Object> paramMap) {
 
-		System.out.println("들어오니");
+		System.out.println("Admin list");
 		List<Map<String, Object>> rows = memberService.Inq();
 
 		JqGridData gridData = new JqGridData(paramMap, rows);

@@ -14,7 +14,7 @@
 
 int main()
 {
-	SetConsoleTitle(_T("Wayne Inc. OS Installer 1.4.0"));
+	SetConsoleTitle(_T("Wayne Inc. OS Installer 1.3.0"));
 	LONG result;
 	BOOL STATE;
 	HKEY hKey;
