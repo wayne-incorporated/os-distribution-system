@@ -18,6 +18,7 @@
 // ~ Modified and Added by LEE Jeun jeun@wayne-inc.com
 #define BUFSIZE 128
 #define DIV 1024
+#define CPU_INFO_QUERY_STRING "wmic cpu get name"
 #define GPU_INFO_QUERY_STRING "wmic path Win32_VideoController get name"
 #define RAM_INFO_QUERY_STRING "wmic memorychip get capacity, speed"
 #define LOCAL_OS_INFO_QUERY_STRING "wmic os get caption, osarchitecture"
