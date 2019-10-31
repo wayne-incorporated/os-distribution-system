@@ -105,20 +105,25 @@ void WidgetInstall::startInstall()
 	//extracted += ".bin";
 	QDir dir;
 	QString path = dir.absoluteFilePath(QString("updStatus/"));
-	QString extracted;
+	QString withoutExtension = HttpManager::GetInstance()->httpThread.getFileName();
+	withoutExtension.chop(4);
+	//QString extracted;
 	QDirIterator it(path, QDirIterator::Subdirectories);
 	while (it.hasNext())
 	{
 		qDebug() << it.next();
-		if (it.fileName().toStdString().find("zip") == std::string::npos)
+		if (it.fileName().toStdString().find("zip") == std::string::npos && it.fileName().toStdString().find(withoutExtension.toStdString()) != std::string::npos)
 		{
-			extracted = it.fileName();
+			qDebug() << "OS File : " << it.fileName();
+			//extracted = it.fileName();
+			path = dir.absoluteFilePath(it.filePath());
+			break;
 		}
 	}
 	// Added by LEE Jeun jeun@wayne-inc.com
 
 	//QDir dir;
-	path = dir.absoluteFilePath(QString("updStatus/") + QString(extracted.toStdString().c_str())); // ~ Modified by LEE Jeun jeun@wayne-inc.com
+	//path = dir.absoluteFilePath(QString("updStatus/") + QString(extracted.toStdString().c_str())); // ~ Modified by LEE Jeun jeun@wayne-inc.com
 	
 	QByteArray charPath = path.toLocal8Bit();
 
