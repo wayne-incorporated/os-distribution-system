@@ -10,6 +10,8 @@
 
 #include <QMessageBox>
 #include <QDir>
+#include <QDirIterator>
+#include <QStringList>
 
 
 
@@ -98,13 +100,30 @@ void WidgetInstall::startInstall()
 	}
 	
 	// ~ Added by LEE Jeun jeun@wayne-inc.com
-	QString extracted = HttpManager::GetInstance()->httpThread.getFileName();
-	extracted.chop(4);
-	extracted += ".bin";
+	//QString extracted = HttpManager::GetInstance()->httpThread.getFileName();
+	//extracted.chop(4);
+	//extracted += ".bin";
+	QDir dir;
+	QString path = dir.absoluteFilePath(QString("updStatus/"));
+	QString withoutExtension = HttpManager::GetInstance()->httpThread.getFileName();
+	withoutExtension.chop(4);
+	//QString extracted;
+	QDirIterator it(path, QDirIterator::Subdirectories);
+	while (it.hasNext())
+	{
+		qDebug() << it.next();
+		if (it.fileName().toStdString().find("zip") == std::string::npos && it.fileName().toStdString().find(withoutExtension.toStdString()) != std::string::npos)
+		{
+			qDebug() << "OS File : " << it.fileName();
+			//extracted = it.fileName();
+			path = dir.absoluteFilePath(it.filePath());
+			break;
+		}
+	}
 	// Added by LEE Jeun jeun@wayne-inc.com
 
-	QDir dir;
-	QString path = dir.absoluteFilePath(QString("updStatus/") + QString(extracted.toStdString().c_str())); // ~ Modified by LEE Jeun jeun@wayne-inc.com
+	//QDir dir;
+	//path = dir.absoluteFilePath(QString("updStatus/") + QString(extracted.toStdString().c_str())); // ~ Modified by LEE Jeun jeun@wayne-inc.com
 	
 	QByteArray charPath = path.toLocal8Bit();
 
@@ -439,16 +458,16 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 
 	unsigned long long totalSz = 0;
 
-	QString uzFilename = filename;
-	uzFilename.chop(4);
-	uzFilename += ".bin";
+	//QString uzFilename = filename;
+	//uzFilename.chop(4);
+	//uzFilename += ".bin";
 
 	QDir dir;
 	QString path = dir.absoluteFilePath("updStatus/" + filename);
 	QByteArray charpath = path.toLocal8Bit();
 
-	QFile uzf("updStatus/" + uzFilename);
-	uzf.open(QIODevice::WriteOnly);
+	//QFile uzf("updStatus/" + uzFilename);
+	//uzf.open(QIODevice::WriteOnly);
 
 	unzFile uf = unzOpen(charpath.toStdString().c_str());
 
@@ -456,7 +475,7 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 	{
 		qDebug() << "failed to open .zip file!";
 
-		uzf.close();
+		//uzf.close();
 		unzClose(uf);
 
 		return -1;
@@ -466,7 +485,7 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 	{
 		qDebug() << "error occured!";
 
-		uzf.close();
+		//uzf.close();
 		unzClose(uf);
 
 		return -1;
@@ -489,6 +508,11 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 	qDebug() << "comment : " << comment;
 	qDebug() << "compressed size : " << info.compressed_size << " bytes";
 	qDebug() << "uncompressed size : " << info.uncompressed_size << " bytes";
+
+	QString uzFilename = oriFileName;
+
+	QFile uzf("updStatus/" + uzFilename);
+	uzf.open(QIODevice::WriteOnly);
 
 	if (unzOpenCurrentFile(uf) != UNZ_OK)
 	{

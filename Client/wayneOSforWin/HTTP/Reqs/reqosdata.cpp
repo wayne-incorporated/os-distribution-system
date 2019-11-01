@@ -123,7 +123,7 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 }
 
 // ~ Added by LEE jeun jeun@wayne-inc.com
-QString ReqOsData::GetCpuName()
+/*QString ReqOsData::GetCpuName()
 {
 	QString ProccessorName;
 	int CPUInfo[4] = { -1 };
@@ -145,6 +145,16 @@ QString ReqOsData::GetCpuName()
 	}
 	ProccessorName = CPUBrandString;
 	return ProccessorName;
+}*/
+
+QString ReqOsData::GetCpuName()
+{
+	std::string Data = getHwInfo(_T(CPU_INFO_QUERY_STRING));
+	int start = 0, end = 0;
+	start = Data.find("\n") + 1;
+	end = Data.find("  ", start);
+	QString ProcessorName = Data.substr(start, end - start).c_str();
+	return ProcessorName;
 }
 
 std::string ReqOsData::getHwInfo(const TCHAR command[])
