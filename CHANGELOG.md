@@ -2,13 +2,13 @@ v 1.2.0
 
 - Server v 0.2.1
 
-	- Update the realCapcity record on the database and the web when the new record is coming.
+	- Update the realCapacity record on the database and the web when the new record is coming.
 	<br/>
 
 - Client v 1.4.0
 
 	- Rewrite the function for reading CPU information.
-	- After decompressing the OS file downloaded from the server, file extension is not fixed as .bin, is the same as the original file. 
+	- After decompressing the OS file downloaded from the server, file extension is not fixed as .bin, the same as the original file. 
 	<br/>
 
 v 1.1.0
