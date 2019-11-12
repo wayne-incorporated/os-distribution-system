@@ -34,6 +34,7 @@
 #include <windows.h>
 #include <winioctl.h>
 #include <QtWidgets\qmessagebox.h>
+#include <string>
 #ifndef FSCTL_IS_VOLUME_MOUNTED
 #define FSCTL_IS_VOLUME_MOUNTED         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 10, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #endif // FSCTL_IS_VOLUME_MOUNTED
@@ -110,4 +111,8 @@ bool checkDriveType(char *name, ULONG *pid);
 void getProductInfo(int deviceID);
 DWORD getDeviceNumber(HANDLE deviceHandle);
 void getSerialNumber(int volumeID);
+
+// convert error message in char string to in wchar string, Added by LEE Jeun@wayne-inc.com
+std::wstring getWerrmsg(char* errmsg);
+
 #endif // DISK_H
