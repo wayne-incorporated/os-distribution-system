@@ -213,7 +213,7 @@ void WidgetInstall::startInstall()
 				hVolume = INVALID_HANDLE_VALUE;
 				//btnCancel->setEnabled(false);
 				//setReadWriteButtonState();
-				return;
+				QApplication::exit(-1); // Added by LEE Jeun jeun@wayne-inc.com
 			}
 			delete sectorData;
 			sectorData = NULL;
