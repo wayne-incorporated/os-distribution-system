@@ -60,7 +60,10 @@ HANDLE getHandleOnFile(char *filelocation, DWORD access)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "File Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on the file.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "File Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on the file.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	delete location;
@@ -80,7 +83,10 @@ HANDLE getHandleOnDevice(int device, DWORD access)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Device Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on the device.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Device Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on the device.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	return hDevice;
@@ -98,7 +104,10 @@ HANDLE getHandleOnVolume(int volume, DWORD access)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Volume Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on the volume.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Volume Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on the volume.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	return hVolume;
@@ -114,7 +123,10 @@ bool getLockOnVolume(HANDLE handle)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Lock Error", QString::fromLocal8Bit("An error occurred when attempting to lock the volume.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Lock Error", QString::fromLocal8Bit("An error occurred when attempting to lock the volume.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	return (bResult);
@@ -130,7 +142,10 @@ bool removeLockOnVolume(HANDLE handle)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Unlock Error", QString::fromLocal8Bit("An error occurred when attempting to unlock the volume.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Unlock Error", QString::fromLocal8Bit("An error occurred when attempting to unlock the volume.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	return (bResult);
@@ -146,7 +161,10 @@ bool unmountVolume(HANDLE handle)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Dismount Error", QString::fromLocal8Bit("An error occurred when attempting to dismount the volume.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Dismount Error", QString::fromLocal8Bit("An error occurred when attempting to dismount the volume.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	return (bResult);
@@ -172,7 +190,10 @@ char *readSectorDataFromHandle(HANDLE handle, unsigned long long startsector, un
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Read Error", QString::fromLocal8Bit("An error occurred when attempting to read data from handle.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Read Error", QString::fromLocal8Bit("An error occurred when attempting to read data from handle.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 		delete data;
 		data = NULL;
@@ -193,7 +214,10 @@ bool writeSectorDataToHandle(HANDLE handle, char *data, unsigned long long start
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Write Error", QString::fromLocal8Bit("An error occurred when attempting to write data from handle.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+		
+		std::wstring errmsg = getWerrmsg(errormessage);
+		
+		QMessageBox::critical(NULL, "Write Error", QString::fromLocal8Bit("An error occurred when attempting to write data from handle.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 	return (bResult);
@@ -210,7 +234,10 @@ unsigned long long getNumberOfSectors(HANDLE handle, unsigned long long *sectors
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Device Error", QString::fromLocal8Bit("An error occurred when attempting to get the device's geometry.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Device Error", QString::fromLocal8Bit("An error occurred when attempting to get the device's geometry.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 		return 0;
 	}
@@ -231,7 +258,10 @@ unsigned long long getFileSizeInSectors(HANDLE handle, unsigned long long sector
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "File Error", QString::fromLocal8Bit("An error occurred while getting the file size.\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "File Error", QString::fromLocal8Bit("An error occurred while getting the file size.\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 		retVal = 0;
 	}
@@ -253,7 +283,10 @@ bool spaceAvailable(char *location, unsigned long long spaceneeded)
 		char *errormessage = NULL;
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-		QMessageBox::critical(NULL, "Free Space Error", QString::fromLocal8Bit("Failed to get the free space on drive %1.\nError %2: %3\nChecking of free space will be skipped.").arg(location).arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "Free Space Error", QString::fromLocal8Bit("Failed to get the free space on drive %1.\nError %2: ").arg(location).arg(GetLastError()) + QString::fromStdWString(errmsg) + QString("\nChecking of free space will be skipped."));
 		return true;
 	}
 	return (spaceneeded <= freespace.QuadPart);
@@ -288,7 +321,10 @@ BOOL GetDisksProperty(HANDLE hDevice, PSTORAGE_DEVICE_DESCRIPTOR pDevDesc,
 			char *errormessage = NULL;
 			//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 			FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-			QMessageBox::critical(NULL, "File Error", QString::fromLocal8Bit("An error occurred while getting the device number.\nThis usually means something is currently accessing the device; please close all applications and try again.\n\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+			std::wstring errmsg = getWerrmsg(errormessage);
+
+			QMessageBox::critical(NULL, "File Error", QString::fromLocal8Bit("An error occurred while getting the device number.\nThis usually means something is currently accessing the device; please close all applications and try again.\n\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 			LocalFree(errormessage);
 		}
 	}
@@ -299,7 +335,10 @@ BOOL GetDisksProperty(HANDLE hDevice, PSTORAGE_DEVICE_DESCRIPTOR pDevDesc,
 		//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 		//After Add**********************************************************/
-		//QMessageBox::critical(NULL, "File Error", QString("An error occurred while querying the properties.\nThis usually means something is currently accessing the device; please close all applications and try again.\n\nError %1: %2").arg(GetLastError()).arg(errormessage));
+
+		std::wstring errmsg = getWerrmsg(errormessage);
+
+		QMessageBox::critical(NULL, "File Error", QString("An error occurred while querying the properties.\nThis usually means something is currently accessing the device; please close all applications and try again.\n\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 		LocalFree(errormessage);
 	}
 
@@ -377,7 +416,10 @@ bool checkDriveType(char *name, ULONG *pid)
 			char *errormessage = NULL;
 			//FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
 			FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, GetLastError(), 0, (LPSTR)&errormessage, 0, NULL);
-			QMessageBox::critical(NULL, "Volume Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on %3.\nError %1: %2").arg(GetLastError()).arg(errormessage).arg(nameWithSlash));
+
+			std::wstring errmsg = getWerrmsg(errormessage);
+
+			QMessageBox::critical(NULL, "Volume Error", QString::fromLocal8Bit("An error occurred when attempting to get a handle on %1.").arg(nameWithSlash) + QString("\nError %1: ").arg(GetLastError()) + QString::fromStdWString(errmsg));
 			LocalFree(errormessage);
 		}
 		else
@@ -619,3 +661,17 @@ void getSerialNumber(int volumeID)
 	SetupDiDestroyDeviceInfoList(hDevInfo);
 	return;
 }
+
+//~ convert error message in char string to in wchar string, Added by LEE Jeun jeun@wayne-inc.com
+std::wstring getWerrmsg(char* errmsg)
+{
+	char errStr[128];
+	strcpy(errStr, errmsg);
+
+	TCHAR WerrStr[128];
+	MultiByteToWideChar(CP_ACP, 0, errStr, sizeof(errStr), WerrStr, sizeof(WerrStr));
+
+	std::wstring Werrmsg = WerrStr;
+	return Werrmsg;
+}
+// Added by LEE Jeun jeun@wayne-inc.com ~
