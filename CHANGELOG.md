@@ -1,3 +1,16 @@
+v 1.2.2
+
+- Server
+
+	- no change
+	<br/>
+
+- Client
+
+	- Make the client shut down right away after closing pop-up window for any kind of errors.
+	- Add message box for querying to close the client in any situation.
+	<br/>
+
 v 1.2.1
 
 - Server
