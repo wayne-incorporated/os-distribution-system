@@ -37,8 +37,8 @@ TitleBar::TitleBar(QWidget *parent)
 
     QLabel* label = new QLabel(this);
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
-    label->setText("  Wayne Inc. OS Install Program 1.2.1");
-    parent->setWindowTitle("  Wayne Inc. OS Install Program 1.2.1");
+    label->setText("  Wayne Inc. OS Install Program 1.2.2");
+    parent->setWindowTitle("  Wayne Inc. OS Install Program 1.2.2");
 	// Modified by LEE jeun jeun@wayne-inc.com ~
 
     QHBoxLayout* hbox = new QHBoxLayout(this);
@@ -53,7 +53,9 @@ TitleBar::TitleBar(QWidget *parent)
 
     maxNormal = false;
 
-    connect(close, SIGNAL( clicked() ), parent, SLOT(close() ) );
+    //connect(close, SIGNAL( clicked() ), parent, SLOT(close() ) );
+	// Added by LEE Jeun@wayne-inc.com
+	connect(close, SIGNAL(clicked()), this, SLOT(queryExit()));
     connect(minimize, SIGNAL( clicked() ), this, SLOT(showSmall() ) );
 
 }
@@ -81,6 +83,34 @@ void TitleBar::showMaxRestore()
         maxNormal = !maxNormal;
 
     }
+}
+
+// exit when clicking exit button, Added by LEE Jeun@wayne-inc.com
+void TitleBar::queryExit()
+{
+	QMessageBox msgBox;
+	if (msgBox.warning(parentWidget(), "Wayne Inc. OS Installer", "The installer will be closed.\nDo you want to stop Wanye OS installation ?",
+		QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+	{
+		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXIT_EVENT;
+
+		parentWidget()->close();
+	}
+	/*msgBox.setText("The installer will be closed.\nDo you want to stop Wanye OS installation?");
+	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+	msgBox.setDefaultButton(QMessageBox::No);
+	msgBox.setWindowTitle("Wayne Inc. OS Installer");
+	msgBox.setIcon(QMessageBox::Warning);
+	msgBox.setStyleSheet("QLabel{width:200px; font-size: 13px;} QPushButton{ width:10px; height:10px; font-size: 11px; }");
+
+	int ret = msgBox.exec();
+	
+	if (ret == QMessageBox::Yes)
+	{
+		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXIT_EVENT;
+		
+		parentWidget()->close();
+	}*/
 }
 
 void TitleBar::mousePressEvent(QMouseEvent *me)
