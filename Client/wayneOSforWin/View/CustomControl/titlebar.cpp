@@ -89,14 +89,14 @@ void TitleBar::showMaxRestore()
 void TitleBar::queryExit()
 {
 	QMessageBox msgBox;
-	if (msgBox.warning(parentWidget(), "Wayne Inc. OS Installer", "The installer will be closed.\nDo you want to stop Wanye OS installation ?",
+	if (msgBox.warning(parentWidget(), "Wayne Inc. OS Installer", "The installer will be closed.\nDo you want to stop Wayne OS installation?",
 		QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
 	{
 		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXIT_EVENT;
 
 		parentWidget()->close();
 	}
-	/*msgBox.setText("The installer will be closed.\nDo you want to stop Wanye OS installation?");
+	/*msgBox.setText("The installer will be closed.\nDo you want to stop Wayne OS installation?");
 	msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 	msgBox.setDefaultButton(QMessageBox::No);
 	msgBox.setWindowTitle("Wayne Inc. OS Installer");
