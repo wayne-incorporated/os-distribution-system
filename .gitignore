@@ -19,6 +19,9 @@
 *.CopyComplete
 GeneratedFiles/
 
+# Log
+logs/
+
 # Created by https://www.gitignore.io/api/qt,visualstudio
 # Edit at https://www.gitignore.io/?templates=qt,visualstudio
 
@@ -99,6 +102,7 @@ mono_crash.*
 [Dd]ebug/*
 !Client/Win32/Debug/libeay32.dll
 !Client/Win32/Debug/ssleay32.dll
+[Dd]ebug/
 ##
 [Dd]ebugPublic/
 [Rr]elease/
@@ -107,6 +111,7 @@ mono_crash.*
 [Rr]elease/*
 !Client/Win32/Release/libeay32.dll
 !Client/Win32/Release/ssleay32.dll
+[Rr]elease/
 ##
 [Rr]eleases/
 x64/

@@ -16,15 +16,16 @@
 
 #define ID 0x80000000
 // ~ Modified and Added by LEE Jeun jeun@wayne-inc.com
-#define BUFSIZE 128
+#define BUFSIZE 4096
 #define DIV 1024
-#define CPU_INFO_QUERY_STRING "wmic cpu get name"
-#define GPU_INFO_QUERY_STRING "wmic path Win32_VideoController get name"
-#define RAM_INFO_QUERY_STRING "wmic memorychip get capacity, speed"
-#define LOCAL_OS_INFO_QUERY_STRING "wmic os get caption, osarchitecture"
-//#define RAM_CAPACITY_QUERY_STRING "wmic memorychip get capacity"
-//#define RAM_CLOCK_SPEED_QUERY_STRING "wmic memorychip get speed"
-// Modified and Added by LEE Jeun jeun@wayne-inc.com ~
+//#define CPU_INFO_QUERY_STRING "wmic cpu get name"
+const CString CPU_INFO_QUERY_STRING = "wmic cpu get name";
+//#define GPU_INFO_QUERY_STRING "wmic path win32_videocontroller get name"
+const CString GPU_INFO_QUERY_STRING = "wmic path win32_videocontroller get name";
+//#define RAM_INFO_QUERY_STRING "wmic memorychip get capacity, speed"
+const CString RAM_INFO_QUERY_STRING = "wmic memorychip get capacity, speed";
+//#define LOCAL_OS_INFO_QUERY_STRING "wmic os get caption, osarchitecture, muilanguages"
+const CString LOCAL_OS_INFO_QUERY_STRING = "wmic os get caption, osarchitecture, muilanguages";
 
 typedef struct _RAMINFO
 {
@@ -36,7 +37,8 @@ typedef struct _RAMINFO
 typedef struct _OSINFO
 {
 	std::string OSver;
-	TCHAR bit[8];
+	TCHAR bit[16];
+	QString lang;
 }OSInfo;
 
 class ReqOsData
@@ -50,14 +52,12 @@ public:
 	QString GetGpuName(); 
 	RamInfo RAM;
 	OSInfo OS;
-	std::string getHwInfo(const TCHAR command[]);
+	std::string getHwInfo(CString command);
 	RamInfo getRamInfo();
 	OSInfo getOSInfo();
 	LONGLONG GetSelectedDiskCapacity();
-	//int getRamCapacity();
-	//int getRamClockSpeed();
 	// Added by LEE Jeun jeun@wayne-inc.com ~
 };
-
+// ~ Modified and Added by LEE Jeun jeun@wayne-inc.com
 
 #endif // REQOSDATA_H

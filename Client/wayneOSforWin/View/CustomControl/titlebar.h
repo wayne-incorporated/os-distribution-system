@@ -5,7 +5,9 @@
 #include <QTextEdit>
 #include <QLabel>
 #include <QStyle>
-
+#include <QCoreApplication>
+#include "View/viewmanager.h"
+#include <QMessageBox>
 
 
 class TitleBar : public QWidget
@@ -17,6 +19,8 @@ public:
 public slots:
     void showSmall();
     void showMaxRestore();
+	// exit when clicking exit button, Added by LEE Jeun@wayne-inc.com
+	void queryExit();
 
 protected:
     void mousePressEvent(QMouseEvent *me);
