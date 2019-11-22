@@ -41,7 +41,7 @@ class ViewManager
         }
 		// ~ Added by LEE Jeun jeun@wayne-inc.com
 		QTimer* timer;
-		enum FLAG { DOWNLOAD, INSTALL, EXTRACT };
+		enum FLAG { DOWNLOAD, INSTALL, EXTRACT, EXIT_EVENT };
 		FLAG flag;
 		// Added by LEE Jeun jeun@wayne-inc.com ~
 };

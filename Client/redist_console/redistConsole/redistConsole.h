@@ -24,11 +24,16 @@ const std::string FAIL = "Fail to install ";
 const std::string ALREADY_INSTALLED = "This PC already had ";
 
 const std::string showVersion(int version);
-int checkVersion(const CString& ver);
-void showStatus(const CString& ver, LONG result);
-const PROCESS_INFORMATION runExApp(const CString& ver, BOOL& STATE);
-void checkAppRunning(PROCESS_INFORMATION& pi);
-void isInstalled(HKEY& hKey, const CString& ver);
+int checkVersion(CString ver);
+void showStatus(CString ver, LONG result);
+//PROCESS_INFORMATION runExApp(CString ver, BOOL& STATE);
+SHELLEXECUTEINFO runExApp(CString ver, BOOL& STATE);
+//void checkAppRunning(PROCESS_INFORMATION& pi);
+void checkAppRunning(SHELLEXECUTEINFO& si);
+void isInstalled(HKEY& hKey, CString ver);
 void checkMainRunning(BOOL state);
+BOOL IsCurrentProcess64bit();
+BOOL IsCurrentProcessWow64();
+BOOL Is64BitWindows();
 
 #endif
