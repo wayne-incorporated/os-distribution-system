@@ -9,9 +9,10 @@ v 1.2.2
 
 	- Make the client shut down right away after closing pop-up window for any kind of errors.
 	- Add message box for querying to close the client in any situation.
-	- Fix the function for HW information.
 	- Fix the function for GPU information to read multiple GPUs on the PC.
 	- Fix the function for Local OS information to read language information used in Local OS also.
+	- Fix the bug in redistConsole which installs Microsoft VC++ Redistributable Package on Windows 7
+	- Fix the bug about reading HW specifiation in the main client on Windows 7
 	<br/>
 
 v 1.2.1

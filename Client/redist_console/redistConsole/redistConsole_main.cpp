@@ -19,17 +19,27 @@ int main()
 	BOOL STATE;
 	HKEY hKey;
 	CString path;
-	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, JUDGE3264, 0, KEY_READ, &hKey);
+	if (Is64BitWindows())
+	{
+		path = KEY64;
+	}
+	else
+	{
+		path = KEY32;
+	}
+	/*result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, JUDGE3264, 0, KEY_READ, &hKey);
 	if (result != ERROR_SUCCESS) path = KEY32;
-	else path = KEY64;
+	else path = KEY64;*/
 	CString ver = path + MSVCRKEY13;
 	// CString csProduct = "{8122DAB1-ED4D-3676-BB0A-CA368196543E}"; // vcredist 2013 x86 minimum 12.0.40664
 	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ver, 0, KEY_READ, &hKey);
 	if (result != ERROR_SUCCESS)
 	{
 		showStatus(ver, result);
-		PROCESS_INFORMATION pi = runExApp(MSVCR13, STATE);
-		checkAppRunning(pi);
+		//PROCESS_INFORMATION pi = runExApp(MSVCR13, STATE);
+		//checkAppRunning(pi);
+		SHELLEXECUTEINFO si = runExApp(MSVCR13, STATE);
+		checkAppRunning(si);
 		isInstalled(hKey, ver);
 	}
 	else showStatus(ver, result);
@@ -38,8 +48,10 @@ int main()
 	if (result != ERROR_SUCCESS)
 	{
 		showStatus(ver, result);
-		PROCESS_INFORMATION pi = runExApp(MSVCR15, STATE);
-		checkAppRunning(pi);
+		//PROCESS_INFORMATION pi = runExApp(MSVCR15, STATE);
+		//checkAppRunning(pi);
+		SHELLEXECUTEINFO si = runExApp(MSVCR15, STATE);
+		checkAppRunning(si);
 		isInstalled(hKey, ver);
 	}
 	else showStatus(ver, result);

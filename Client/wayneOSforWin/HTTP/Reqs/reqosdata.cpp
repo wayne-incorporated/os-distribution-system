@@ -9,6 +9,8 @@
 #include "HTTP/httpmanager.h"
 #include "HTTP/httpthread.h"
 
+#include <QMessageBox>
+#include <QCoreApplication>
 #include <qnetworkinterface>
 #include <map>
 #include <utility>
@@ -145,7 +147,7 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 
 QString ReqOsData::GetCpuName()
 {
-	std::string Data = getHwInfo(_T(CPU_INFO_QUERY_STRING));
+	std::string Data = getHwInfo(CPU_INFO_QUERY_STRING);
 	int start = 0, end = 0;
 	start = Data.find("\n") + 1;
 	end = Data.find("  ", start);
@@ -153,10 +155,11 @@ QString ReqOsData::GetCpuName()
 	return ProcessorName;
 }
 
-std::string ReqOsData::getHwInfo(const TCHAR command[])
+std::string ReqOsData::getHwInfo(CString command)
 {
-	TCHAR cmd[BUFSIZE];
-	lstrcpy(cmd, command);
+	//TCHAR cmd[BUFSIZE];
+	CString cmd = command;
+	//lstrcpy(cmd, command);
 	HANDLE hChildStdOut_Rd = NULL, hChildStdOut_Wr = NULL;
 	CHAR Buf[BUFSIZE];
 	memset(Buf, 0, sizeof(Buf));
@@ -172,13 +175,21 @@ std::string ReqOsData::getHwInfo(const TCHAR command[])
 	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
 	ZeroMemory(&si, sizeof(STARTUPINFO));
 	si.cb = sizeof(STARTUPINFO);
-	si.hStdInput = NULL;
-	si.hStdOutput = hChildStdOut_Wr;
 	si.dwFlags |= STARTF_USESTDHANDLES;
+	si.hStdOutput = hChildStdOut_Wr;
+	si.hStdError = hChildStdOut_Wr;
 	si.wShowWindow = SW_HIDE;
-	CreateProcess(NULL, cmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+	BOOL bSuccess = CreateProcess(NULL, cmd.GetBuffer(cmd.GetLength()), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+	cmd.ReleaseBuffer();
+	if (!bSuccess)
+	{
+		DWORD errnum = GetLastError();
+		qDebug() << errnum;
+		QMessageBox::critical(NULL, QString("Error"), QString::number(errnum) + QString(" error occured!"));
+		QCoreApplication::exit(-1);
+	}
 	DWORD dwRead = 0, dwOut = 0;
-	DWORD dwExitCode = 0;
+	DWORD dwExitCode = 0, dwResult = 0;
 	/*while (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL))
 	{
 		if (dwOut <= 0 && WaitForSingleObject(pi.hProcess, 0) != WAIT_TIMEOUT) break;
@@ -191,34 +202,27 @@ std::string ReqOsData::getHwInfo(const TCHAR command[])
 	}*/
 	while (dwExitCode == 0)
 	{
-		dwOut = WaitForSingleObject(pi.hProcess, 500);
-
+		dwResult = WaitForSingleObject(pi.hProcess, 1000);
 		if (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL) && dwOut > 0)
 		{
 			ReadFile(hChildStdOut_Rd, Buf, sizeof(Buf), &dwRead, NULL);
-			Buf[dwRead] = 0;
 			Data += std::string(Buf);
 		}
 
-		if (dwOut != WAIT_TIMEOUT)
+		if (dwResult != WAIT_TIMEOUT)
 		{
 			dwExitCode = 1;
 		}
 	}
 
-	GetExitCodeProcess(pi.hProcess, &dwExitCode);
-	
-	if (dwExitCode == STILL_ACTIVE)
-	{
-		TerminateProcess(pi.hProcess, PROCESS_TERMINATE);
-	}
-	
 	CloseHandle(hChildStdOut_Rd);
 	CloseHandle(hChildStdOut_Wr);
 
+	GetExitCodeProcess(pi.hProcess, &dwExitCode);
+	
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
-
+	
 	return Data;
 }
 
@@ -231,7 +235,7 @@ RamInfo ReqOsData::getRamInfo()
 	bool toggle = false;
 	int cnt = 0;
 	memset(&ri, 0, sizeof(ri));
-	std::string Data = getHwInfo(_T(RAM_INFO_QUERY_STRING));
+	std::string Data = getHwInfo(RAM_INFO_QUERY_STRING);
 	for (auto it = Data.begin(); it != Data.end(); ++it)
 	{
 		if (*it != ' ' && *it != '\r' && *it != '\n') toggle = true;
@@ -312,7 +316,7 @@ OSInfo ReqOsData::getOSInfo()
 
 	OSInfo oi;
 
-	std::string Data = getHwInfo(_T(LOCAL_OS_INFO_QUERY_STRING));
+	std::string Data = getHwInfo(LOCAL_OS_INFO_QUERY_STRING);
 
 	std::string value;
 
@@ -379,7 +383,7 @@ QString ReqOsData::GetGpuName()
 {
 	const std::string name = "Name";
 
-	std::string Data = getHwInfo(_T(GPU_INFO_QUERY_STRING));
+	std::string Data = getHwInfo(GPU_INFO_QUERY_STRING);
 
 	std::string value;
 
