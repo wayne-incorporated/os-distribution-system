@@ -14,7 +14,6 @@
 #include <QStringList>
 
 
-
 WidgetInstall::WidgetInstall(QWidget *parent) : QWidget(parent),ui(new Ui::WidgetInstall)
 {
     ui->setupUi(this);
@@ -74,7 +73,8 @@ void WidgetInstall::startInstall()
 	hVolume = getHandleOnVolume(volumeID, GENERIC_WRITE);
 	if (hVolume == INVALID_HANDLE_VALUE)
 	{
-		status = STATUS_IDLE;
+		//status = STATUS_IDLE;
+		status = STATUS_EXIT;
 		//btnCancel->setEnabled(false);
 		//setReadWriteButtonState();
 		return;
@@ -82,7 +82,8 @@ void WidgetInstall::startInstall()
 	if (!getLockOnVolume(hVolume))
 	{
 		CloseHandle(hVolume);
-		status = STATUS_IDLE;
+		//status = STATUS_IDLE;
+		status = STATUS_EXIT;
 		hVolume = INVALID_HANDLE_VALUE;
 		//btnCancel->setEnabled(false);
 		//setReadWriteButtonState();
@@ -92,7 +93,8 @@ void WidgetInstall::startInstall()
 	{
 		removeLockOnVolume(hVolume);
 		CloseHandle(hVolume);
-		status = STATUS_IDLE;
+		//status = STATUS_IDLE;
+		status = STATUS_EXIT;
 		hVolume = INVALID_HANDLE_VALUE;
 		//btnCancel->setEnabled(false);
 		//setReadWriteButtonState();
@@ -135,7 +137,8 @@ void WidgetInstall::startInstall()
 		{
 			removeLockOnVolume(hVolume);
 			CloseHandle(hVolume);
-			status = STATUS_IDLE;
+			//status = STATUS_IDLE;
+			status = STATUS_EXIT;
 			hVolume = INVALID_HANDLE_VALUE;
 			//btnCancel->setEnabled(false);
 			//setReadWriteButtonState();
@@ -147,7 +150,8 @@ void WidgetInstall::startInstall()
 			removeLockOnVolume(hVolume);
 			CloseHandle(hFile);
 			CloseHandle(hVolume);
-			status = STATUS_IDLE;
+			//status = STATUS_IDLE;
+			status = STATUS_EXIT;
 			hVolume = INVALID_HANDLE_VALUE;
 			hFile = INVALID_HANDLE_VALUE;
 			//btnCancel->setEnabled(false);
@@ -163,7 +167,8 @@ void WidgetInstall::startInstall()
 			CloseHandle(hRawDisk);
 			CloseHandle(hFile);
 			CloseHandle(hVolume);
-			status = STATUS_IDLE;
+			//status = STATUS_IDLE;
+			status = STATUS_EXIT;
 			hVolume = INVALID_HANDLE_VALUE;
 			hFile = INVALID_HANDLE_VALUE;
 			hRawDisk = INVALID_HANDLE_VALUE;
@@ -180,7 +185,7 @@ void WidgetInstall::startInstall()
 		display = "Installing";
 		ui->labelStatus->setText(display);
 		// Added by LEE Jeun@wayne-inc.com ~
-		for (i = 0ul; i < numsectors && status == STATUS_WRITING; i += 1024ul)
+		for (i = 0ul; i < numsectors && status == STATUS_WRITING && ViewManager::GetInstance()->flag == ViewManager::GetInstance()->INSTALL; i += 1024ul)
 		{
 			sectorData = readSectorDataFromHandle(hFile, i, (numsectors - i >= 1024ul) ? 1024ul : (numsectors - i), sectorsize);
 			if (sectorData == NULL)
@@ -190,7 +195,8 @@ void WidgetInstall::startInstall()
 				CloseHandle(hRawDisk);
 				CloseHandle(hFile);
 				CloseHandle(hVolume);
-				status = STATUS_IDLE;
+				//status = STATUS_IDLE;
+				status = STATUS_EXIT;
 				sectorData = NULL;
 				hRawDisk = INVALID_HANDLE_VALUE;
 				hFile = INVALID_HANDLE_VALUE;
@@ -206,14 +212,15 @@ void WidgetInstall::startInstall()
 				CloseHandle(hRawDisk);
 				CloseHandle(hFile);
 				CloseHandle(hVolume);
-				status = STATUS_IDLE;
+				//status = STATUS_IDLE;
+				status = STATUS_EXIT;
 				sectorData = NULL;
 				hRawDisk = INVALID_HANDLE_VALUE;
 				hFile = INVALID_HANDLE_VALUE;
 				hVolume = INVALID_HANDLE_VALUE;
 				//btnCancel->setEnabled(false);
 				//setReadWriteButtonState();
-				QApplication::exit(-1); // Added by LEE Jeun jeun@wayne-inc.com
+				return;
 			}
 			delete sectorData;
 			sectorData = NULL;
@@ -243,6 +250,11 @@ void WidgetInstall::startInstall()
 	///////////////////
     #endif
 	
+	if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
+	{
+		QCoreApplication::exit();
+	}
+
 	// ~ Modified and Added by LEE jeun jeun@wayne-inc.com
 	ui->progressBar->hide();
 	ui->label_3->hide();
@@ -255,11 +267,11 @@ void WidgetInstall::startInstall()
 	this->CompleteUpdateFileDelete();
 	ui->btnNext->setEnabled(true);
 	
-	if (status == STATUS_EXIT)
+	/*if (status == STATUS_EXIT)
 	{
 		close();
 		
-	}
+	}*/
 	status = STATUS_IDLE;
 }
 
@@ -308,7 +320,6 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 		//ui->labelStatus->setText(display);
 		//Write logic call...
 		// ~ Added by LEE Jeun jeun@wayne-inc.com
-		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXTRACT;
 
 		display = "Extracting";
 		ui->labelStatus->setText(display);
@@ -325,6 +336,7 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 			{
 				qDebug() << "install Fail!";
 				this->CompleteUpdateFileDelete();
+				status = STATUS_EXIT;
 			}
 		}
 
@@ -335,9 +347,17 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 			if (result == -1)
 			{
 				QMessageBox::critical(NULL, "Error", "can not extract downloaded file!");
-				QApplication::exit(-1);
+				//QApplication::exit(-1);
+				status = STATUS_EXIT;
 			}
 			// Added by LEE Jeun jeun@wayne-inc.com ~
+			
+			else if (result == 1)
+			{
+				this->CompleteUpdateFileDelete();
+
+				QCoreApplication::exit();
+			}
 
 			else
 			{
@@ -349,11 +369,16 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 				{
 					qDebug() << "install Fail!";
 					this->CompleteUpdateFileDelete();
+					status = STATUS_EXIT;
 				}
 			}
 		}
 	}
 
+	if (status == STATUS_EXIT)
+	{
+		QCoreApplication::exit(-1);
+	}
 }
 // Modified by LEE Jeun jeun@wayne-inc.com
 
@@ -451,6 +476,8 @@ WidgetInstall::setDynamic()
 
 int WidgetInstall::extract(const QString& filename) // this is for extracting .zip files.
 {
+	ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXTRACT;
+
 	p = 0;
 
 	ui->progressBar->reset();
@@ -530,10 +557,22 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 
 	while (readSz = unzReadCurrentFile(uf, in, BUFSIZE))
 	{
+		if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
+		{
+			qDebug() << "detect clicking exit button!";
+
+			unzCloseCurrentFile(uf);
+			uzf.close();
+			unzClose(uf);
+
+			return 1;
+		}
+
 		if (readSz < 0)
 		{
 			qDebug() << "error occured!";
 
+			unzCloseCurrentFile(uf);
 			uzf.close();
 			unzClose(uf);
 
@@ -548,7 +587,7 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 
 		ui->progressBar->setValue((100 * curTot) / totalSz);
 
-		QApplication::processEvents();
+		QCoreApplication::processEvents();
 	}
 
 	qDebug() << "decompression completed : " << filename << " - > " << uzFilename;
