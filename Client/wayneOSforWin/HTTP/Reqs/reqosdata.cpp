@@ -9,7 +9,12 @@
 #include "HTTP/httpmanager.h"
 #include "HTTP/httpthread.h"
 
+#include <QMessageBox>
+#include <QCoreApplication>
 #include <qnetworkinterface>
+#include <map>
+#include <utility>
+#include <algorithm>
 
 
 ReqOsData::ReqOsData(QNetworkAccessManager* manager)
@@ -67,13 +72,6 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
 	jsonObject.insert("externalIP", HttpManager::GetInstance()->httpThread.IPAddr);
 	
-	/*int ramSize = getRamCapacity();
-	qDebug() << "RAM Capacity: " << ramSize;
-	jsonObject.insert("ramSize", ramSize);
-	
-	int ramClockSpeed = getRamClockSpeed();
-	qDebug() << "RAM Clock Speed: " << ramClockSpeed;
-	jsonObject.insert("ramClockSpeed", ramClockSpeed);*/
 	RAM = getRamInfo();
 	qDebug() << RAM.byteToGB() << "GB";
 	jsonObject.insert("ramSize", RAM.byteToGB());
@@ -83,8 +81,8 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 
 	OS = getOSInfo();
 	QString LocalOSver = OS.OSver.c_str(), LocalOSbit = QString::fromWCharArray(OS.bit);
-	qDebug() << LocalOSver << " " << LocalOSbit;
-	jsonObject.insert("LocalOSinfo", LocalOSver + " " + LocalOSbit);
+	qDebug() << LocalOSver << " " << LocalOSbit << " " << OS.lang;
+	jsonObject.insert("LocalOSinfo", LocalOSver + " " + LocalOSbit + " " + OS.lang);
 
 	QString CPU = GetCpuName();
 	//jsonObject.insert("customerInfo0", "CPU: " + CPU);
@@ -149,7 +147,7 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 
 QString ReqOsData::GetCpuName()
 {
-	std::string Data = getHwInfo(_T(CPU_INFO_QUERY_STRING));
+	std::string Data = getHwInfo(CPU_INFO_QUERY_STRING);
 	int start = 0, end = 0;
 	start = Data.find("\n") + 1;
 	end = Data.find("  ", start);
@@ -157,10 +155,11 @@ QString ReqOsData::GetCpuName()
 	return ProcessorName;
 }
 
-std::string ReqOsData::getHwInfo(const TCHAR command[])
+std::string ReqOsData::getHwInfo(CString command)
 {
-	TCHAR cmd[BUFSIZE];
-	lstrcpy(cmd, command);
+	//TCHAR cmd[BUFSIZE];
+	CString cmd = command;
+	//lstrcpy(cmd, command);
 	HANDLE hChildStdOut_Rd = NULL, hChildStdOut_Wr = NULL;
 	CHAR Buf[BUFSIZE];
 	memset(Buf, 0, sizeof(Buf));
@@ -176,13 +175,22 @@ std::string ReqOsData::getHwInfo(const TCHAR command[])
 	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
 	ZeroMemory(&si, sizeof(STARTUPINFO));
 	si.cb = sizeof(STARTUPINFO);
-	si.hStdInput = NULL;
-	si.hStdOutput = hChildStdOut_Wr;
 	si.dwFlags |= STARTF_USESTDHANDLES;
+	si.hStdOutput = hChildStdOut_Wr;
+	si.hStdError = hChildStdOut_Wr;
 	si.wShowWindow = SW_HIDE;
-	CreateProcess(NULL, cmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+	BOOL bSuccess = CreateProcess(NULL, cmd.GetBuffer(cmd.GetLength()), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+	cmd.ReleaseBuffer();
+	if (!bSuccess)
+	{
+		DWORD errnum = GetLastError();
+		qDebug() << errnum;
+		QMessageBox::critical(NULL, QString("Error"), QString::number(errnum) + QString(" error occured!"));
+		QCoreApplication::exit(-1);
+	}
 	DWORD dwRead = 0, dwOut = 0;
-	while (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL))
+	DWORD dwExitCode = 0, dwResult = 0;
+	/*while (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL))
 	{
 		if (dwOut <= 0 && WaitForSingleObject(pi.hProcess, 0) != WAIT_TIMEOUT) break;
 		while (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL) && dwOut > 0)
@@ -191,49 +199,32 @@ std::string ReqOsData::getHwInfo(const TCHAR command[])
 			Buf[dwRead] = 0;
 			Data += std::string(Buf);
 		}
-	}
-	CloseHandle(hChildStdOut_Rd);
-	CloseHandle(hChildStdOut_Wr);
-	return Data;
-}
-
-/*int ReqOsData::getRamCapacity()
-{
-	std::vector<std::string> infoArray;
-	std::string Data = getHwInfo(_T(RAM_CAPACITY_QUERY_STRING));
-	std::string capacity_str;
-	bool toggle = false;
-	for (auto it = Data.begin(); it != Data.end(); ++it)
+	}*/
+	while (dwExitCode == 0)
 	{
-		if (*it >= '0' && *it <= '9') toggle = true;
-		else toggle = false;
-		if (toggle) capacity_str += *it;
-		if (!toggle && capacity_str.size() != 0)
+		dwResult = WaitForSingleObject(pi.hProcess, 1000);
+		if (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL) && dwOut > 0)
 		{
-			infoArray.push_back(capacity_str);
-			capacity_str.clear();
+			ReadFile(hChildStdOut_Rd, Buf, sizeof(Buf), &dwRead, NULL);
+			Data += std::string(Buf);
+		}
+
+		if (dwResult != WAIT_TIMEOUT)
+		{
+			dwExitCode = 1;
 		}
 	}
-	long long RamCapacity = 0;
-	for (int i = 0; i < infoArray.size(); ++i) RamCapacity += atoll(infoArray[i].c_str());
-	return RamCapacity / (DIV*DIV*DIV);
-}
 
-int ReqOsData::getRamClockSpeed()
-{
-	std::string Data = getHwInfo(_T(RAM_CLOCK_SPEED_QUERY_STRING));
-	std::string clock_speed_str;
-	bool toggle = false;
-	for (auto it = Data.begin(); it != Data.end(); ++it)
-	{
-		if (*it >= '0' && *it <= '9') toggle = true;
-		else toggle = false;
-		if (toggle) clock_speed_str += *it;
-		if (!toggle && clock_speed_str.size() != 0) break;
-	}
-	int RamClockSpeed = atoi(clock_speed_str.c_str());
-	return RamClockSpeed;
-}*/
+	CloseHandle(hChildStdOut_Rd);
+	CloseHandle(hChildStdOut_Wr);
+
+	GetExitCodeProcess(pi.hProcess, &dwExitCode);
+	
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+	
+	return Data;
+}
 
 RamInfo ReqOsData::getRamInfo()
 {
@@ -244,7 +235,7 @@ RamInfo ReqOsData::getRamInfo()
 	bool toggle = false;
 	int cnt = 0;
 	memset(&ri, 0, sizeof(ri));
-	std::string Data = getHwInfo(_T(RAM_INFO_QUERY_STRING));
+	std::string Data = getHwInfo(RAM_INFO_QUERY_STRING);
 	for (auto it = Data.begin(); it != Data.end(); ++it)
 	{
 		if (*it != ' ' && *it != '\r' && *it != '\n') toggle = true;
@@ -278,7 +269,7 @@ RamInfo ReqOsData::getRamInfo()
 	return ri;
 }
 
-OSInfo ReqOsData::getOSInfo()
+/*OSInfo ReqOsData::getOSInfo()
 {
 	OSInfo oi;
 	std::vector<std::string> infoArray;
@@ -315,15 +306,128 @@ OSInfo ReqOsData::getOSInfo()
 	strcpy(tmpBuf, infoArray[3].c_str());
 	MultiByteToWideChar(CP_ACP, 0, tmpBuf, sizeof(tmpBuf), oi.bit, sizeof(oi.bit));
 	return oi;
+}*/
+
+OSInfo ReqOsData::getOSInfo()
+{
+	const std::string caption = "Caption";
+	const std::string osarchitecture = "OSArchitecture";
+	const std::string muilanguages = "MUILanguages";
+
+	OSInfo oi;
+
+	std::string Data = getHwInfo(LOCAL_OS_INFO_QUERY_STRING);
+
+	std::string value;
+
+	std::map<int, std::string> idxMap;
+	std::map<int, std::string>::iterator it;
+
+	std::map<std::string, std::string> OsInfo;
+
+	std::pair<int, std::string> largest;
+
+	int idx = 0, subIdx1 = Data.find(caption), subIdx2 = Data.find(osarchitecture), subIdx3 = Data.find(muilanguages);
+
+	idxMap[subIdx1] = caption;
+	idxMap[subIdx2] = osarchitecture;
+	idxMap[subIdx3] = muilanguages;
+	it = idxMap.begin();
+
+	largest = *(--idxMap.end());
+
+	idx = largest.first + largest.second.size();
+
+	while (idx < Data.size())
+	{
+		if ((Data[idx] != '\n') && (Data[idx] != '\r') && (Data[idx] != ' '))
+		{
+			value += Data[idx];
+		}
+
+		else if (Data[idx] == ' ')
+		{
+			if (idx < Data.size() - 1 && Data[idx + 1] == ' ' && value.size() != 0)
+			{
+				OsInfo[it->second] = value;
+				value.clear();
+				++it;
+			}
+
+			else if (idx < Data.size() - 1 && Data[idx + 1] != '\n' && Data[idx + 1] != '\r' 
+				&& Data[idx + 1] != ' ' && Data[idx - 1] != ' ')
+			{
+				value += Data[idx];
+			}
+		}
+		++idx;
+	}
+
+	oi.OSver = OsInfo[caption];
+
+	char tmpBuf[BUFSIZE];
+	strcpy(tmpBuf, OsInfo[osarchitecture].c_str());
+	memset(oi.bit, 0, sizeof(oi.bit));
+	MultiByteToWideChar(CP_ACP, 0, tmpBuf, strlen(tmpBuf), oi.bit, sizeof(oi.bit));
+
+	memset(tmpBuf, 0, sizeof(tmpBuf));
+	strcpy(tmpBuf, OsInfo[muilanguages].c_str());
+	TCHAR tmpWBuf[BUFSIZE];
+	MultiByteToWideChar(CP_ACP, 0, tmpBuf, sizeof(tmpBuf), tmpWBuf, sizeof(tmpWBuf));
+	oi.lang = QString::fromWCharArray(tmpWBuf);
+
+	return oi;
 }
 
 QString ReqOsData::GetGpuName()
 {
-	std::string Data = getHwInfo(_T(GPU_INFO_QUERY_STRING));
-	int start = 0, end = 0;
-	start = Data.find("\n") + 1;
-	end = Data.find("  ", start);
-	QString ProcessorName = Data.substr(start, end - start).c_str();
+	const std::string name = "Name";
+
+	std::string Data = getHwInfo(GPU_INFO_QUERY_STRING);
+
+	std::string value;
+
+	std::vector<std::string> gpuArr;
+
+	int idx = 0;
+	idx = Data.find(name) + name.size();
+
+	while (idx < Data.size())
+	{
+		if ((Data[idx] != '\n') && (Data[idx] != '\r') && (Data[idx] != ' '))
+		{
+			value += Data[idx];
+		}
+		
+		else if (Data[idx] == ' ')
+		{
+			if (idx < Data.size() - 1 && Data[idx + 1] == ' ' && value.size() != 0)
+			{
+				gpuArr.push_back(value);
+				value.clear();
+			}
+
+			else if (idx < Data.size() - 1 && Data[idx + 1] != '\n' && Data[idx + 1] != '\r' && Data[idx + 1] != ' ' && Data[idx - 1] != ' ')
+			{
+				value += Data[idx];
+			}
+		}
+		++idx;
+	}
+
+	QString ProcessorName;
+
+	ProcessorName += "[";
+
+	for (int i = 0; i < gpuArr.size(); ++i)
+	{
+		qDebug() << "GPU" << i + 1 << ": " << gpuArr[i].c_str();
+		ProcessorName += "{";
+		ProcessorName += gpuArr[i].c_str();
+		ProcessorName += "}";
+		ProcessorName += i < gpuArr.size() - 1 ? ", " : "]";
+	}
+
 	return ProcessorName;
 }
 
@@ -340,46 +444,6 @@ LONGLONG ReqOsData::GetSelectedDiskCapacity()
 	LONGLONG selectedDiskCapacity = lpTotalNumberOfBytes.QuadPart;
 	return selectedDiskCapacity;
 }
-/*QString ReqOsData::GetGpuName()
-{
-	HANDLE hChildStdOut_Rd = NULL, hChildStdOut_Wr = NULL;
-	TCHAR cmd[] = _T(GPU_INFO_QUERY_STRING);
-	CHAR Buf[BUFSIZE];
-	memset(Buf, 0, sizeof(Buf));
-	std::string Data;
-	SECURITY_ATTRIBUTES sa;
-	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-	sa.bInheritHandle = TRUE;
-	sa.lpSecurityDescriptor = NULL;
-	CreatePipe(&hChildStdOut_Rd, &hChildStdOut_Wr, &sa, 0);
-	SetHandleInformation(hChildStdOut_Rd, HANDLE_FLAG_INHERIT, 0);
-	PROCESS_INFORMATION pi;
-	STARTUPINFO si;
-	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
-	ZeroMemory(&si, sizeof(STARTUPINFO));
-	si.cb = sizeof(STARTUPINFO);
-	si.hStdInput = NULL;
-	si.hStdOutput = hChildStdOut_Wr;
-	si.dwFlags |= STARTF_USESTDHANDLES;
-	si.wShowWindow = SW_HIDE;
-	CreateProcess(NULL, cmd, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
-	DWORD dwRead = 0, dwOut = 0;
-	while (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL))
-	{
-		if (dwOut <= 0 && WaitForSingleObject(pi.hProcess, 0) != WAIT_TIMEOUT) break;
-		while (PeekNamedPipe(hChildStdOut_Rd, NULL, 0, NULL, &dwOut, NULL) && dwOut > 0)
-		{
-			ReadFile(hChildStdOut_Rd, Buf, sizeof(Buf), &dwRead, NULL);
-			Data += std::string(Buf);
-		}
-	}
-	CloseHandle(hChildStdOut_Rd);
-	int start = 0, end = 0;
-	start = Data.find("\n") + 1;
-	end = Data.find("  ", start);
-	QString ProcessorName = Data.substr(start, end - start).c_str();
-	return ProcessorName;
-}*/
 // Added by LEE jeun jeun@wayne-inc.com ~
 
 
