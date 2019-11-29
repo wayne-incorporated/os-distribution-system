@@ -1,3 +1,5 @@
+THIS COMPETITION IS NOW CLOSED.
+
 ## Benefits for Contributors
 Contributor can use own contribution result/history for own portfolio/career (project/company name can be mentioned)  
 Contributor gets priority in Wayne Inc.'s recruiting/partnership
