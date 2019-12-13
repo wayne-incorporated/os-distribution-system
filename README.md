@@ -1,37 +1,48 @@
+# Requirement for running
+
+- <h3>Client</h3>
+- The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit both)
+    - Internet connection is required
+    <br/>
+    
+- <h3>Server</h3>
+- Install Java 1.7 or over
+    - Install Tomcat 8 or over
+    - Install MySQL
+    - The Operating System which can install Java 1.7 or over, Tomcat 8 or over, MySQL on.  
+    (ex. Ubuntu Linux, Windows, etc.)
+    <br/>
+
 # IDE
 
 - <h3>Client</h3>
-    
-    - Windows 10 pro
+- Windows 10 pro
     - Visual Studio 2017
     - Qt Framework
     - Qt VS Tools
     - vcpkg
     <br/>
-
-    - <h5>Language/External</h5>
-        
-        - C++
+    
+- <h5>Language/External</h5>
+      - C++
         - Qt 5.11.1 msvc 2015 32bit
         - zlib 1.2.11
         - minizip 1.2.11
         - ImageWriter
         - The OpenSSL ToolKit
         <br/>
-
-- <h3>Server</h3>
-
-  - Windows 10 pro
-  - Spring Tool Suite 3.9.9
-  - Java SDK 12.0.2 64bit
-  - MySQL 8.0
-  - Pivotal tc server Developer Edition v4.0 based on Tomcat 9.0.13
-  - Maven 3.6.1
-  <br/>
-
-    - <h5>Language/External</h5>
     
-        - Java
+- <h3>Server</h3>
+- Windows 10 pro
+    - Spring Tool Suite 3.9.9
+    - Java SDK 12.0.2 64bit
+    - MySQL 8.0
+    - Pivotal tc server Developer Edition v4.0 based on Tomcat 9.0.13
+    - Maven 3.6.1
+    <br/>
+    
+- <h5>Language/External</h5>
+    - Java
         - JavaScript
         - jsp
         - xml
@@ -47,8 +58,7 @@
 # How to set up the project
 
 - <h3>Client</h3>
-    
-    1. Download the project. use command below.  
+1. Download the project. use command below.  
         ```
         git clone https://gitlab.com/wayne-inc/os-distribution-system
         ```
@@ -65,14 +75,15 @@
     
     7. Test by creating initial Qt project. If building is success, Qt setting is done.
     
-    8. For downloding and installing external libraries, recommend using vcpkg. You can download in https://github.com/microsoft/vcpkg. And follow the description on this site. You can easily download/install and build zlib, minizip by vcpkg.
+    8. For downloding and installing external libraries, recommend using vcpkg.  
+    You can download in https://github.com/microsoft/vcpkg. And follow the description on this site.  
+    You can easily download/install and build zlib, minizip by vcpkg.
     
     9. After all of the above are done, setting up is completed. You can build the client project by Visual Studio 2017.
     <br/>
-
+    
 - <h3>Server</h3>
-
-    1. Download and install Java SDK in Oracle homepage.
+1. Download and install Java SDK in Oracle homepage.
     
     2. Configure environment variables for Java development.
     
@@ -109,7 +120,7 @@ When users run the installer(client) to install Wayne OS on their disk...
 8. The client sends all data gathered from users in JSON format to the server.
 
 9. The server compares the data from the client with the data stored in the server.
-    
+
     - The free version
     
         - The server sends the information of the os file which is matched for the disk volume users selected to the client.
@@ -195,7 +206,7 @@ Organization that distribute OS image file which can be installed in Removable D
         Copyright (c) 1998-2018 The OpenSSL Project.    
         OpenSSL License, SSLeay License
         <br/>
-        
+    
 - https://gitlab.com/wayne-inc/os-distribution-system/blob/master/LICENSE
 <br/>
 
@@ -203,4 +214,3 @@ Organization that distribute OS image file which can be installed in Removable D
 ## CONTRIBUTING
 
 https://gitlab.com/wayne-inc/os-distribution-system/blob/master/CONTRIBUTING.md
-
