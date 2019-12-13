@@ -1,30 +1,35 @@
 # Requirement for running
 
 - <h3>Client</h3>
-- The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit both)
+
+    - The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit both)
     - Internet connection is required
     <br/>
     
 - <h3>Server</h3>
-- Install Java 1.7 or over
+
+    - Install Java 1.7 or over
     - Install Tomcat 8 or over
     - Install MySQL
     - The Operating System which can install Java 1.7 or over, Tomcat 8 or over, MySQL on.  
     (ex. Ubuntu Linux, Windows, etc.)
     <br/>
 
+
 # IDE
 
 - <h3>Client</h3>
-- Windows 10 pro
+
+    - Windows 10 pro
     - Visual Studio 2017
     - Qt Framework
     - Qt VS Tools
     - vcpkg
     <br/>
     
-- <h5>Language/External</h5>
-      - C++
+    - <h5>Language/External</h5>
+        
+        - C++
         - Qt 5.11.1 msvc 2015 32bit
         - zlib 1.2.11
         - minizip 1.2.11
@@ -33,7 +38,8 @@
         <br/>
     
 - <h3>Server</h3>
-- Windows 10 pro
+
+    - Windows 10 pro
     - Spring Tool Suite 3.9.9
     - Java SDK 12.0.2 64bit
     - MySQL 8.0
@@ -41,8 +47,9 @@
     - Maven 3.6.1
     <br/>
     
-- <h5>Language/External</h5>
-    - Java
+    - <h5>Language/External</h5>
+        
+        - Java
         - JavaScript
         - jsp
         - xml
@@ -58,7 +65,8 @@
 # How to set up the project
 
 - <h3>Client</h3>
-1. Download the project. use command below.  
+
+    1. Download the project. use command below.  
         ```
         git clone https://gitlab.com/wayne-inc/os-distribution-system
         ```
@@ -83,7 +91,8 @@
     <br/>
     
 - <h3>Server</h3>
-1. Download and install Java SDK in Oracle homepage.
+
+    1. Download and install Java SDK in Oracle homepage.
     
     2. Configure environment variables for Java development.
     
