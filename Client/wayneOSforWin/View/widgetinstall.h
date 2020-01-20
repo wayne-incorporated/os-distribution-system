@@ -18,6 +18,7 @@
 #include <QtZlib/zconf.h>
 #include <minizip/zip.h>
 #include <minizip/unzip.h>
+#include <string>
 // Added by LEE Jeun jeun@wayne-inc.com ~
 
 namespace Ui {
@@ -40,6 +41,8 @@ public:
 	void CompleteUpdateFileDelete();
 
 	enum Status {STATUS_IDLE=0, STATUS_READING, STATUS_WRITING, STATUS_EXIT};
+	std::string drive_name;
+	std::string volume_name;
 
     ~WidgetInstall();
 

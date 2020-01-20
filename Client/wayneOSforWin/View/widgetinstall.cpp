@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QStringList>
+#include "formatusb.h"
 
 
 WidgetInstall::WidgetInstall(QWidget *parent) : QWidget(parent),ui(new Ui::WidgetInstall)
@@ -19,7 +20,7 @@ WidgetInstall::WidgetInstall(QWidget *parent) : QWidget(parent),ui(new Ui::Widge
     ui->setupUi(this);
 	// ~ Added by LEE Jeun@wayne-inc.com
 	idx = 0, cnt = 0, p = 0;
-	display = "Downloading Files";
+	//display = "Downloading Files";
 	connect(ViewManager::GetInstance()->timer, SIGNAL(timeout()), this, SLOT(setDynamic()));
 	//ViewManager::GetInstance()->timer->start(500);
 	// Added by LEE Jeun@wayne-inc.com
@@ -49,6 +50,10 @@ void WidgetInstall::on_btnNext_clicked()
 
 void WidgetInstall::startInstall()
 {
+	DWORD size;
+	BOOL bResult = FALSE;
+	char driveName[4];
+	char volumeName[MAX_PATH];
 	status = STATUS_WRITING;
 	// ~ Added by LEE Jeun@wayne-inc.com
 	ViewManager::GetInstance()->timer->stop();
@@ -65,25 +70,67 @@ void WidgetInstall::startInstall()
 	//int volumeID = cboxDevice->currentText().at(1).toAscii() - 'A';
 	/*********************************************************/
 	//Lee Test, After ¼öÁ¤
-	int volumeID = InfoManager::GetInstance()->mVolumeId;
+	//int volumeID = InfoManager::GetInstance()->mVolumeId;
 	int deviceID = InfoManager::GetInstance()->mDeviceId;
+
+	hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE | GENERIC_READ);
+
+	if (hRawDisk == INVALID_HANDLE_VALUE)
+	{
+		qDebug("Could not get handle from device!");
+		status = STATUS_EXIT;
+		return;
+	}
+
+	/*if (!getLockOnVolume(hRawDisk))
+	{
+		qDebug("Could not lock volume on device!");
+		status = STATUS_EXIT;
+		CloseHandle(hRawDisk);
+		hRawDisk = INVALID_HANDLE_VALUE;
+		return;
+	}*/
+
+	bResult = DeviceIoControl(hRawDisk, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &size, NULL);
 	//QMessageBox::information(NULL, "ID info123", QString("volumeID = %1, deviceID = %2").arg(volumeID).arg(deviceID));
 	/***************************************************************/
 	//////////////////////////////////////////////////////////
-	hVolume = getHandleOnVolume(volumeID, GENERIC_WRITE);
+	//hVolume = getHandleOnVolume(volumeID, GENERIC_WRITE);
+	//volume_name = getLogicalName(deviceID, 0, TRUE);
+	volume_name = AltGetLogicalName(deviceID, 0, TRUE);
+	memset(volumeName, 0, sizeof(volumeName));
+
+	if (volume_name.empty())
+	{
+		qDebug("Could not find volume GUID!");
+		CloseHandle(hRawDisk);
+		hRawDisk = INVALID_HANDLE_VALUE;
+		status = STATUS_EXIT;
+		return;
+	}
+
+	strncpy(volumeName, volume_name.c_str(), volume_name.size());
+	volumeName[strlen(volumeName) - 1] = 0;
+	hVolume = CreateFileA(volumeName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+		NULL, OPEN_EXISTING, 0, NULL);
+
 	if (hVolume == INVALID_HANDLE_VALUE)
 	{
 		//status = STATUS_IDLE;
 		status = STATUS_EXIT;
 		//btnCancel->setEnabled(false);
 		//setReadWriteButtonState();
+		CloseHandle(hRawDisk);
+		hRawDisk = INVALID_HANDLE_VALUE;
 		return;
 	}
 	if (!getLockOnVolume(hVolume))
 	{
+		CloseHandle(hRawDisk);
 		CloseHandle(hVolume);
 		//status = STATUS_IDLE;
 		status = STATUS_EXIT;
+		hRawDisk = INVALID_HANDLE_VALUE;
 		hVolume = INVALID_HANDLE_VALUE;
 		//btnCancel->setEnabled(false);
 		//setReadWriteButtonState();
@@ -92,9 +139,11 @@ void WidgetInstall::startInstall()
 	if (!unmountVolume(hVolume))
 	{
 		removeLockOnVolume(hVolume);
+		CloseHandle(hRawDisk);
 		CloseHandle(hVolume);
 		//status = STATUS_IDLE;
 		status = STATUS_EXIT;
+		hRawDisk = INVALID_HANDLE_VALUE;
 		hVolume = INVALID_HANDLE_VALUE;
 		//btnCancel->setEnabled(false);
 		//setReadWriteButtonState();
@@ -136,28 +185,33 @@ void WidgetInstall::startInstall()
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
 			removeLockOnVolume(hVolume);
+			CloseHandle(hRawDisk);
 			CloseHandle(hVolume);
 			//status = STATUS_IDLE;
 			status = STATUS_EXIT;
+			hRawDisk = INVALID_HANDLE_VALUE;
 			hVolume = INVALID_HANDLE_VALUE;
 			//btnCancel->setEnabled(false);
 			//setReadWriteButtonState();
 			return;
 		}
-		hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE);
+		/*hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE);
 		if (hRawDisk == INVALID_HANDLE_VALUE)
 		{
 			removeLockOnVolume(hVolume);
+			CloseHandle(hRawDisk);
 			CloseHandle(hFile);
 			CloseHandle(hVolume);
 			//status = STATUS_IDLE;
 			status = STATUS_EXIT;
+			hRawDisk = INVALID_HANDLE_VALUE;
 			hVolume = INVALID_HANDLE_VALUE;
 			hFile = INVALID_HANDLE_VALUE;
 			//btnCancel->setEnabled(false);
 			//setReadWriteButtonState();
+			
 			return;
-		}
+		}*/
 		availablesectors = getNumberOfSectors(hRawDisk, &sectorsize);
 		numsectors = getFileSizeInSectors(hFile, sectorsize);
 		if (numsectors > availablesectors)
@@ -187,6 +241,8 @@ void WidgetInstall::startInstall()
 		// Added by LEE Jeun@wayne-inc.com ~
 		for (i = 0ul; i < numsectors && status == STATUS_WRITING && ViewManager::GetInstance()->flag == ViewManager::GetInstance()->INSTALL; i += 1024ul)
 		{
+			QCoreApplication::processEvents();
+
 			sectorData = readSectorDataFromHandle(hFile, i, (numsectors - i >= 1024ul) ? 1024ul : (numsectors - i), sectorsize);
 			if (sectorData == NULL)
 			{
@@ -224,7 +280,6 @@ void WidgetInstall::startInstall()
 			}
 			delete sectorData;
 			sectorData = NULL;
-			QCoreApplication::processEvents();
 			if (timer.elapsed() >= 1000)
 			{
 				mbpersec = (((double)sectorsize * (i - lasti)) * (1000.0 / timer.elapsed())) / 1024.0 / 1024.0;
@@ -234,16 +289,45 @@ void WidgetInstall::startInstall()
 				lasti = i;
 			}
 			ui->progressBar->setValue(i);
-			QCoreApplication::processEvents();
 		}
+
+		bResult = DeviceIoControl(hRawDisk, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &size, NULL);
+
 		removeLockOnVolume(hVolume);
-		CloseHandle(hRawDisk);
-		CloseHandle(hFile);
 		CloseHandle(hVolume);
-		sectorData = NULL;
-		hRawDisk = INVALID_HANDLE_VALUE;
-		hFile = INVALID_HANDLE_VALUE;
+		CloseHandle(hRawDisk);
 		hVolume = INVALID_HANDLE_VALUE;
+		hRawDisk = INVALID_HANDLE_VALUE;
+		Sleep(200);
+
+		volume_name = getLogicalName(deviceID, 0, TRUE);
+		//volume_name = AltGetLogicalName(deviceID, 0, TRUE);
+		memset(volumeName, 0, sizeof(volumeName));
+		strncpy(volumeName, volume_name.c_str(), volume_name.size());
+		memset(driveName, 0, sizeof(driveName));
+		strncpy(driveName, drive_name.c_str(), drive_name.size());
+		bResult = MountVolume(driveName, volumeName);
+
+		if (bResult)
+		{
+			qDebug("volume mounted as %s", driveName);
+		}
+
+		else
+		{
+			qDebug("Installation is completed but unable to mount volume: Could not get volume GUID!");
+			QMessageBox::warning(NULL, "warning", "Installation is completed but unable to mount volume: Could not get volume GUID!");
+		}
+		
+		//removeLockOnVolume(hVolume);
+		//CloseHandle(hRawDisk);
+		CloseHandle(hFile);
+		//CloseHandle(hVolume);
+		sectorData = NULL;
+		//hRawDisk = INVALID_HANDLE_VALUE;
+		hFile = INVALID_HANDLE_VALUE;
+		//hVolume = INVALID_HANDLE_VALUE;
+
 		ViewManager::GetInstance()->timer->stop(); // Added by LEE Jeun jeun@wayne-inc.com
 		ui->progressBar->reset();
 	}
@@ -363,6 +447,19 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 			{
 				try
 				{
+					int deviceId = InfoManager::GetInstance()->mDeviceId;
+
+					display = "Format USB...";
+					ui->labelStatus->setText(display);
+					ViewManager::GetInstance()->flag = ViewManager::GetInstance()->FORMAT;
+					ui->progressBar->reset();
+
+					if (getVds(deviceId, drive_name) == -1)
+					{
+						QMessageBox::critical(NULL, "error", "Could not format USB!");
+						status = STATUS_EXIT;
+					}
+
 					this->startInstall();
 				}
 				catch (std::exception & e)
@@ -377,6 +474,7 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 
 	if (status == STATUS_EXIT)
 	{
+		QMessageBox::critical(NULL, "error", "error occured while installing!");
 		QCoreApplication::exit(-1);
 	}
 }
@@ -417,61 +515,19 @@ WidgetInstall::setDynamic()
 			display = "Installing";
 		}
 
-		else
+		else if(ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXTRACT)
 		{
 			display = "Extracting";
+		}
+
+		else
+		{
+			display = "Format USB";
 		}
 
 		p = 0;
 		ui->labelStatus->setText(display);
 	}
-	/*if (ViewManager::GetInstance()->flag==ViewManager::GetInstance()->DOWNLOAD)
-	{
-		if (p < 3)
-		{
-			display += " . ";
-			++p;
-			ui->labelStatus->setText(display);
-		}
-		else
-		{
-			display = "Downloading Files " + QString::number(idx) + " / " + QString::number(cnt);
-			p = 0;
-			ui->labelStatus->setText(display);
-		}
-	}
-	
-	else if(ViewManager::GetInstance()->flag==ViewManager::GetInstance()->INSTALL)
-	{
-		if (p < 3)
-		{
-			display += " . ";
-			++p;
-			ui->labelStatus->setText(display);
-		}
-		else
-		{
-			display = "Installing";
-			p = 0;
-			ui->labelStatus->setText(display);
-		}
-	}
-
-	else
-	{
-		if (p < 3)
-		{
-			display += " . ";
-			++p;
-			ui->labelStatus->setText(display);
-		}
-		else
-		{
-			display = "Extracting";
-			p = 0;
-			ui->labelStatus->setText(display);
-		}
-	}*/
 }
 
 int WidgetInstall::extract(const QString& filename) // this is for extracting .zip files.
@@ -485,24 +541,15 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 
 	unsigned long long totalSz = 0;
 
-	//QString uzFilename = filename;
-	//uzFilename.chop(4);
-	//uzFilename += ".bin";
-
 	QDir dir;
 	QString path = dir.absoluteFilePath("updStatus/" + filename);
 	QByteArray charpath = path.toLocal8Bit();
-
-	//QFile uzf("updStatus/" + uzFilename);
-	//uzf.open(QIODevice::WriteOnly);
 
 	unzFile uf = unzOpen(charpath.toStdString().c_str());
 
 	if (uf == NULL)
 	{
 		qDebug() << "failed to open .zip file!";
-
-		//uzf.close();
 		unzClose(uf);
 
 		return -1;
@@ -511,28 +558,26 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 	if (unzGoToFirstFile(uf) != UNZ_OK)
 	{
 		qDebug() << "error occured!";
-
-		//uzf.close();
 		unzClose(uf);
 
 		return -1;
 	}
 
 	const int MAX_FILENAME = 256;
-	const int MAX_COMMENT = 256;
+	//const int MAX_COMMENT = 256;
 
 	unsigned long long curTot = 0;
 
 	char oriFileName[MAX_FILENAME];
-	char comment[MAX_COMMENT];
+	//char comment[MAX_COMMENT];
 
-	unz_file_info64 info;
-	unzGetCurrentFileInfo64(uf, &info, oriFileName, MAX_FILENAME, NULL, 0, comment, MAX_COMMENT);
+	unz_file_info64 info = { 0, };
+	unzGetCurrentFileInfo64(uf, &info, oriFileName, MAX_FILENAME, NULL, 0, NULL, 0);
 
 	totalSz = info.uncompressed_size;
 
 	qDebug() << "filename : " << oriFileName;
-	qDebug() << "comment : " << comment;
+	//qDebug() << "comment : " << comment;
 	qDebug() << "compressed size : " << info.compressed_size << " bytes";
 	qDebug() << "uncompressed size : " << info.uncompressed_size << " bytes";
 
@@ -551,12 +596,14 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 		return -1;
 	}
 
-	const int BUFSIZE = 20480;
+	const int BUFSIZE = 204800;
 	Bytef in[BUFSIZE];
 	unsigned long long readSz = 0;
 
 	while (readSz = unzReadCurrentFile(uf, in, BUFSIZE))
 	{
+		QCoreApplication::processEvents();
+
 		if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
 		{
 			qDebug() << "detect clicking exit button!";
@@ -586,8 +633,6 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 		qDebug() << curTot << "/" << totalSz << " completed...";
 
 		ui->progressBar->setValue((100 * curTot) / totalSz);
-
-		QCoreApplication::processEvents();
 	}
 
 	qDebug() << "decompression completed : " << filename << " - > " << uzFilename;

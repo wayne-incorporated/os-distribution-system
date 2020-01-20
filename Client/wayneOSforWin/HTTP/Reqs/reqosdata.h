@@ -55,7 +55,7 @@ public:
 	std::string getHwInfo(CString command);
 	RamInfo getRamInfo();
 	OSInfo getOSInfo();
-	LONGLONG GetSelectedDiskCapacity();
+	ULONGLONG GetSelectedDiskCapacity();
 	// Added by LEE Jeun jeun@wayne-inc.com ~
 };
 // ~ Modified and Added by LEE Jeun jeun@wayne-inc.com

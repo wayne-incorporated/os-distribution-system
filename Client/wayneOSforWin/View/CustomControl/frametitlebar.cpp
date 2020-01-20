@@ -50,14 +50,17 @@ FrameTitleBar::~FrameTitleBar()
 {
 	//excetion update file remove.
 	if (QFile::exists("updStatus"))
-   {
-      HttpManager::GetInstance()->httpThread.updateFile->close();
-      QDir dir("updStatus");
-      dir.removeRecursively();
-      
-   }
+	{
+		if (HttpManager::GetInstance()->httpThread.updateFile->isOpen())
+		{
+			HttpManager::GetInstance()->httpThread.updateFile->close();
+		}
+		QDir dir("updStatus");
+		dir.removeRecursively(); 
+	}
     qDebug()<<"MainWindow Delete Managers...";
 
+	CoUninitialize();
     delete ViewManager::GetInstance()->getStackedWidget();
     delete ViewManager::GetInstance();
     delete InfoManager::GetInstance();
