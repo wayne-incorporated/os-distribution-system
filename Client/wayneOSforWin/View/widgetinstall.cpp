@@ -46,14 +46,18 @@ void WidgetInstall::on_btnNext_clicked()
 
 }
 
-
+// Merging extract function into installation function. 
+// extract and read a partial file, write it on a hard disk, read and write this partial file on USB, and delete a partial file from a hard disk. this is one cycle of this function.
+// ~ Modified by LEE Jeun jeun@wayne-inc.com
 void WidgetInstall::startInstall()
 {
 	status = STATUS_WRITING;
 	// ~ Added by LEE Jeun@wayne-inc.com
 	ViewManager::GetInstance()->timer->stop();
 	ViewManager::GetInstance()->flag = ViewManager::GetInstance()->INSTALL;
-	// Added by LEE Jeun@wayne-inc.com
+	ViewManager::GetInstance()->timer->start(500);
+	display = "Installing";
+	ui->labelStatus->setText(display);
 
     #if WAYNE_WINAPI
 	double mbpersec;
@@ -101,36 +105,142 @@ void WidgetInstall::startInstall()
 		return;
 	}
 	
-	// ~ Added by LEE Jeun jeun@wayne-inc.com
-	//QString extracted = HttpManager::GetInstance()->httpThread.getFileName();
-	//extracted.chop(4);
-	//extracted += ".bin";
-	QDir dir;
-	QString path = dir.absoluteFilePath(QString("updStatus/"));
-	QString withoutExtension = HttpManager::GetInstance()->httpThread.getFileName();
-	withoutExtension.chop(4);
-	//QString extracted;
-	QDirIterator it(path, QDirIterator::Subdirectories);
-	while (it.hasNext())
+	hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE);
+	if (hRawDisk == INVALID_HANDLE_VALUE)
 	{
-		qDebug() << it.next();
-		if (it.fileName().toStdString().find("zip") == std::string::npos && it.fileName().toStdString().find(withoutExtension.toStdString()) != std::string::npos)
-		{
-			qDebug() << "OS File : " << it.fileName();
-			//extracted = it.fileName();
-			path = dir.absoluteFilePath(it.filePath());
-			break;
-		}
+		removeLockOnVolume(hVolume);
+		//CloseHandle(hFile);
+		CloseHandle(hVolume);
+		//status = STATUS_IDLE;
+		status = STATUS_EXIT;
+		hVolume = INVALID_HANDLE_VALUE;
+		//hFile = INVALID_HANDLE_VALUE;
+		//btnCancel->setEnabled(false);
+		//setReadWriteButtonState();
+		return;
 	}
-	// Added by LEE Jeun jeun@wayne-inc.com
 
-	//QDir dir;
-	//path = dir.absoluteFilePath(QString("updStatus/") + QString(extracted.toStdString().c_str())); // ~ Modified by LEE Jeun jeun@wayne-inc.com
-	
+	i = 0ul, lasti = 0ul;
+	availablesectors = getNumberOfSectors(hRawDisk, &sectorsize);
+	ui->progressBar->reset();
+
+	unsigned long long totalSz = 0;
+
+	QDir dir;
+	QString path = dir.absoluteFilePath("updStatus/" + HttpManager::GetInstance()->httpThread.getFileName());
 	QByteArray charPath = path.toLocal8Bit();
 
-	if (HttpManager::GetInstance()->httpThread.getFileName() != "dummy.img") // Modified by LEE Jeun jeun@wayne-inc.com
+	unzFile uf = unzOpen(charPath.toStdString().c_str());
+
+	if (uf == NULL)
 	{
+		qDebug() << "failed to open .zip file!";
+
+		unzClose(uf);
+
+		status = STATUS_EXIT;
+
+		return;
+	}
+
+	if (unzGoToFirstFile(uf) != UNZ_OK)
+	{
+		qDebug() << "error occured!";
+
+		unzClose(uf);
+
+		status = STATUS_EXIT;
+
+		return;
+	}
+
+	unsigned long long curTot = 0;
+	
+	unz_file_info64 info;
+	unzGetCurrentFileInfo64(uf, &info, NULL, 0, NULL, 0, NULL, 0);
+
+	totalSz = info.uncompressed_size;
+
+	qDebug() << "compressed size : " << info.compressed_size << " bytes";
+	qDebug() << "uncompressed size : " << info.uncompressed_size << " bytes";
+
+	unsigned long long totalNumsectors = (unsigned long long)info.uncompressed_size / sectorsize;
+
+	ui->progressBar->setRange(0, totalNumsectors);
+
+	unsigned long long partNumber = 0;
+
+	if (unzOpenCurrentFile(uf) != UNZ_OK)
+	{
+		qDebug() << "error occured!";
+
+		unzCloseCurrentFile(uf);
+		unzClose(uf);
+
+		status = STATUS_EXIT;
+		
+		return;
+	}
+
+	const int BUFSIZE = 524288;
+	Bytef in[BUFSIZE];
+	unsigned long long readSz = 0;
+
+	while (readSz = unzReadCurrentFile(uf, in, BUFSIZE))
+	{
+		if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
+		{
+			qDebug() << "detect clicking exit button!";
+
+			break;
+		}
+
+		if (readSz < 0)
+		{
+			qDebug() << "error occured!";
+
+			unzCloseCurrentFile(uf);
+			unzClose(uf);
+
+			status = STATUS_EXIT;
+
+			return;
+		}
+
+		curTot += readSz;
+
+		partNumber = (curTot * 100 / totalSz);
+
+		qDebug() << curTot << "/" << totalSz << " completed...";
+
+		QString uzFilename = "WayneOSfile_part";
+
+		QFile uzf("updStatus/" + uzFilename + QString::number(partNumber));
+		uzf.open(QIODevice::WriteOnly);
+		
+		uzf.write((const char*)in, readSz);
+
+		uzf.close();
+
+		QCoreApplication::processEvents();
+
+		path = dir.absoluteFilePath(QString("updStatus/"));
+
+		QDirIterator it(path, QDirIterator::Subdirectories);
+
+		while (it.hasNext())
+		{
+			qDebug() << it.next();
+			if (it.fileName().toStdString().find("zip") == std::string::npos && it.fileName().toStdString().find(uzFilename.toStdString()) != std::string::npos)
+			{
+				qDebug() << "OS File : " << it.fileName();
+				path = dir.absoluteFilePath(it.filePath());
+				break;
+			}
+		}
+
+		charPath = path.toLocal8Bit();
+
 		hFile = getHandleOnFile(charPath.data(), GENERIC_READ);
 		//hFile = getHandleOnFile("wayneUpdateFile", GENERIC_READ);
 		if (hFile == INVALID_HANDLE_VALUE)
@@ -144,22 +254,9 @@ void WidgetInstall::startInstall()
 			//setReadWriteButtonState();
 			return;
 		}
-		hRawDisk = getHandleOnDevice(deviceID, GENERIC_WRITE);
-		if (hRawDisk == INVALID_HANDLE_VALUE)
-		{
-			removeLockOnVolume(hVolume);
-			CloseHandle(hFile);
-			CloseHandle(hVolume);
-			//status = STATUS_IDLE;
-			status = STATUS_EXIT;
-			hVolume = INVALID_HANDLE_VALUE;
-			hFile = INVALID_HANDLE_VALUE;
-			//btnCancel->setEnabled(false);
-			//setReadWriteButtonState();
-			return;
-		}
-		availablesectors = getNumberOfSectors(hRawDisk, &sectorsize);
+
 		numsectors = getFileSizeInSectors(hFile, sectorsize);
+		
 		if (numsectors > availablesectors)
 		{
 			QMessageBox::critical(NULL, "Write Error", QString::fromLocal8Bit("Not enough space on disk: Size: %1 sectors  Available: %2 sectors  Sector size: %3").arg(numsectors).arg(availablesectors).arg(sectorsize));
@@ -177,85 +274,84 @@ void WidgetInstall::startInstall()
 			return;
 		}
 
-		ui->progressBar->setRange(0, (numsectors == 0ul) ? 100 : (int)numsectors);
-		lasti = 0ul;
 		timer.start();
-		// ~ Added by LEE Jeun@wayne-inc.com
-		ViewManager::GetInstance()->timer->start(500);
-		display = "Installing";
-		ui->labelStatus->setText(display);
-		// Added by LEE Jeun@wayne-inc.com ~
-		for (i = 0ul; i < numsectors && status == STATUS_WRITING && ViewManager::GetInstance()->flag == ViewManager::GetInstance()->INSTALL; i += 1024ul)
+
+		sectorData = readSectorDataFromHandle(hFile, 0, (totalNumsectors - i >= numsectors) ? numsectors : (totalNumsectors - i), sectorsize);
+		
+		if (sectorData == NULL)
 		{
-			sectorData = readSectorDataFromHandle(hFile, i, (numsectors - i >= 1024ul) ? 1024ul : (numsectors - i), sectorsize);
-			if (sectorData == NULL)
-			{
-				delete sectorData;
-				removeLockOnVolume(hVolume);
-				CloseHandle(hRawDisk);
-				CloseHandle(hFile);
-				CloseHandle(hVolume);
-				//status = STATUS_IDLE;
-				status = STATUS_EXIT;
-				sectorData = NULL;
-				hRawDisk = INVALID_HANDLE_VALUE;
-				hFile = INVALID_HANDLE_VALUE;
-				hVolume = INVALID_HANDLE_VALUE;
-				//btnCancel->setEnabled(false);
-				//setReadWriteButtonState();
-				return;
-			}
-			if (!writeSectorDataToHandle(hRawDisk, sectorData, i, (numsectors - i >= 1024ul) ? 1024ul : (numsectors - i), sectorsize))
-			{
-				delete sectorData;
-				removeLockOnVolume(hVolume);
-				CloseHandle(hRawDisk);
-				CloseHandle(hFile);
-				CloseHandle(hVolume);
-				//status = STATUS_IDLE;
-				status = STATUS_EXIT;
-				sectorData = NULL;
-				hRawDisk = INVALID_HANDLE_VALUE;
-				hFile = INVALID_HANDLE_VALUE;
-				hVolume = INVALID_HANDLE_VALUE;
-				//btnCancel->setEnabled(false);
-				//setReadWriteButtonState();
-				return;
-			}
 			delete sectorData;
+			removeLockOnVolume(hVolume);
+			CloseHandle(hRawDisk);
+			CloseHandle(hFile);
+			CloseHandle(hVolume);
+			//status = STATUS_IDLE;
+			status = STATUS_EXIT;
 			sectorData = NULL;
-			QCoreApplication::processEvents();
-			if (timer.elapsed() >= 1000)
-			{
-				mbpersec = (((double)sectorsize * (i - lasti)) * (1000.0 / timer.elapsed())) / 1024.0 / 1024.0;
-				//after make
-		  //statusbar->showMessage(QString("%1MB/s").arg(mbpersec));
-				timer.start();
-				lasti = i;
-			}
-			ui->progressBar->setValue(i);
-			QCoreApplication::processEvents();
+			hRawDisk = INVALID_HANDLE_VALUE;
+			hFile = INVALID_HANDLE_VALUE;
+			hVolume = INVALID_HANDLE_VALUE;
+			//btnCancel->setEnabled(false);
+			//setReadWriteButtonState();
+			return;
 		}
-		removeLockOnVolume(hVolume);
-		CloseHandle(hRawDisk);
-		CloseHandle(hFile);
-		CloseHandle(hVolume);
+		
+		if (!writeSectorDataToHandle(hRawDisk, sectorData, i, (totalNumsectors - i >= numsectors) ? numsectors : (totalNumsectors - i), sectorsize))
+		{
+			delete sectorData;
+			removeLockOnVolume(hVolume);
+			CloseHandle(hRawDisk);
+			CloseHandle(hFile);
+			CloseHandle(hVolume);
+			//status = STATUS_IDLE;
+			status = STATUS_EXIT;
+			sectorData = NULL;
+			hRawDisk = INVALID_HANDLE_VALUE;
+			hFile = INVALID_HANDLE_VALUE;
+			hVolume = INVALID_HANDLE_VALUE;
+			//btnCancel->setEnabled(false);
+			//setReadWriteButtonState();
+			return;
+		}
+
+		delete sectorData;
 		sectorData = NULL;
-		hRawDisk = INVALID_HANDLE_VALUE;
+		QCoreApplication::processEvents();
+		
+		if (timer.elapsed() >= 1000)
+		{
+			mbpersec = (((double)sectorsize * (i - lasti)) * (1000.0 / timer.elapsed())) / 1024.0 / 1024.0;
+			//after make
+			//statusbar->showMessage(QString("%1MB/s").arg(mbpersec));
+			timer.start();
+			lasti = i;
+		}
+		ui->progressBar->setValue(i);
+		CloseHandle(hFile);
+		sectorData = NULL;
 		hFile = INVALID_HANDLE_VALUE;
-		hVolume = INVALID_HANDLE_VALUE;
-		ViewManager::GetInstance()->timer->stop(); // Added by LEE Jeun jeun@wayne-inc.com
-		ui->progressBar->reset();
+		uzf.remove();
+		i += numsectors;
+		QCoreApplication::processEvents();
 	}
-	///////////////////
+
+	removeLockOnVolume(hVolume);
+	CloseHandle(hRawDisk);
+	CloseHandle(hVolume);
+	hRawDisk = INVALID_HANDLE_VALUE;
+	hVolume = INVALID_HANDLE_VALUE;
+	unzCloseCurrentFile(uf);
+	unzClose(uf);
+	ViewManager::GetInstance()->timer->stop();
+	ui->progressBar->reset();
     #endif
 	
 	if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
 	{
+		this->CompleteUpdateFileDelete();
 		QCoreApplication::exit();
 	}
 
-	// ~ Modified and Added by LEE jeun jeun@wayne-inc.com
 	ui->progressBar->hide();
 	ui->label_3->hide();
 	ui->label_4->hide();
@@ -263,18 +359,12 @@ void WidgetInstall::startInstall()
 	ui->labelStatus->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
 	ui->labelStatus->setFont(QFont("Aharoni", 13, QFont::Bold, false));
 	ui->labelStatus->setText(QString::fromLocal8Bit("Installation Complete!!"));
-	// Modified and Added by LEE jeun jeun@wayne-inc.com ~
 	this->CompleteUpdateFileDelete();
 	ui->btnNext->setEnabled(true);
 	
-	/*if (status == STATUS_EXIT)
-	{
-		close();
-		
-	}*/
 	status = STATUS_IDLE;
 }
-
+// Modified by LEE Jeun jeun@wayne-inc.com ~
 
 void WidgetInstall::RequestServerData()
 {
@@ -316,62 +406,16 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 	else if (index == count)
 	{
 		qDebug() << "FileDownload End";
-		//QString status = "Installing...";
-		//ui->labelStatus->setText(display);
-		//Write logic call...
-		// ~ Added by LEE Jeun jeun@wayne-inc.com
 
-		display = "Extracting";
-		ui->labelStatus->setText(display);
-
-		QString filename = HttpManager::GetInstance()->httpThread.getFileName();
-
-		if (filename == "dummy.img")
+		try
 		{
-			try
-			{
-				this->startInstall();
-			}
-			catch (std::exception & e)
-			{
-				qDebug() << "install Fail!";
-				this->CompleteUpdateFileDelete();
-				status = STATUS_EXIT;
-			}
+			this->startInstall();
 		}
-
-		else
+		catch (std::exception & e)
 		{
-			int result = extract(filename);
-
-			if (result == -1)
-			{
-				QMessageBox::critical(NULL, "Error", "can not extract downloaded file!");
-				//QApplication::exit(-1);
-				status = STATUS_EXIT;
-			}
-			// Added by LEE Jeun jeun@wayne-inc.com ~
-			
-			else if (result == 1)
-			{
-				this->CompleteUpdateFileDelete();
-
-				QCoreApplication::exit();
-			}
-
-			else
-			{
-				try
-				{
-					this->startInstall();
-				}
-				catch (std::exception & e)
-				{
-					qDebug() << "install Fail!";
-					this->CompleteUpdateFileDelete();
-					status = STATUS_EXIT;
-				}
-			}
+			qDebug() << "install Fail!";
+			this->CompleteUpdateFileDelete();
+			status = STATUS_EXIT;
 		}
 	}
 
@@ -380,7 +424,7 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 		QCoreApplication::exit(-1);
 	}
 }
-// Modified by LEE Jeun jeun@wayne-inc.com
+// Modified by LEE Jeun jeun@wayne-inc.com ~
 
 void WidgetInstall::CompleteUpdateFileDelete()
 {
@@ -425,56 +469,9 @@ WidgetInstall::setDynamic()
 		p = 0;
 		ui->labelStatus->setText(display);
 	}
-	/*if (ViewManager::GetInstance()->flag==ViewManager::GetInstance()->DOWNLOAD)
-	{
-		if (p < 3)
-		{
-			display += " . ";
-			++p;
-			ui->labelStatus->setText(display);
-		}
-		else
-		{
-			display = "Downloading Files " + QString::number(idx) + " / " + QString::number(cnt);
-			p = 0;
-			ui->labelStatus->setText(display);
-		}
-	}
-	
-	else if(ViewManager::GetInstance()->flag==ViewManager::GetInstance()->INSTALL)
-	{
-		if (p < 3)
-		{
-			display += " . ";
-			++p;
-			ui->labelStatus->setText(display);
-		}
-		else
-		{
-			display = "Installing";
-			p = 0;
-			ui->labelStatus->setText(display);
-		}
-	}
-
-	else
-	{
-		if (p < 3)
-		{
-			display += " . ";
-			++p;
-			ui->labelStatus->setText(display);
-		}
-		else
-		{
-			display = "Extracting";
-			p = 0;
-			ui->labelStatus->setText(display);
-		}
-	}*/
 }
 
-int WidgetInstall::extract(const QString& filename) // this is for extracting .zip files.
+/*int WidgetInstall::extract(const QString& filename) // this is for extracting .zip files.
 {
 	ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXTRACT;
 
@@ -597,5 +594,5 @@ int WidgetInstall::extract(const QString& filename) // this is for extracting .z
 	unzClose(uf);
 
 	return 0;
-}
+}*/
 // Added by LEE Jeun jeun@wayne-inc.com ~
