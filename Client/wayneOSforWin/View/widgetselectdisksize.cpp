@@ -47,12 +47,12 @@ void  WidgetSelectDiskSize::SetWidgetPrepare()
 	QLineEdit* editVersion =  widgetPrepare->findChild<QLineEdit*>("editVersion");
     if((InfoManager::GetInstance()->mVersionType) == InfoManager::FREE)
     {
-        editVersion->setText(QString::fromLocal8Bit("Free version"));
+        editVersion->setText(QString::fromLocal8Bit("Wayne OS Free Version"));
 
     }
     else if((InfoManager::GetInstance()->mVersionType) == InfoManager::PAID)
     {
-        editVersion->setText(QString::fromLocal8Bit("Registered Version (Paid)"));
+        editVersion->setText(QString::fromLocal8Bit("Wayne OS Paid Version"));
     }
 
 	//Path Check
@@ -61,7 +61,8 @@ void  WidgetSelectDiskSize::SetWidgetPrepare()
 
 	//Device Type Check
 	QLineEdit* editType =  widgetPrepare->findChild<QLineEdit*>("editType");
-    if((InfoManager::GetInstance()->mDeviceType) == InfoManager::USB)
+    editType->setText(QString::fromLocal8Bit("USB Flash Drive"));
+    /*if((InfoManager::GetInstance()->mDeviceType) == InfoManager::USB)
     {
         editType->setText(QString::fromLocal8Bit("USB Flash Drive"));
 
@@ -69,7 +70,7 @@ void  WidgetSelectDiskSize::SetWidgetPrepare()
     else if((InfoManager::GetInstance()->mDeviceType) == InfoManager::SSD)
     {
         editType->setText(QString::fromLocal8Bit("SSD"));
-    }
+    }*/
 	//Device Size Check
 	QLineEdit* editSize = widgetPrepare->findChild<QLineEdit*>("editSize");
 	editSize->setText(QString::number(InfoManager::GetInstance()->mSize) + "GB");

@@ -18,7 +18,7 @@ public:
 
 
     const static int USB = 100;
-    const static int SSD = 200;
+    //const static int SSD = 200;
 
    
 
