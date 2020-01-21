@@ -27,7 +27,7 @@ void WidgetSelectType::on_btnPrev_clicked()
 void WidgetSelectType::on_btnNext_clicked()
 {
 
-    if(ui->radioUSB->isChecked())
+    /*if(ui->radioUSB->isChecked())
     {
         InfoManager::GetInstance()->mDeviceType = InfoManager::USB;
     }
@@ -35,6 +35,7 @@ void WidgetSelectType::on_btnNext_clicked()
     {
         InfoManager::GetInstance()->mDeviceType = InfoManager::SSD;
 
-    }
+    }*/
+    InfoManager::GetInstance()->mDeviceType = InfoManager::USB;
     ViewManager::GetInstance()->SetViewByIndex(ViewManager::WIDGET_SELECTDISKSIZE);
 }
