@@ -44,8 +44,9 @@ QJsonDocument ReqOsData::GetInstallInfoData()
     else if(infoManager->mVersionType == InfoManager::PAID) jsonObject.insert("versionType","PAID");
 
     //Device Type Check
-    if(infoManager->mDeviceType == InfoManager::USB) jsonObject.insert("deviceType","USB");
-    else if(infoManager->mDeviceType == InfoManager::SSD) jsonObject.insert("deviceType","SSD");
+	jsonObject.insert("deviceType", "USB");
+    //if(infoManager->mDeviceType == InfoManager::USB) jsonObject.insert("deviceType","USB");
+    //else if(infoManager->mDeviceType == InfoManager::SSD) jsonObject.insert("deviceType","SSD");
 
    
 	jsonObject.insert("deviceVolume",QString::number(infoManager->mSize));
