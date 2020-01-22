@@ -12,8 +12,8 @@ WidgetComplete::WidgetComplete(QWidget *parent) :
 {
 	ui->setupUi(this);
 	// ~ Added by LEE jeun jeun@wayne-inc.com
-	QPixmap pic("company-logo.png");
-	ui->label->setPixmap(pic.scaled(400, 200, Qt::IgnoreAspectRatio));
+	QPixmap pic("company-logo.jpg");
+	ui->label->setPixmap(pic);
 	ui->label->setMask(pic.mask());
 	ui->label->setScaledContents(true);
 	// Added by LEE jeun jeun@wayne-inc.com ~

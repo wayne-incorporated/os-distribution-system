@@ -28,17 +28,16 @@ TitleBar::TitleBar(QWidget *parent)
 
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
     QPixmap pixmap("icon.png");
-	imageLabel->setPixmap(pixmap.scaled(21, 20, Qt::IgnoreAspectRatio));
+	imageLabel->setPixmap(pixmap);
 	// Modified by LEE jeun jeun@wayne-inc.com ~
 
     imageLabel->setMask(pixmap.mask());
     imageLabel->setScaledContents(true);
-    imageLabel->setMinimumHeight(20);
 
     QLabel* label = new QLabel(this);
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
-    label->setText("  Wayne Inc. OS Install Program 1.2.2");
-    parent->setWindowTitle("  Wayne Inc. OS Install Program 1.2.2");
+    label->setText("  Wayne OS Installer 1.3.2");
+    parent->setWindowTitle("  Wayne OS Installer 1.3.2");
 	// Modified by LEE jeun jeun@wayne-inc.com ~
 
     QHBoxLayout* hbox = new QHBoxLayout(this);
@@ -89,7 +88,7 @@ void TitleBar::showMaxRestore()
 void TitleBar::queryExit()
 {
 	QMessageBox msgBox;
-	if (msgBox.warning(parentWidget(), "Wayne Inc. OS Installer", "The installer will be closed.\nDo you want to stop Wayne OS installation?",
+	if (msgBox.warning(parentWidget(), "Wayne OS Installer", "The installer will be closed.\nDo you want to stop Wayne OS installation?",
 		QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
 	{
 		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->EXIT_EVENT;
