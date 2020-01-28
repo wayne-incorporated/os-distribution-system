@@ -34,7 +34,7 @@ public:
 
 	Ui::WidgetInstall *getUI();
 
-	int extract(const QString& filename); // ~ Added by LEE Jeun@wayne-inc.com
+	//int extract(const QString& filename); // ~ Added by LEE Jeun@wayne-inc.com
 	void startInstall();
 	void RequestServerData();
 	void CompleteUpdateFileDelete();
