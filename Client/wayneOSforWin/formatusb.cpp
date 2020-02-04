@@ -45,18 +45,14 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 	IUnknown* pUnkForProvider;
 	IUnknown* pUnkForPack;
 	IUnknown* pUnkForDisk;
-	//IUnknown* pUnkForVol;
 	IEnumVdsObject* pEnumForProvider;
 	IEnumVdsObject* pEnumForPack;
 	IEnumVdsObject* pEnumForDisk;
-	//IEnumVdsObject* pEnumForVol;
 	IVdsProvider* pProvider = NULL;
 	IVdsSwProvider* pSwProvider = NULL;
 	IVdsPack* pPack = NULL;
 	IVdsDisk* pDisk = NULL;
 	IVdsAdvancedDisk* pAdvDisk = NULL;
-	//IVdsVolume* pVol = NULL;
-	//IVdsVolumeMF* pVolMf = NULL;
 	ULONG ulFetched = 0;
 	
 	QString selected = getDiskName(device);
@@ -110,20 +106,13 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 			}
 
 			hr = pPack->QueryDisks(&pEnumForDisk);
+			_SafeRelease(pPack);
 
 			if (hr != S_OK)
 			{
 				qDebug("Could not query VDS Disks!");
 				goto out;
 			}
-
-			//hr = pPack->QueryVolumes(&pEnumForVol);
-
-			/*if (hr != S_OK)
-			{
-				qDebug("Could not query VDS Volumes!");
-				goto out;
-			}*/
 
 			while (pEnumForDisk->Next(1, &pUnkForDisk, &ulFetched) == S_OK)
 			{
@@ -136,10 +125,10 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 				LONG numOfPartitions = 0;
 
 				hr = pUnkForDisk->QueryInterface(IID_IVdsDisk, (void**)&pDisk);
+				_SafeRelease(pUnkForDisk);
 				
 				if (hr != S_OK)
 				{
-					//_SafeRelease(pUnkForDisk);
 					qDebug("Could not get VDS Disk!");
 					goto out;
 				}
@@ -148,6 +137,7 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 
 				if (hr != S_OK)
 				{
+					_SafeRelease(pDisk);
 					qDebug("Could not query VDS Disk Properties!");
 					goto out;
 				}
@@ -163,9 +153,8 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 					continue;
 				}
 
-				hr = pUnkForDisk->QueryInterface(IID_IVdsAdvancedDisk, (void**)&pAdvDisk);
+				hr = pDisk->QueryInterface(IID_IVdsAdvancedDisk, (void**)&pAdvDisk);
 				_SafeRelease(pDisk);
-				//_SafeRelease(pUnkForDisk);
 
 				if (hr != S_OK)
 				{
@@ -188,61 +177,6 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 				qDebug("Disk Bytes per Sector: %lu", diskProp.ulBytesPerSector);
 				qDebug("Disk Sectors per Track: %lu", diskProp.ulSectorsPerTrack);
 				qDebug("Disk Tracks per Cylinder: %lu", diskProp.ulTracksPerCylinder);
-
-				/*while (pEnumForVol->Next(1, &pUnkForVol, &ulFetched) == S_OK)
-				{
-					hr = pUnkForVol->QueryInterface(IID_IVdsVolume, (void**)&pVol);
-
-					if (hr != S_OK)
-					{
-						_SafeRelease(pUnkForVol);
-						qDebug("Could not get VDS Volume!");
-						goto out;
-					}
-
-					hr = pUnkForVol->QueryInterface(IID_IVdsVolumeMF, (void**)&pVolMf);
-					_SafeRelease(pUnkForVol);
-
-					if (hr != S_OK)
-					{
-						qDebug("Could not get VDS VolumeMF!");
-						goto out;
-					}
-
-					VDS_VOLUME_PROP volProp;
-					VDS_FILE_SYSTEM_PROP fsProp;
-
-					pVol->GetProperties(&volProp);
-					pVolMf->GetFileSystemProperties(&fsProp);
-
-					qDebug("Volume Name: %ls", volProp.pwszName);
-					::StringFromGUID2(volProp.id, wsGuid, sizeof(wsGuid));
-					qDebug("Volume ID: %ls", wsGuid);
-					memset(wsGuid, 0, sizeof(wsGuid));
-					qDebug("Volume Size: %llu", volProp.ullSize);
-					qDebug("File System: %s", FsType[fsProp.type].c_str());
-					if (fsProp.pwszLabel != NULL)
-					{
-						qDebug("File System Label: %ls", fsProp.pwszLabel);
-					}
-					else
-					{
-						qDebug("File System Label: NULL");
-					}
-
-					//CoTaskMemFree(volProp.pwszName);
-					//CoTaskMemFree(fsProp.pwszLabel);
-				}*/
-
-				/*for (int i = 0; i < driveLetters.size(); ++i)
-				{
-					driveName[0] = driveLetters[i];
-					
-					if (!DeleteVolumeMountPointA(driveName))
-					{
-						qDebug("Failed to delete mountpoint %s", driveName);
-					}
-				}*/
 
 				hr = pAdvDisk->QueryPartitions(&pPartProp, &numOfPartitions);
 
@@ -275,9 +209,8 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 						if (hr != S_OK)
 						{
 							qDebug("Could not delete Patition %lu", pPartProp[i].ulPartitionNumber);
-							ret = FALSE;
-							CoTaskMemFree(pPartProp);
-							goto out;
+							qDebug("error code: %#.8x", hr);
+							ret = FALSE;						
 						}
 					}
 
@@ -307,8 +240,6 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 				if (hr != S_OK)
 				{
 					qDebug("Could not check which drive letters are in use!");
-					ret = FALSE;
-					goto out;
 				}
 
 				wchar_t pwszPath[4];
@@ -341,17 +272,9 @@ BOOL DeletePartitions(IVdsService* pService, int device, std::string& drive_name
 	}
 
 out:
-	/*if(pEnumForProvider != NULL) _SafeRelease(pEnumForProvider);
+	if(pEnumForProvider != NULL) _SafeRelease(pEnumForProvider);
 	if(pEnumForPack != NULL) _SafeRelease(pEnumForPack);
 	if(pEnumForDisk != NULL) _SafeRelease(pEnumForDisk);
-	if(pEnumForVol != NULL) _SafeRelease(pEnumForVol);
-	if(pProvider != NULL) _SafeRelease(pProvider);
-	if(pSwProvider != NULL) _SafeRelease(pSwProvider);
-	if(pPack != NULL) _SafeRelease(pPack);
-	if(pDisk != NULL) _SafeRelease(pDisk);
-	if(pAdvDisk != NULL) _SafeRelease(pAdvDisk);
-	if(pVol != NULL) _SafeRelease(pVol);
-	if(pVolMf != NULL) _SafeRelease(pVolMf);*/
 
 	return ret;
 }
@@ -407,12 +330,7 @@ int getVds(int device, std::string& drive_name)
 				bResult = DeletePartitions(pService, device, drive_name);
 				_SafeRelease(pService);
 
-				if (!bResult)
-				{
-					qDebug("Could not clean USB!");
-				}
-
-				return (bResult ? 0 : -1);
+				return 0;
 			}
 		}
 	}
@@ -679,7 +597,7 @@ std::string getLogicalName(int device, uint64_t partitionOffset, BOOL bKeep)
 		goto out;
 	}
 
-	for (i = 0; (i < found_name.size()) && (partitionOffset != 0) && (partitionOffset!=found_offset[i]); ++i);
+	for (i = 0; (i < found_name.size()) && (partitionOffset != 0) && (partitionOffset != found_offset[i]); ++i);
 
 	if (i < found_name.size())
 	{
@@ -914,5 +832,4 @@ BOOL refreshLayout()
 
 out:
 	return r;
-
 }

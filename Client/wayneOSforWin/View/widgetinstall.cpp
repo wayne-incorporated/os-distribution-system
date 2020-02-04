@@ -81,10 +81,9 @@ void WidgetInstall::startInstall()
 	}
 
 	bResult = DeviceIoControl(hRawDisk, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &size, NULL);
-	//bResult = refreshLayout(deviceID);
-
-	volume_name = getLogicalName(deviceID, 0, FALSE);
 	
+	volume_name = getLogicalName(deviceID, 0, FALSE);
+
 	if (volume_name.empty())
 	{
 		volume_name = AltGetLogicalName(deviceID, 0, FALSE);
@@ -389,10 +388,9 @@ void WidgetInstall::startInstall()
 	ViewManager::GetInstance()->timer->stop();
 	ui->progressBar->reset();
     #endif
-
+	
 	qDebug("Refresh drive layout");
 	bResult = DeviceIoControl(hRawDisk, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &size, NULL);
-	//bResult = refreshLayout(deviceID);
 
 	removeLockOnVolume(hVolume);
 	CloseHandle(hVolume);
@@ -421,17 +419,6 @@ void WidgetInstall::startInstall()
 	{
 		qDebug("volume mounted as %s", driveName);
 	}
-
-	else
-	{
-		qDebug("Installation is completed but could not mount volume");
-
-		if (volume_name.empty())
-		{
-			qDebug("Could not get volume name!");
-		}
-	}
-	
 
 	ui->progressBar->hide();
 	ui->label_3->hide();
@@ -488,28 +475,31 @@ void WidgetInstall::DonwloadStatus(int index, int count)
 	{
 		qDebug() << "FileDownload End";
 
-		try
-		{
-			int deviceId = InfoManager::GetInstance()->mDeviceId;
+		int deviceId = InfoManager::GetInstance()->mDeviceId;
 
-			display = "Clean USB...";
-			ui->labelStatus->setText(display);
-			ViewManager::GetInstance()->flag = ViewManager::GetInstance()->FORMAT;
-			ui->progressBar->reset();
-				
-			if (getVds(deviceId, drive_name) == -1)
+		display = "Clean USB...";
+		ui->labelStatus->setText(display);
+		ViewManager::GetInstance()->flag = ViewManager::GetInstance()->FORMAT;
+		ui->progressBar->reset();
+
+		if (getVds(deviceId, drive_name) == -1)
+		{
+			QMessageBox::critical(NULL, "error", "Could not clean USB!");
+			status = STATUS_EXIT;
+		}
+
+		else
+		{
+			try
 			{
-				QMessageBox::critical(NULL, "error", "Could not clean USB!");
+				this->startInstall();
+			}
+			catch (std::exception & e)
+			{
+				qDebug() << "install Fail!";
+				this->CompleteUpdateFileDelete();
 				status = STATUS_EXIT;
 			}
-
-			this->startInstall();
-		}
-		catch (std::exception & e)
-		{
-			qDebug() << "install Fail!";
-			this->CompleteUpdateFileDelete();
-			status = STATUS_EXIT;
 		}
 	}
 
