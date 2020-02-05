@@ -66,9 +66,9 @@ QJsonDocument ReqOsData::GetInstallInfoData()
 	jsonObject.insert("productRevision", productRevision);
 	jsonObject.insert("serialNumber", serialNumber);
 	// ~ Added by LEE jeun jeun@wayne-inc.com
-	LONGLONG realCapacity = GetSelectedDiskCapacity();
-	qDebug() << "real capacity: " << realCapacity << "Byte";
-	jsonObject.insert("realCapacity", realCapacity);
+	ULONGLONG realCapacity = GetSelectedDiskCapacity();
+	qDebug() << "real capacity: " << realCapacity << "bytes";
+	jsonObject.insert("realCapacity", QJsonValue::fromVariant(realCapacity));
 
 	qDebug() << HttpManager::GetInstance()->httpThread.IPAddr;
 	jsonObject.insert("externalIP", HttpManager::GetInstance()->httpThread.IPAddr);
@@ -432,9 +432,9 @@ QString ReqOsData::GetGpuName()
 	return ProcessorName;
 }
 
-LONGLONG ReqOsData::GetSelectedDiskCapacity()
+ULONGLONG ReqOsData::GetSelectedDiskCapacity()
 {
-	QString path = InfoManager::GetInstance()->mDriveInstallPath.section("", 2, 3);
+	/*QString path = InfoManager::GetInstance()->mDriveInstallPath.section("", 2, 3);
 	TCHAR DrivePath[8];
 	memset(DrivePath, 0, sizeof(DrivePath));
 	path.toWCharArray(DrivePath);
@@ -443,7 +443,33 @@ LONGLONG ReqOsData::GetSelectedDiskCapacity()
 	BOOL bResult = GetDiskFreeSpaceEx(DrivePath, &lpFreeByteAvailableToCaller, &lpTotalNumberOfBytes, &lpTotalNumberOfFreeBytes);
 	if (!bResult) return 0;
 	LONGLONG selectedDiskCapacity = lpTotalNumberOfBytes.QuadPart;
-	return selectedDiskCapacity;
+	return selectedDiskCapacity;*/
+	int device = InfoManager::GetInstance()->mDeviceId;
+	std::string selected = "\\\\?\\PhysicalDrive" + std::to_string(device);
+
+	BYTE geometry[256];
+	ZeroMemory(geometry, sizeof(geometry));
+	PDISK_GEOMETRY_EX diskGeometry = (PDISK_GEOMETRY_EX)(void*)geometry;
+
+	HANDLE hd = INVALID_HANDLE_VALUE;
+	DWORD size = 0;
+	BOOL bResult = FALSE;
+
+	hd = CreateFileA(selected.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
+		NULL, OPEN_EXISTING, 0, NULL);
+	if (hd == INVALID_HANDLE_VALUE)
+	{
+		return 0;
+	}
+
+	bResult = DeviceIoControl(hd, IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, 
+		NULL, 0, geometry, sizeof(geometry), &size, NULL);
+	if (!bResult)
+	{
+		return 0;
+	}
+	
+	return diskGeometry->DiskSize.QuadPart;
 }
 // Added by LEE jeun jeun@wayne-inc.com ~
 
