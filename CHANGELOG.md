@@ -1,3 +1,23 @@
+v 1.3.2
+
+- Server
+    
+    - no change
+    <br/>
+
+- Client
+    
+    - Add the new feature to clean USB before OS installation, to deal with the volume of USB in OS installation.
+    - Implement new installation algorithm.  
+    the former installation process is "download->extract->install".  
+    new process is "download->extract and install", merging the feature to extract .zip file into installation feature.
+    - Fix the feature to get the real capacity of USB.
+    - Delete SSD option in disk selection step.
+    - Change OS version name to Wayne OS free version, Wayne OS paid version in version selection step.
+    - Change icon and company-logo image to new one.
+    - Change the client name to Wayne OS Installer.
+    <br/>
+
 v 1.2.2
 
 - Server
