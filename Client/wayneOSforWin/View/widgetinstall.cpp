@@ -441,13 +441,13 @@ void WidgetInstall::RequestServerData()
 	p = 0;
 	ViewManager::GetInstance()->timer->start(500);
 	// Added by LEE JEun jeun@wayne-inc.com ~
-	QObject::connect(&(HttpManager::GetInstance()->httpThread), SIGNAL(DonwloadStatus(int, int)), this, SLOT(DonwloadStatus(int, int)));
+	QObject::connect(&(HttpManager::GetInstance()->httpThread), SIGNAL(DownloadStatus(int, int)), this, SLOT(DownloadStatus(int, int)));
 	HttpManager::GetInstance()->RequestOSData();
 }
 
 // ~ Modified by LEE Jeun@wayne-inc.com
 //from Http Thread
-void WidgetInstall::DonwloadStatus(int index, int count)
+void WidgetInstall::DownloadStatus(int index, int count)
 {
 	if (index < count)
 	{

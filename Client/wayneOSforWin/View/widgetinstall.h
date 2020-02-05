@@ -49,7 +49,7 @@ public:
 private slots:
     void on_btnNext_clicked();
 public slots:
-	void DonwloadStatus(int index, int count);
+	void DownloadStatus(int index, int count);
 	void setDynamic(); // Added by LEE Jeun@wayne-inc.com
 private:
     Ui::WidgetInstall *ui;

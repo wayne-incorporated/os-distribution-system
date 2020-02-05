@@ -42,7 +42,7 @@ private:
 	 // Modified by LEE jeun jeun@wayne-inc.com ~
 
 signals:
-    void DonwloadStatus(int index,int count);
+    void DownloadStatus(int index,int count);
     void DownloadDeviceVolume(QStringList list );
 
 public slots:
