@@ -1,3 +1,15 @@
+v 1.3.2
+
+- Server
+    
+    - no change
+    <br/>
+
+- Client
+    
+    - Add the new feature to clean USB before OS installation.
+    - Implement new installation algorithm.the former installation process is <download->extract->install>.
+
 v 1.2.2
 
 - Server
