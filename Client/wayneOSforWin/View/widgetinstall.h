@@ -18,6 +18,7 @@
 #include <QtZlib/zconf.h>
 #include <minizip/zip.h>
 #include <minizip/unzip.h>
+#include <string>
 // Added by LEE Jeun jeun@wayne-inc.com ~
 
 namespace Ui {
@@ -34,19 +35,21 @@ public:
 
 	Ui::WidgetInstall *getUI();
 
-	int extract(const QString& filename); // ~ Added by LEE Jeun@wayne-inc.com
+	//int extract(const QString& filename); // ~ Added by LEE Jeun@wayne-inc.com
 	void startInstall();
 	void RequestServerData();
 	void CompleteUpdateFileDelete();
 
 	enum Status {STATUS_IDLE=0, STATUS_READING, STATUS_WRITING, STATUS_EXIT};
+	std::string drive_name;
+	std::string volume_name;
 
     ~WidgetInstall();
 
 private slots:
     void on_btnNext_clicked();
 public slots:
-	void DonwloadStatus(int index, int count);
+	void DownloadStatus(int index, int count);
 	void setDynamic(); // Added by LEE Jeun@wayne-inc.com
 private:
     Ui::WidgetInstall *ui;

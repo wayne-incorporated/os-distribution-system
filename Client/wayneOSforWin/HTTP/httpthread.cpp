@@ -103,7 +103,7 @@ void HttpThread::RequestOSFile()
         }
 		updateFile = new QFile("updStatus/" + getFileName()); // ~ Modified by LEE Jeun jeun@wayne-inc.com
         updateFile->open(QIODevice::WriteOnly);
-        emit DonwloadStatus(0,slideCount);
+        emit DownloadStatus(0,slideCount);
 
     }
     ReqOsFile ReqOsFile(manager,updateFileName,slideIndex,slideCount);
@@ -235,9 +235,9 @@ void HttpThread::ReplyFinished(QNetworkReply *reply)
 
                if(slideIndex < slideCount)
                {
-                   emit DonwloadStatus(slideIndex,slideCount);
+                   emit DownloadStatus(slideIndex,slideCount);
 
-                   qDebug()<<"File Wrtie"<<slideIndex;
+                   qDebug()<<"File write"<<slideIndex;
                    updateFile->write(resData);
 
                    RequestOSFile();
@@ -247,7 +247,7 @@ void HttpThread::ReplyFinished(QNetworkReply *reply)
                    updateFile->write(resData);
                    updateFile->close();
 				   
-				   emit DonwloadStatus(slideIndex, slideCount);
+				   emit DownloadStatus(slideIndex, slideCount);
                   
 
                }

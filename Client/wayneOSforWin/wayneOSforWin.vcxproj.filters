@@ -289,6 +289,9 @@
     <ClCompile Include="WinDpiScale\WinDpiScale.cpp">
       <Filter>Source Files\WinDpiScale</Filter>
     </ClCompile>
+    <ClCompile Include="formatusb.cpp">
+      <Filter>Source Files\Disk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_stackedwidget.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="WinDpiScale\WinDpiScale.h">
       <Filter>Source Files\WinDpiScale</Filter>
+    </ClInclude>
+    <ClInclude Include="formatusb.h">
+      <Filter>Source Files\Disk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="Disk\disk.cpp" />
     <ClCompile Include="Disk\diskmanager.cpp" />
+    <ClCompile Include="formatusb.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_httpmanager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -291,6 +292,7 @@
   <ItemGroup>
     <ClInclude Include="Disk\disk.h" />
     <ClInclude Include="Disk\diskmanager.h" />
+    <ClInclude Include="formatusb.h" />
     <ClInclude Include="GeneratedFiles\ui_stackedwidget.h" />
     <ClInclude Include="GeneratedFiles\ui_widgetcomplete.h" />
     <ClInclude Include="GeneratedFiles\ui_widgetinstall.h" />
