@@ -29,7 +29,7 @@ void WidgetPrepareComplete::on_btnPrev_clicked()
 
 void WidgetPrepareComplete::on_btnSetup_clicked()
 {
-	if (QMessageBox::warning(NULL, "Confirm overwrite", "Writing to a physical device can corrupt the device.\nAre you sure you want to continue?", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)
+	if (QMessageBox::warning(NULL, "Confirm Wayne OS installation", "Writing to a physical device can corrupt the device.\nAll data in your USB will be removed.\nAre you sure you want to continue?", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)
 	{
 		return;
 	}
