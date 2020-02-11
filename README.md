@@ -2,7 +2,10 @@
 
 - <h3>Client</h3>
 
-    - The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit both)
+    - The client program can be run on Windows 8, Windows 10. (32bit, 64bit)
+    - Only removable disk is supported.
+    - USB Capacity is required at least 8GB. (we serve 8GB, 16GB, 32GB of Wayne OS for USB)
+    - Downloading and installation speed are depending on users' pc and network specification.
     - Internet connection is required
     <br/>
     
