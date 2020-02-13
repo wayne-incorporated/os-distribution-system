@@ -12,9 +12,11 @@
 #include <map>
 #include "Info/infomanager.h"
 #include "View/viewmanager.h"
+#include <cfgmgr32.h>
 
 #pragma comment(lib, "ole32.lib")
 #pragma comment(lib, "rpcrt4.lib")
+#pragma comment(lib, "cfgmgr32.lib")
 
 #define _SafeRelease(x){if(x!=NULL){x->Release();x=NULL;}}
 #define MAX_PARTITIONS 16
@@ -41,6 +43,7 @@ std::string getLogicalName(int device, uint64_t partitionOffset, BOOL bKeep);
 std::string AltGetLogicalName(int device, uint64_t partitionOffset, BOOL bKeep);
 BOOL WaitForLogical(int deviceId, uint64_t partitionOffset);
 BOOL refreshLayout();
+BOOL scanForHwChanges();
 
 #endif // !_FORMAT_USB
 
