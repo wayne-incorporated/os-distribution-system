@@ -746,6 +746,8 @@ BOOL WaitForLogical(int deviceId, uint64_t partitionOffset)
 
 	do
 	{
+		QCoreApplication::processEvents();
+
 		logicalPath = getLogicalName(deviceId, partitionOffset, FALSE);
 
 		if (!logicalPath.empty() && strncmp(logicalPath.c_str(), global_root, global_root_len) != 0)
@@ -832,4 +834,26 @@ BOOL refreshLayout()
 
 out:
 	return r;
+}
+
+BOOL scanForHwChanges()
+{
+	DEVINST devInst;
+	CONFIGRET status;
+
+	status = CM_Locate_DevNode(&devInst, NULL, CM_LOCATE_DEVNODE_NORMAL);
+	if (status != CR_SUCCESS)
+	{
+		qDebug("CM_Locate_DevNode failed: %#.8x\n", status);
+		return FALSE;
+	}
+
+	status = CM_Reenumerate_DevNode(devInst, 0);
+	if (status != CR_SUCCESS)
+	{
+		qDebug("CM_Reenumerate_DevNode failed: %#.8x\n", status);
+		return FALSE;
+	}
+
+	return TRUE;
 }
