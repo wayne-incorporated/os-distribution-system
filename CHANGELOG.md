@@ -1,12 +1,25 @@
+v 1.4.2
+
+- Server
+
+	- no change
+	<br/>
+
+- Client
+
+	- Add the notice pop-up window for forcing users plug out USB from PC and plug in USB again after installation. this window may show only on Window 7.
+	- If the client can't find the volume name to mount on USB, make the client keep find the volume name until users plug out USB from PC and plug in USB again after installation. by this way, the client can find the volume name by updating disk properties. this process may be run only on Windows 7.
+	<br/>
+
 v 1.3.2
 
 - Server
-    
+  
     - no change
     <br/>
 
 - Client
-    
+  
     - Add the new feature to clean USB before OS installation, to deal with the volume of USB in OS installation.
     - Implement new installation algorithm.  
     the former installation process is "download->extract->install".  
