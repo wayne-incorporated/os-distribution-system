@@ -1,17 +1,17 @@
 # Requirement for running
 
 - <h3>Client</h3>
-
-    - The client program can be run on Windows 8, Windows 10. (32bit, 64bit)
+- The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit)
     - Only removable disk is supported.
-    - USB Capacity is required at least 8GB. (we serve 8GB, 16GB, 32GB of Wayne OS for USB)
+    - USB Capacity is required at least 8GB ≈ 7.45058GiB. (we serve 8GB, 16GB, 32GB of Wayne OS for USB)
+    - The client program is offered in .zip file. (size: almost 74MB)
+    - The capacity of the hard disk where users download the client is required at least 2GB ≈ 1.86265GiB {the size of OS file in .zip downloaded from the server (close to 1GB ≈ 0.931323GiB ) + the size of a temporary partial file decompressed from .zip file (512KB) + the size of the client (139MB)}
     - Downloading and installation speed are depending on users' pc and network specification.
     - Internet connection is required
     <br/>
     
 - <h3>Server</h3>
-
-    - Install Java 1.7 or over
+- Install Java 1.7 or over
     - Install Tomcat 8 or over
     - Install MySQL
     - The Operating System which can install Java 1.7 or over, Tomcat 8 or over, MySQL on.  
@@ -22,8 +22,7 @@
 # IDE
 
 - <h3>Client</h3>
-
-    - Windows 10 pro
+- Windows 10 pro
     - Visual Studio 2017
     - Qt Framework
     - Qt VS Tools
@@ -31,8 +30,7 @@
     <br/>
     
     - <h5>Language/External</h5>
-        
-        - C++
+      - C++
         - Qt 5.11.1 msvc 2015 32bit
         - zlib 1.2.11
         - minizip 1.2.11
@@ -42,8 +40,7 @@
         <br/>
     
 - <h3>Server</h3>
-
-    - Windows 10 pro
+- Windows 10 pro
     - Spring Tool Suite 3.9.9
     - Java SDK 12.0.2 64bit
     - MySQL 8.0
@@ -52,8 +49,7 @@
     <br/>
     
     - <h5>Language/External</h5>
-        
-        - Java
+      - Java
         - JavaScript
         - jsp
         - xml
@@ -69,8 +65,7 @@
 # How to set up the project
 
 - <h3>Client</h3>
-
-    1. Download the project. use command below.  
+1. Download the project. use command below.  
         ```
         git clone https://gitlab.com/wayne-inc/os-distribution-system
         ```
@@ -95,9 +90,8 @@
     <br/>
     
 - <h3>Server</h3>
-
-    1. Download and install Java SDK in Oracle homepage.
-    
+1. Download and install Java SDK in Oracle homepage.
+   
     2. Configure environment variables for Java development.
     
     3. Download MySQL installer in http://www.mysql.com and install MySQL.
@@ -229,7 +223,7 @@ Organization that distribute OS image file which can be installed in Removable D
         Copyright (c) 2011-2019 Pete Batard <pete@akeo.ie>  
         GNU General Public License v3.0
         <br/>
-        
+    
 - https://gitlab.com/wayne-inc/os-distribution-system/blob/master/LICENSE
 <br/>
 
