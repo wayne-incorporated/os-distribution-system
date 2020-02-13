@@ -2,7 +2,10 @@
 
 - <h3>Client</h3>
 
-    - The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit both)
+    - The client program can be run on Windows 8, Windows 10. (32bit, 64bit)
+    - Only removable disk is supported.
+    - USB Capacity is required at least 8GB. (we serve 8GB, 16GB, 32GB of Wayne OS for USB)
+    - Downloading and installation speed are depending on users' pc and network specification.
     - Internet connection is required
     <br/>
     
@@ -35,6 +38,7 @@
         - minizip 1.2.11
         - ImageWriter
         - The OpenSSL ToolKit
+        - rufus
         <br/>
     
 - <h3>Server</h3>
@@ -110,7 +114,7 @@
 
 ## How the OS distribution system works
 
-When users run the installer(client) to install Wayne OS on their disk...
+When users run the installer(client) to install Wayne OS on their USB...
 
 1. The client requests introduction(main) and license information to the server.
 
@@ -118,11 +122,11 @@ When users run the installer(client) to install Wayne OS on their disk...
 
 3. The client shows those in the first page(main) and the second page(license).
 
-4. The client requests disk(device) volume list to the server.
+4. The client requests USB(device) volume list to the server.
 
-5. The server sends disk(device) volume list in JSON format to the client.
+5. The server sends USB(device) volume list in JSON format to the client.
 
-6. The client recognizes the disk which users plugs on their pc and gathers all data such as vendor, model name, serial number, disk capacity.
+6. The client recognizes USB which users plugs on their pc and gathers all data such as vendor, model name, serial number, capacity.
 
 7. The client also gathers the data which users selected in options on the client such as Wayne OS version(free or paid), disk drive, disk type, disk volume and the data which is collected for better service such as IP address, Ram, CPU, GPU, Local OS information users are using on their pc.
 
@@ -132,19 +136,19 @@ When users run the installer(client) to install Wayne OS on their disk...
 
     - The free version
     
-        - The server sends the information of the os file which is matched for the disk volume users selected to the client.
+        - The server sends the information of the os file which is matched for USB volume users selected to the client.
         <br/>
     - The paid version
-        - For the paid version, the disk information is registered for one paid version os file on the server in advance. If the data from the client is not matched for the data stored in the server, the server sends an error to the client and the client shows an error message. And then, the client is exited. On the other hand, the server sends the information of the os file which is matched for the registration to the client.
+        - For the paid version, USB information is registered for one paid version os file on the server in advance. If the data from the client is not matched with the data stored in the server, the server sends an error to the client and the client shows an error message. And then, the client is exited. On the other hand, the server sends the information of the os file which is matched with the registration to the client.
         <br/>
 
-10. The client requests 30MB of the os file to the server and the server sends 30MB of the os file to the client in each cycle until the whole file is processed.
+10. The client requests 30MB of the OS file to the server and the server sends 30MB of the OS file to the client in each cycle until the whole file is processed.
 
-11. After that, the client decompresses the file downloaded from the server.
+11. After that, the client cleans USB(delete drive letters, delete all partitions, unmount volume) before OS installation.
 
-12. After decompression is completed, the client starts to install Wayne OS on users disk.
+12. the client decompresses a partial file and installs a partial file on USB in each cycle. a partial file is deleted right away after each partial installation cycle.
 
-13. After Installation is completed, the client shows the complete page to notify users that it is done.
+13. After Installation is completed, the client mounts volume on USB and shows the complete status to notify users that it is done.
 <br/>
 
 
@@ -216,6 +220,16 @@ Organization that distribute OS image file which can be installed in Removable D
         OpenSSL License, SSLeay License
         <br/>
     
+    - rufus (we refer to rufus source code for the feature to clean USB)
+    
+        - The Reliable USB Formatting Utility  
+        a utility that helps format and create bootable USB flash drives  
+        [https://rufus.ie](https://rufus.ie)  
+        Copyright (c) 2007-2009 Tom Thornhill/Ridgecrop  
+        Copyright (c) 2011-2019 Pete Batard <pete@akeo.ie>  
+        GNU General Public License v3.0
+        <br/>
+        
 - https://gitlab.com/wayne-inc/os-distribution-system/blob/master/LICENSE
 <br/>
 
