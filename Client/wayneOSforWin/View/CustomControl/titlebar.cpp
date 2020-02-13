@@ -36,8 +36,8 @@ TitleBar::TitleBar(QWidget *parent)
 
     QLabel* label = new QLabel(this);
 	// ~ Modified by LEE jeun jeun@wayne-inc.com
-    label->setText("  Wayne OS Installer 1.3.2");
-    parent->setWindowTitle("  Wayne OS Installer 1.3.2");
+    label->setText("  Wayne OS Installer 1.4.2");
+    parent->setWindowTitle("  Wayne OS Installer 1.4.2");
 	// Modified by LEE jeun jeun@wayne-inc.com ~
 
     QHBoxLayout* hbox = new QHBoxLayout(this);
