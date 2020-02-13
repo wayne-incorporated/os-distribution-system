@@ -81,7 +81,7 @@ void WidgetInstall::startInstall()
 	}
 
 	bResult = DeviceIoControl(hRawDisk, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &size, NULL);
-	
+		
 	volume_name = getLogicalName(deviceID, 0, FALSE);
 
 	if (volume_name.empty())
@@ -385,8 +385,7 @@ void WidgetInstall::startInstall()
 
 	unzCloseCurrentFile(uf);
 	unzClose(uf);
-	ViewManager::GetInstance()->timer->stop();
-	ui->progressBar->reset();
+	//ui->progressBar->reset();
     #endif
 	
 	qDebug("Refresh drive layout");
@@ -398,7 +397,7 @@ void WidgetInstall::startInstall()
 	hVolume = INVALID_HANDLE_VALUE;
 	hRawDisk = INVALID_HANDLE_VALUE;
 	Sleep(200);
-	WaitForLogical(deviceID, 0);
+	//WaitForLogical(deviceID, 0);
 
 	if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
 	{
@@ -407,6 +406,28 @@ void WidgetInstall::startInstall()
 		return;
 	}
 
+	while (!WaitForLogical(deviceID, 0))
+	{
+		if (ViewManager::GetInstance()->flag == ViewManager::GetInstance()->EXIT_EVENT)
+		{
+			this->CompleteUpdateFileDelete();
+			QCoreApplication::exit();
+			return;
+		}
+
+		QMessageBox msgBox;
+		msgBox.setText("Plug out USB from your PC and plug in USB again.\nClick Ok after you do this.");
+		msgBox.setWindowTitle("Notice");
+		msgBox.setIcon(QMessageBox::Information);
+		int ret = msgBox.exec();
+		
+		if (ret == QMessageBox::Ok && !getLogicalName(deviceID, 0, TRUE).empty())
+		{
+			bResult = scanForHwChanges();
+			break;
+		}
+	}
+	
 	volume_name = getLogicalName(deviceID, 0, TRUE);
 	memset(volumeName, 0, sizeof(volumeName));
 	strncpy(volumeName, volume_name.c_str(), volume_name.size());
@@ -420,6 +441,7 @@ void WidgetInstall::startInstall()
 		qDebug("volume mounted as %s", driveName);
 	}
 
+	ViewManager::GetInstance()->timer->stop();
 	ui->progressBar->hide();
 	ui->label_3->hide();
 	ui->label_4->hide();
