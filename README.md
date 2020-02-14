@@ -4,9 +4,9 @@
 
     - The client program can be run on Windows 7, Windows 8, Windows 10. (32bit, 64bit)
     - Only removable disk is supported.
-    - USB Capacity is required at least 8GB ≈ 7.45058GiB. (we serve 8GB, 16GB, 32GB of Wayne OS for USB)
-    - The client program is offered in .zip file. (size: almost 74MB)
-    - The capacity of the hard disk where users download the client is required at least 2GB ≈ 1.86265GiB {the size of OS file in .zip downloaded from the server (close to 1GB ≈ 0.931323GiB ) + the size of a temporary partial file decompressed from .zip file (512KB) + the size of the client (139MB)}
+    - USB Capacity is required at least 8GiB ≈ 8.58993GB. (we serve 8GB, 16GB, 32GB of Wayne OS for USB on Windows)
+    - The client program is offered in .zip file. (size: approximately 74MiB ≈ 77.5946MB)
+    - The capacity of the hard disk where users download the client is required at least 2GiB ≈ 2.14748GB {the size of OS file in .zip downloaded from the server (close to 1GiB ≈ 1.07374GB ) + the size of a temporary partial file decompressed from .zip file (512KiB ≈ 524.288KB) + the size of the client (139MiB ≈ 145.752MB)}
     - Downloading and installation speed are depending on users' pc and network specification.
     - Internet connection is required
     <br/>
